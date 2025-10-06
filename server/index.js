@@ -25,11 +25,18 @@ console.log('✅ Ruta / registrada');
 
 // 🔧 CORRECCIÓN: Ajustar la ruta de importación
 // Como index.js está en la raíz, necesitamos entrar a /server/routes/
+
+// Importar rutas de dogs
 const dogsRoutesModule = await import('./routes/dogs.routes.js');
 const dogsRoutes = dogsRoutesModule.default;
-
 app.use('/api/dogs', dogsRoutes);
 console.log('✅ Ruta /api/dogs registrada exitosamente');
+
+// Importar rutas de users
+const usersRoutesModule = await import('./routes/users.routes.js');
+const usersRoutes = usersRoutesModule.default;
+app.use('/api/users', usersRoutes);
+console.log('✅ Ruta /api/users registrada exitosamente');
 
 // Iniciar servidor
 const PORT = process.env.PORT || 5050;
