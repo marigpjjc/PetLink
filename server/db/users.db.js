@@ -5,7 +5,7 @@ let users = [
   },
 ];
 
-const supabaseCli = require("../services/supabase.service");
+import supabaseCli from "../services/supabase.service.js";
 
 const getAllUsers = async () => {
   const { data, error } = await supabaseCli.from("users").select();
@@ -58,9 +58,4 @@ const deleteUserInDb = async (userId) => {
   return data;
 };
 
-module.exports = {
-  getAllUsers,
-  createUserInDB,
-  updateUserInDb,
-  deleteUserInDb,
-};
+export { getAllUsers, createUserInDB, updateUserInDb, deleteUserInDb };

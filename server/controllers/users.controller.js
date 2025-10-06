@@ -1,9 +1,9 @@
-const {
+import {
   getAllUsers,
   createUserInDB,
   updateUserInDb,
   deleteUserInDb,
-} = require("../db/users.db");
+} from "../db/users.db.js";
 
 const getUsers = async (req, res) => {
   const users = await getAllUsers();
@@ -29,9 +29,4 @@ const deleteUser = async (req, res) => {
   res.send(response);
 };
 
-module.exports = {
-  getUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-};
+export { getUsers, createUser, updateUser, deleteUser };

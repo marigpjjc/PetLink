@@ -1,10 +1,14 @@
-const express = require("express");
-const path = require("path");
-const { createServer } = require("http");
+import express from "express";
+import path from "path";
+import { createServer } from "http";
+import { fileURLToPath } from "url";
 
-const usersRouter = require("./server/routes/users.router");
-const screen1EventsRouter = require("./server/routes/screen1Events.router");
-const { initSocketInstance } = require("./server/services/socket.service");
+import usersRouter from "./server/routes/users.routes.js";
+import { initSocketInstance } from "./server/services/socket.service.js";
+
+// Necesario para __dirname en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = 5050;
 
@@ -18,7 +22,6 @@ app.use("/app2", express.static(path.join(__dirname, "app2")));
 
 // Routes
 app.use("/", usersRouter);
-app.use("/", screen1EventsRouter);
 
 // Services
 initSocketInstance(httpServer);

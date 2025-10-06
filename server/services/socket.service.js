@@ -1,4 +1,4 @@
-const { Server } = require("socket.io");
+import { Server } from "socket.io";
 
 let io;
 
@@ -18,7 +18,4 @@ const emitEvent = (eventName, data) => {
   io.emit(eventName, data);
 };
 
-module.exports = {
-  emitEvent,
-  initSocketInstance,
-};
+export { emitEvent, initSocketInstance };
