@@ -1,14 +1,14 @@
 // server/services/dogs.service.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
-const supabase = require('./supabase.service');
+import supabase from '../services/supabase.service.js';
 
 // 🐕 Traer TODOS los perritos
 const getAllDogs = async () => {
   try {
     const { data, error } = await supabase
-      .from('Dogs')  // Nombre de tu tabla en Supabase
-      .select('*');  // Traer todas las columnas
+      .from('Dogs')
+      .select('*');
     
     if (error) throw error;
     return { success: true, data };
@@ -23,8 +23,8 @@ const getDogById = async (id) => {
     const { data, error } = await supabase
       .from('Dogs')
       .select('*')
-      .eq('id', id)  // Buscar donde el id sea igual al que nos dieron
-      .single();     // Solo queremos UN resultado
+      .eq('id', id)
+      .single();
     
     if (error) throw error;
     return { success: true, data };
@@ -38,8 +38,8 @@ const createDog = async (dogData) => {
   try {
     const { data, error } = await supabase
       .from('Dogs')
-      .insert([dogData])  // Insertar la información del perrito
-      .select();          // Devolver el perrito creado
+      .insert([dogData])
+      .select();
     
     if (error) throw error;
     return { success: true, data: data[0] };
@@ -53,8 +53,8 @@ const updateDog = async (id, dogData) => {
   try {
     const { data, error } = await supabase
       .from('Dogs')
-      .update(dogData)    // Actualizar con nueva información
-      .eq('id', id)       // Solo el perrito con este ID
+      .update(dogData)
+      .eq('id', id)
       .select();
     
     if (error) throw error;
@@ -79,8 +79,7 @@ const deleteDog = async (id) => {
   }
 };
 
-// Exportar todas las funciones para usarlas en el controlador
-export default  {
+export default {
   getAllDogs,
   getDogById,
   createDog,
