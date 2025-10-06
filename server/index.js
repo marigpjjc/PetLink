@@ -56,6 +56,12 @@ const needsRoutes = needsRoutesModule.default;
 app.use('/api/needs', needsRoutes);
 console.log('✅ Ruta /api/needs registrada exitosamente');
 
+// Importar rutas de accessories
+const accessoriesRoutesModule = await import('./routes/accessories.routes.js');
+const accessoriesRoutes = accessoriesRoutesModule.default;
+app.use('/api/accessories', accessoriesRoutes);
+console.log('✅ Ruta /api/accessories registrada exitosamente');
+
 // Iniciar servidor
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
@@ -67,4 +73,5 @@ app.listen(PORT, () => {
   console.log('   GET  http://localhost:' + PORT + '/api/appointments');
   console.log('   GET  http://localhost:' + PORT + '/api/donations');
   console.log('   GET  http://localhost:' + PORT + '/api/needs');
+  console.log('   GET  http://localhost:' + PORT + '/api/accessories');
 });
