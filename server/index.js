@@ -50,6 +50,12 @@ const donationsRoutes = donationsRoutesModule.default;
 app.use('/api/donations', donationsRoutes);
 console.log('✅ Ruta /api/donations registrada exitosamente');
 
+// Importar rutas de needs
+const needsRoutesModule = await import('./routes/needs.routes.js');
+const needsRoutes = needsRoutesModule.default;
+app.use('/api/needs', needsRoutes);
+console.log('✅ Ruta /api/needs registrada exitosamente');
+
 // Iniciar servidor
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
@@ -60,4 +66,5 @@ app.listen(PORT, () => {
   console.log('   GET  http://localhost:' + PORT + '/api/users');
   console.log('   GET  http://localhost:' + PORT + '/api/appointments');
   console.log('   GET  http://localhost:' + PORT + '/api/donations');
+  console.log('   GET  http://localhost:' + PORT + '/api/needs');
 });
