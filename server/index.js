@@ -17,7 +17,7 @@ console.log('✅ Express iniciado');
 app.get('/', (req, res) => {
   res.json({ 
     message: '🐕 API de PetLink funcionando!',
-    endpoints: ['/api/dogs']
+    endpoints: ['/api/dogs', '/api/users', '/api/appointments']
   });
 });
 
@@ -38,6 +38,12 @@ const usersRoutes = usersRoutesModule.default;
 app.use('/api/users', usersRoutes);
 console.log('✅ Ruta /api/users registrada exitosamente');
 
+// Importar rutas de appointments
+const appointmentsRoutesModule = await import('./routes/appointments.routes.js');
+const appointmentsRoutes = appointmentsRoutesModule.default;
+app.use('/api/appointments', appointmentsRoutes);
+console.log('✅ Ruta /api/appointments registrada exitosamente');
+
 // Iniciar servidor
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
@@ -45,4 +51,6 @@ app.listen(PORT, () => {
   console.log('📍 Rutas disponibles:');
   console.log('   GET  http://localhost:' + PORT + '/');
   console.log('   GET  http://localhost:' + PORT + '/api/dogs');
+  console.log('   GET  http://localhost:' + PORT + '/api/users');
+  console.log('   GET  http://localhost:' + PORT + '/api/appointments');
 });
