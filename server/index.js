@@ -62,6 +62,12 @@ const accessoriesRoutes = accessoriesRoutesModule.default;
 app.use('/api/accessories', accessoriesRoutes);
 console.log('✅ Ruta /api/accessories registrada exitosamente');
 
+// Importar rutas de integraciones AI
+const aiIntegrationRoutesModule = await import('./routes/ai-integration.routes.js');
+const aiIntegrationRoutes = aiIntegrationRoutesModule.default;
+app.use('/api/ai', aiIntegrationRoutes);
+console.log('✅ Ruta /api/ai registrada exitosamente');
+
 // Iniciar servidor
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
@@ -74,4 +80,5 @@ app.listen(PORT, () => {
   console.log('   GET  http://localhost:' + PORT + '/api/donations');
   console.log('   GET  http://localhost:' + PORT + '/api/needs');
   console.log('   GET  http://localhost:' + PORT + '/api/accessories');
+  console.log('   POST http://localhost:' + PORT + '/api/ai/*');
 });
