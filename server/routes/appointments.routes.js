@@ -1,4 +1,3 @@
-// server/routes/appointments.routes.js
 // Este archivo define las RUTAS (URLs) para las citas
 
 import express from 'express';

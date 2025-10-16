@@ -1,7 +1,7 @@
-// server/controllers/needs.controller.js
 // Este archivo RECIBE las peticiones y llama al servicio
 
 import needsService from '../db/needs.js';
+import { emitNewNeed, emitUrgentNeed } from '../utils/socket-helper.js';
 
 // 🐾 GET - Traer todas las necesidades
 const getAllNeeds = async (req, res) => {
@@ -91,6 +91,15 @@ const createNeed = async (req, res) => {
     
     if (result.success) {
       console.log('✅ Necesidad creada:', result.data);
+      
+      // 🔌 EMITIR EVENTO DE WEBSOCKET
+      // Si la necesidad es urgente, emitir evento especial
+      if (needData.urgent || needData.state === 'urgent') {
+        emitUrgentNeed(result.data);
+      } else {
+        emitNewNeed(result.data);
+      }
+      
       res.status(201).json(result.data);
     } else {
       console.log('❌ Error al crear:', result.error);
@@ -112,6 +121,12 @@ const updateNeed = async (req, res) => {
     
     if (result.success) {
       console.log('✅ Necesidad actualizada:', result.data);
+      
+      // 🔌 Si se actualiza a urgente, emitir evento
+      if (needData.state === 'urgent') {
+        emitUrgentNeed(result.data);
+      }
+      
       res.status(200).json(result.data);
     } else {
       console.log('❌ Error al actualizar:', result.error);

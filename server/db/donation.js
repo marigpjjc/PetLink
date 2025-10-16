@@ -3,7 +3,7 @@
 
 import supabase from '../services/supabase.service.js';
 
-// 💰 Traer TODAS las donaciones
+// ðŸ’° Traer TODAS las donaciones
 const getAllDonations = async () => {
   try {
     const { data, error } = await supabase
@@ -17,7 +17,7 @@ const getAllDonations = async () => {
   }
 };
 
-// 💰 Traer UNA donación por ID
+// ðŸ’° Traer UNA donaciÃ³n por ID
 const getDonationById = async (id) => {
   try {
     const { data, error } = await supabase
@@ -33,7 +33,7 @@ const getDonationById = async (id) => {
   }
 };
 
-// 💰 Traer donaciones por id_padrino
+// ðŸ’° Traer donaciones por id_padrino
 const getDonationsByPadrino = async (id_padrino) => {
   try {
     const { data, error } = await supabase
@@ -48,7 +48,7 @@ const getDonationsByPadrino = async (id_padrino) => {
   }
 };
 
-// 💰 Traer donaciones por id_dog
+// ðŸ’° Traer donaciones por id_dog
 const getDonationsByDog = async (id_dog) => {
   try {
     const { data, error } = await supabase
@@ -63,7 +63,7 @@ const getDonationsByDog = async (id_dog) => {
   }
 };
 
-// 💰 Traer donaciones por id_need
+// ðŸ’° Traer donaciones por id_need
 const getDonationsByNeed = async (id_need) => {
   try {
     const { data, error } = await supabase
@@ -78,7 +78,7 @@ const getDonationsByNeed = async (id_need) => {
   }
 };
 
-// 💰 Traer donaciones por estado
+// ðŸ’° Traer donaciones por estado
 const getDonationsByState = async (state) => {
   try {
     const { data, error } = await supabase
@@ -93,7 +93,7 @@ const getDonationsByState = async (state) => {
   }
 };
 
-// 💰 Crear una NUEVA donación
+// ðŸ’° Crear una NUEVA donaciÃ³n
 const createDonation = async (donationData) => {
   try {
     const { data, error } = await supabase
@@ -108,7 +108,7 @@ const createDonation = async (donationData) => {
   }
 };
 
-// 💰 Actualizar una donación existente
+// ðŸ’° Actualizar una donaciÃ³n existente
 const updateDonation = async (id, donationData) => {
   try {
     const { data, error } = await supabase
@@ -124,7 +124,7 @@ const updateDonation = async (id, donationData) => {
   }
 };
 
-// 💰 Eliminar una donación
+// ðŸ’° Eliminar una donaciÃ³n
 const deleteDonation = async (id) => {
   try {
     const { error } = await supabase
@@ -133,7 +133,7 @@ const deleteDonation = async (id) => {
       .eq('id', id);
     
     if (error) throw error;
-    return { success: true, message: 'Donación eliminada correctamente' };
+    return { success: true, message: 'DonaciÃ³n eliminada correctamente' };
   } catch (error) {
     return { success: false, error: error.message };
   }

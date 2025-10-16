@@ -3,8 +3,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { setSocketIO } from './utils/socket-helper.js';
 
-// 🔧 Cargar variables de entorno PRIMERO
+// Cargar variables de entorno PRIMERO
 dotenv.config();
 
 const app = express();
@@ -79,9 +80,10 @@ const aiIntegrationRoutes = aiIntegrationRoutesModule.default;
 app.use('/api/ai', aiIntegrationRoutes);
 console.log('✅ Ruta /api/ai registrada exitosamente');
 
-// ============================================
-// 🔌 CONFIGURACIÓN DE SOCKET.IO
-// ============================================
+
+
+// CONFIGURACIÓN DE SOCKET.IO
+
 
 // Variable para contar usuarios conectados
 let connectedUsers = 0;
@@ -89,8 +91,8 @@ let connectedUsers = 0;
 // Cuando un cliente se conecta
 io.on('connection', (socket) => {
   connectedUsers++;
-  console.log('🔌 Nuevo cliente conectado. ID:', socket.id);
-  console.log('👥 Usuarios conectados:', connectedUsers);
+  console.log('Nuevo cliente conectado. ID:', socket.id);
+  console.log('Usuarios conectados:', connectedUsers);
   
   // Enviar mensaje de bienvenida al cliente
   socket.emit('welcome', {
@@ -226,6 +228,9 @@ io.on('connection', (socket) => {
 
 // Hacer io accesible en toda la aplicación
 app.set('io', io);
+
+// GUARDAR IO EN socket-helper
+setSocketIO(io);
 
 console.log('✅ Socket.IO configurado');
 
