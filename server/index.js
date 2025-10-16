@@ -25,7 +25,7 @@ const io = new Server(httpServer, {
 app.use(cors());
 app.use(express.json());
 
-console.log('✅ Express iniciado');
+console.log('Express iniciado');
 
 // Ruta de prueba
 app.get('/', (req, res) => {
@@ -36,51 +36,55 @@ app.get('/', (req, res) => {
   });
 });
 
-console.log('✅ Ruta / registrada');
+console.log('Ruta / registrada');
 
 // Importar rutas de dogs
 const dogsRoutesModule = await import('./routes/dogs.routes.js');
 const dogsRoutes = dogsRoutesModule.default;
 app.use('/api/dogs', dogsRoutes);
-console.log('✅ Ruta /api/dogs registrada exitosamente');
+console.log('Ruta /api/dogs registrada exitosamente');
 
 // Importar rutas de users
 const usersRoutesModule = await import('./routes/users.routes.js');
 const usersRoutes = usersRoutesModule.default;
 app.use('/api/users', usersRoutes);
-console.log('✅ Ruta /api/users registrada exitosamente');
+console.log('Ruta /api/users registrada exitosamente');
 
 // Importar rutas de appointments
 const appointmentsRoutesModule = await import('./routes/appointments.routes.js');
 const appointmentsRoutes = appointmentsRoutesModule.default;
 app.use('/api/appointments', appointmentsRoutes);
-console.log('✅ Ruta /api/appointments registrada exitosamente');
+console.log('Ruta /api/appointments registrada exitosamente');
 
 // Importar rutas de donations
 const donationsRoutesModule = await import('./routes/donations.routes.js');
 const donationsRoutes = donationsRoutesModule.default;
 app.use('/api/donations', donationsRoutes);
-console.log('✅ Ruta /api/donations registrada exitosamente');
+console.log('Ruta /api/donations registrada exitosamente');
 
 // Importar rutas de needs
 const needsRoutesModule = await import('./routes/needs.routes.js');
 const needsRoutes = needsRoutesModule.default;
 app.use('/api/needs', needsRoutes);
-console.log('✅ Ruta /api/needs registrada exitosamente');
+console.log('Ruta /api/needs registrada exitosamente');
 
 // Importar rutas de accessories
 const accessoriesRoutesModule = await import('./routes/accessories.routes.js');
 const accessoriesRoutes = accessoriesRoutesModule.default;
 app.use('/api/accessories', accessoriesRoutes);
-console.log('✅ Ruta /api/accessories registrada exitosamente');
+console.log('Ruta /api/accessories registrada exitosamente');
 
 // Importar rutas de integraciones AI
 const aiIntegrationRoutesModule = await import('./routes/ai-integration.routes.js');
 const aiIntegrationRoutes = aiIntegrationRoutesModule.default;
 app.use('/api/ai', aiIntegrationRoutes);
-console.log('✅ Ruta /api/ai registrada exitosamente');
+console.log('Ruta /api/ai registrada exitosamente');
 
-
+// Importar rutas de auth
+const authRoutesModule = await import('./routes/auth.routes.js');
+const authRoutes = authRoutesModule.default;
+app.use('/api/auth', authRoutes);
+console.log('Ruta /api/auth registrada exitosamente');
 
 // CONFIGURACIÓN DE SOCKET.IO
 
@@ -127,7 +131,7 @@ io.on('connection', (socket) => {
   
   // Escuchar cuando se crea una nueva necesidad
   socket.on('new-need', (needData) => {
-    console.log('🆘 Nueva necesidad registrada:', needData);
+    console.log('Nueva necesidad registrada:', needData);
     
     // Notificar a TODOS los clientes
     io.emit('need-created', {
@@ -139,11 +143,11 @@ io.on('connection', (socket) => {
   
   // Cuando se marca una necesidad como urgente
   socket.on('urgent-need', (needData) => {
-    console.log('⚠️ ¡NECESIDAD URGENTE!:', needData);
+    console.log('¡NECESIDAD URGENTE!:', needData);
     
     // Notificar con prioridad alta
     io.emit('urgent-need-alert', {
-      message: '🆘 ¡ALERTA! Necesidad urgente',
+      message: '¡ALERTA! Necesidad urgente',
       need: needData,
       priority: 'high',
       timestamp: new Date()
@@ -156,7 +160,7 @@ io.on('connection', (socket) => {
   
   // Nueva cita agendada
   socket.on('new-appointment', (appointmentData) => {
-    console.log('📅 Nueva cita agendada:', appointmentData);
+    console.log('Nueva cita agendada:', appointmentData);
     
     // Notificar al usuario específico (si tienes rooms por usuario)
     io.emit('appointment-created', {
@@ -172,7 +176,7 @@ io.on('connection', (socket) => {
   
   // Cuando alguien compra un accesorio
   socket.on('accessory-purchased', (purchaseData) => {
-    console.log('🎁 Accesorio comprado:', purchaseData);
+    console.log('Accesorio comprado:', purchaseData);
     
     io.emit('purchase-notification', {
       message: '¡Nueva compra realizada!',
@@ -182,13 +186,13 @@ io.on('connection', (socket) => {
   });
   
   // ============================================
-  // 💬 CHAT EN TIEMPO REAL (Opcional)
+  //  CHAT EN TIEMPO REAL (Opcional)
   // ============================================
   
   // Unirse a una sala de chat específica
   socket.on('join-chat', (roomId) => {
     socket.join(roomId);
-    console.log(`💬 Usuario ${socket.id} se unió al chat ${roomId}`);
+    console.log(` Usuario ${socket.id} se unió al chat ${roomId}`);
     
     // Notificar a otros en la sala
     socket.to(roomId).emit('user-joined', {
@@ -199,7 +203,7 @@ io.on('connection', (socket) => {
   
   // Enviar mensaje en una sala específica
   socket.on('chat-message', ({ roomId, message, userName }) => {
-    console.log(`💬 Mensaje en ${roomId}:`, message);
+    console.log(` Mensaje en ${roomId}:`, message);
     
     // Enviar a todos en la sala (incluyendo al emisor)
     io.to(roomId).emit('new-message', {
@@ -211,12 +215,12 @@ io.on('connection', (socket) => {
   });
   
   // ============================================
-  // 🔌 DESCONEXIÓN
+  // DESCONEXIÓN
   // ============================================
   
   socket.on('disconnect', () => {
     connectedUsers--;
-    console.log('🔌 Cliente desconectado. ID:', socket.id);
+    console.log('Cliente desconectado. ID:', socket.id);
     console.log('👥 Usuarios conectados:', connectedUsers);
     
     // Notificar a todos
@@ -232,16 +236,16 @@ app.set('io', io);
 // GUARDAR IO EN socket-helper
 setSocketIO(io);
 
-console.log('✅ Socket.IO configurado');
+console.log('Socket.IO configurado');
 
 // ============================================
-// 🚀 INICIAR SERVIDOR
+// INICIAR SERVIDOR
 // ============================================
 
 const PORT = process.env.PORT || 5050;
 httpServer.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log('📍 Rutas disponibles:');
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log('Rutas disponibles:');
   console.log('   GET  http://localhost:' + PORT + '/');
   console.log('   GET  http://localhost:' + PORT + '/api/dogs');
   console.log('   GET  http://localhost:' + PORT + '/api/users');
@@ -251,5 +255,5 @@ httpServer.listen(PORT, () => {
   console.log('   GET  http://localhost:' + PORT + '/api/accessories');
   console.log('   POST http://localhost:' + PORT + '/api/ai/*');
   console.log('');
-  console.log('🔌 WebSocket disponible en ws://localhost:' + PORT);
+  console.log('WebSocket disponible en ws://localhost:' + PORT);
 });
