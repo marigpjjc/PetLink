@@ -7,20 +7,28 @@ import aiIntegrationController from '../controllers/ai-integration.controller.js
 const router = express.Router();
 
 // ============================================
-// 🤖 RUTAS DE GEMINI AI
+// 🎨 RUTAS DE STABILITY AI (Generación de Imágenes)
 // ============================================
 
-// POST /api/ai/generate-dog-description
-// Body: { name, breed, age, size }
-router.post('/generate-dog-description', aiIntegrationController.generateDogDescription);
+// 🎯 RUTA PRINCIPAL: Generar imagen de perro CON accesorio
+// POST /api/ai/generate-dog-with-accessory
+// Body: { 
+//   dogData: { name, breed, age, size },
+//   accessoryData: { category, description }
+// }
+router.post('/generate-dog-with-accessory', aiIntegrationController.generateDogWithAccessoryImage);
 
-// POST /api/ai/generate-needs-suggestions
+// POST /api/ai/generate-dog-image
 // Body: { name, breed, age, size }
-router.post('/generate-needs-suggestions', aiIntegrationController.generateNeedsSuggestions);
+router.post('/generate-dog-image', aiIntegrationController.generateDogImage);
 
-// POST /api/ai/generate-accessory-recommendations
-// Body: { size, age, breed }
-router.post('/generate-accessory-recommendations', aiIntegrationController.generateAccessoryRecommendations);
+// POST /api/ai/generate-accessory-image
+// Body: { category, description }
+router.post('/generate-accessory-image', aiIntegrationController.generateAccessoryImage);
+
+// POST /api/ai/generate-custom-image
+// Body: { prompt }
+router.post('/generate-custom-image', aiIntegrationController.generateCustomImage);
 
 // ============================================
 // 📱 RUTAS DE TWILIO (WhatsApp)
@@ -45,5 +53,19 @@ router.post('/send-urgent-need-alert', aiIntegrationController.sendUrgentNeedAle
 // POST /api/ai/send-custom-message
 // Body: { phoneNumber, messageText }
 router.post('/send-custom-message', aiIntegrationController.sendCustomMessage);
+
+// ============================================
+// 🎁 RUTA COMBINADA (Imagen + WhatsApp)
+// ============================================
+
+// 🎯 Confirmar compra de accesorio (genera imagen Y envía WhatsApp)
+// POST /api/ai/confirm-accessory-purchase
+// Body: { 
+//   phoneNumber,
+//   dogData: { name, breed, age, size },
+//   accessoryData: { category, description },
+//   purchaseData: { amount }
+// }
+router.post('/confirm-accessory-purchase', aiIntegrationController.confirmAccessoryPurchase);
 
 export default router;
