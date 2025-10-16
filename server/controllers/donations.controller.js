@@ -1,7 +1,7 @@
-// server/controllers/donations.controller.js
 // Este archivo RECIBE las peticiones y llama al servicio
 
 import donationsService from '../db/donation.js';
+import { emitNewDonation } from '../utils/socket-helper.js';
 
 // 💰 GET - Traer todas las donaciones
 const getAllDonations = async (req, res) => {
@@ -42,86 +42,6 @@ const getDonationById = async (req, res) => {
   }
 };
 
-// 💰 GET - Traer donaciones por id_padrino
-const getDonationsByPadrino = async (req, res) => {
-  try {
-    const { id_padrino } = req.params;
-    console.log('🔥 Petición recibida: GET /api/donations/padrino/' + id_padrino);
-    const result = await donationsService.getDonationsByPadrino(id_padrino);
-    
-    if (result.success) {
-      console.log('✅ Donaciones encontradas para el padrino:', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getDonationsByPadrino:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
-// 💰 GET - Traer donaciones por id_dog
-const getDonationsByDog = async (req, res) => {
-  try {
-    const { id_dog } = req.params;
-    console.log('🔥 Petición recibida: GET /api/donations/dog/' + id_dog);
-    const result = await donationsService.getDonationsByDog(id_dog);
-    
-    if (result.success) {
-      console.log('✅ Donaciones encontradas para el perro:', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getDonationsByDog:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
-// 💰 GET - Traer donaciones por id_need
-const getDonationsByNeed = async (req, res) => {
-  try {
-    const { id_need } = req.params;
-    console.log('🔥 Petición recibida: GET /api/donations/need/' + id_need);
-    const result = await donationsService.getDonationsByNeed(id_need);
-    
-    if (result.success) {
-      console.log('✅ Donaciones encontradas para la necesidad:', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getDonationsByNeed:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
-// 💰 GET - Traer donaciones por estado
-const getDonationsByState = async (req, res) => {
-  try {
-    const { state } = req.params;
-    console.log('🔥 Petición recibida: GET /api/donations/state/' + state);
-    const result = await donationsService.getDonationsByState(state);
-    
-    if (result.success) {
-      console.log('✅ Donaciones encontradas con estado:', state, ':', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getDonationsByState:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
 // 💰 POST - Crear una nueva donación
 const createDonation = async (req, res) => {
   try {
@@ -131,6 +51,10 @@ const createDonation = async (req, res) => {
     
     if (result.success) {
       console.log('✅ Donación creada:', result.data);
+      
+      // 🔌 EMITIR EVENTO DE WEBSOCKET
+      emitNewDonation(result.data);
+      
       res.status(201).json(result.data);
     } else {
       console.log('❌ Error al crear:', result.error);
@@ -183,13 +107,93 @@ const deleteDonation = async (req, res) => {
   }
 };
 
+// 💰 GET - Traer donaciones por padrino
+const getDonationsByPadrino = async (req, res) => {
+  try {
+    const { id_padrino } = req.params;
+    console.log('🔥 Petición recibida: GET /api/donations/padrino/' + id_padrino);
+    const result = await donationsService.getDonationsByPadrino(id_padrino);
+    
+    if (result.success) {
+      console.log('✅ Donaciones encontradas:', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getDonationsByPadrino:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// 💰 GET - Traer donaciones por perro
+const getDonationsByDog = async (req, res) => {
+  try {
+    const { id_dog } = req.params;
+    console.log('🔥 Petición recibida: GET /api/donations/dog/' + id_dog);
+    const result = await donationsService.getDonationsByDog(id_dog);
+    
+    if (result.success) {
+      console.log('✅ Donaciones encontradas:', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getDonationsByDog:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// 💰 GET - Traer donaciones por necesidad
+const getDonationsByNeed = async (req, res) => {
+  try {
+    const { id_need } = req.params;
+    console.log('🔥 Petición recibida: GET /api/donations/need/' + id_need);
+    const result = await donationsService.getDonationsByNeed(id_need);
+    
+    if (result.success) {
+      console.log('✅ Donaciones encontradas:', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getDonationsByNeed:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// 💰 GET - Traer donaciones por estado
+const getDonationsByState = async (req, res) => {
+  try {
+    const { state } = req.params;
+    console.log('🔥 Petición recibida: GET /api/donations/state/' + state);
+    const result = await donationsService.getDonationsByState(state);
+    
+    if (result.success) {
+      console.log('✅ Donaciones encontradas con estado', state + ':', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getDonationsByState:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 export default {
   getAllDonations,
   getDonationById,
-  getDonationsByPadrino,
-  getDonationsByDog,
-  getDonationsByNeed,
-  getDonationsByState,
+  getDonationsByPadrino,    
+  getDonationsByDog,       
+  getDonationsByNeed,       
+  getDonationsByState,      
   createDonation,
   updateDonation,
   deleteDonation

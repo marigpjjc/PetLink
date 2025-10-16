@@ -1,4 +1,3 @@
-// server/db/appointments.db.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
 import supabase from '../services/supabase.service.js';

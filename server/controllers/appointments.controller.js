@@ -1,7 +1,7 @@
-// server/controllers/appointments.controller.js
 // Este archivo RECIBE las peticiones y llama al servicio
 
 import appointmentsService from '../db/appoinments.js';
+import { emitNewAppointment } from '../utils/socket-helper.js';
 
 // 📅 GET - Traer todas las citas
 const getAllAppointments = async (req, res) => {
@@ -21,6 +21,8 @@ const getAllAppointments = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+
 
 // 📅 GET - Traer una cita por ID
 const getAppointmentById = async (req, res) => {
@@ -42,66 +44,6 @@ const getAppointmentById = async (req, res) => {
   }
 };
 
-// 📅 GET - Traer citas por id_dog
-const getAppointmentsByDog = async (req, res) => {
-  try {
-    const { id_dog } = req.params;
-    console.log('🔥 Petición recibida: GET /api/appointments/dog/' + id_dog);
-    const result = await appointmentsService.getAppointmentsByDog(id_dog);
-    
-    if (result.success) {
-      console.log('✅ Citas encontradas para el perro:', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getAppointmentsByDog:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
-// 📅 GET - Traer citas por id_padrino
-const getAppointmentsByPadrino = async (req, res) => {
-  try {
-    const { id_padrino } = req.params;
-    console.log('🔥 Petición recibida: GET /api/appointments/padrino/' + id_padrino);
-    const result = await appointmentsService.getAppointmentsByPadrino(id_padrino);
-    
-    if (result.success) {
-      console.log('✅ Citas encontradas para el padrino:', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getAppointmentsByPadrino:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
-// 📅 GET - Traer citas por id_admin
-const getAppointmentsByAdmin = async (req, res) => {
-  try {
-    const { id_admin } = req.params;
-    console.log('🔥 Petición recibida: GET /api/appointments/admin/' + id_admin);
-    const result = await appointmentsService.getAppointmentsByAdmin(id_admin);
-    
-    if (result.success) {
-      console.log('✅ Citas encontradas para el admin:', result.data.length);
-      res.status(200).json(result.data);
-    } else {
-      console.log('❌ Error:', result.error);
-      res.status(400).json({ error: result.error });
-    }
-  } catch (error) {
-    console.error('❌ Error en getAppointmentsByAdmin:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-};
-
 // 📅 POST - Crear una nueva cita
 const createAppointment = async (req, res) => {
   try {
@@ -111,6 +53,10 @@ const createAppointment = async (req, res) => {
     
     if (result.success) {
       console.log('✅ Cita creada:', result.data);
+      
+      // 🔌 EMITIR EVENTO DE WEBSOCKET
+      emitNewAppointment(result.data);
+      
       res.status(201).json(result.data);
     } else {
       console.log('❌ Error al crear:', result.error);
@@ -277,12 +223,72 @@ Te invitamos a agendar otra cita en una fecha diferente. ¡${dogName} te espera!
   }
 };
 
+// 📅 GET - Traer citas por perro
+const getAppointmentsByDog = async (req, res) => {
+  try {
+    const { id_dog } = req.params;
+    console.log('🔥 Petición recibida: GET /api/appointments/dog/' + id_dog);
+    const result = await appointmentsService.getAppointmentsByDog(id_dog);
+    
+    if (result.success) {
+      console.log('✅ Citas encontradas:', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getAppointmentsByDog:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// 📅 GET - Traer citas por padrino
+const getAppointmentsByPadrino = async (req, res) => {
+  try {
+    const { id_padrino } = req.params;
+    console.log('🔥 Petición recibida: GET /api/appointments/padrino/' + id_padrino);
+    const result = await appointmentsService.getAppointmentsByPadrino(id_padrino);
+    
+    if (result.success) {
+      console.log('✅ Citas encontradas:', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getAppointmentsByPadrino:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// 📅 GET - Traer citas por admin
+const getAppointmentsByAdmin = async (req, res) => {
+  try {
+    const { id_admin } = req.params;
+    console.log('🔥 Petición recibida: GET /api/appointments/admin/' + id_admin);
+    const result = await appointmentsService.getAppointmentsByAdmin(id_admin);
+    
+    if (result.success) {
+      console.log('✅ Citas encontradas:', result.data.length);
+      res.status(200).json(result.data);
+    } else {
+      console.log('❌ Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('❌ Error en getAppointmentsByAdmin:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 export default {
   getAllAppointments,
   getAppointmentById,
-  getAppointmentsByDog,
-  getAppointmentsByPadrino,
-  getAppointmentsByAdmin,
+  getAppointmentsByDog,        
+  getAppointmentsByPadrino,    
+  getAppointmentsByAdmin,       
   createAppointment,
   updateAppointment,
   deleteAppointment,

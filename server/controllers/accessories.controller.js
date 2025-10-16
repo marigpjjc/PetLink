@@ -2,6 +2,7 @@
 // Este archivo RECIBE las peticiones y llama al servicio
 
 import accessoriesService from '../db/accessories.js';
+import { emitAccessoryPurchase } from '../utils/socket-helper.js'
 
 // 🎁 GET - Traer todos los accesorios
 const getAllAccessories = async (req, res) => {
@@ -102,7 +103,7 @@ const getAccessoriesByCategory = async (req, res) => {
   }
 };
 
-// 🎁 POST - Crear un nuevo accesorio
+// 🎁 POST - Crear un nuevo accesorio (comprar)
 const createAccessory = async (req, res) => {
   try {
     const accessoryData = req.body;
@@ -111,6 +112,10 @@ const createAccessory = async (req, res) => {
     
     if (result.success) {
       console.log('✅ Accesorio creado:', result.data);
+      
+      // 🔌 EMITIR EVENTO DE WEBSOCKET
+      emitAccessoryPurchase(result.data);
+      
       res.status(201).json(result.data);
     } else {
       console.log('❌ Error al crear:', result.error);

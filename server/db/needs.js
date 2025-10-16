@@ -1,7 +1,7 @@
 // server/db/needs.db.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
-import supabase from '../services/supabase.service.js';
+import supabase from '../services/supabase.service.js'
 
 // 🐾 Traer TODAS las necesidades
 const getAllNeeds = async () => {
@@ -108,6 +108,8 @@ const deleteNeed = async (id) => {
     return { success: false, error: error.message };
   }
 };
+
+
 
 export default {
   getAllNeeds,
