@@ -163,6 +163,120 @@ const deleteAppointment = async (req, res) => {
   }
 };
 
+// 📱 PUT - Aceptar o rechazar una cita (envía WhatsApp automáticamente)
+const handleAppointmentDecision = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { decision, phoneNumber, padrinoName, dogName, date, time } = req.body;
+    
+    console.log('🔥 Petición recibida: PUT /api/appointments/decision/' + id);
+    console.log('Decisión:', decision);
+    console.log('Datos recibidos:', { phoneNumber, padrinoName, dogName, date, time });
+    
+    // ✅ Validar que decision sea 'accepted' o 'rejected'
+    if (!decision || !['accepted', 'rejected'].includes(decision)) {
+      return res.status(400).json({ 
+        error: 'Debes proporcionar una decisión válida: "accepted" o "rejected"' 
+      });
+    }
+    
+    // ✅ Validar datos necesarios para el WhatsApp
+    if (!phoneNumber || !padrinoName || !dogName || !date || !time) {
+      return res.status(400).json({ 
+        error: 'Faltan datos necesarios: phoneNumber, padrinoName, dogName, date, time' 
+      });
+    }
+    
+    // ✅ Validar y formatear el número de teléfono (debe tener +57 para Colombia)
+    let formattedPhone = phoneNumber.trim();
+    if (!formattedPhone.startsWith('+')) {
+      // Si no tiene +, asumimos que es de Colombia y agregamos +57
+      formattedPhone = '+57' + formattedPhone.replace(/\D/g, ''); // Quita todo excepto números
+    }
+    
+    // ✅ Formatear fecha y hora para que se vean mejor en WhatsApp
+    const formattedDate = new Date(date).toLocaleDateString('es-CO', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    
+    // 1️⃣ Actualizar el estado de la cita en la base de datos
+    const updateData = {
+      status: decision  // 'accepted' o 'rejected'
+    };
+    
+    const result = await appointmentsService.updateAppointment(id, updateData);
+    
+    if (!result.success) {
+      console.log('❌ Error al actualizar cita:', result.error);
+      return res.status(400).json({ error: result.error });
+    }
+    
+    console.log('✅ Cita actualizada con estado:', decision);
+    
+    // 2️⃣ Enviar WhatsApp automáticamente
+    console.log('📱 Enviando WhatsApp al padrino...');
+    
+    // Importar el servicio de Twilio
+    const twilioService = (await import('../services/twilio.service.js')).default;
+    
+    let messageText;
+    
+    if (decision === 'accepted') {
+      messageText = `¡Hola ${padrinoName}! 🎉
+
+Tu cita de juego con ${dogName} ha sido ACEPTADA ✅
+
+📅 Fecha: ${formattedDate}
+🕐 Hora: ${time}
+
+¡Nos vemos pronto! ${dogName} está emocionado de conocerte 🐕❤️
+
+- Fundación PetLink`;
+    } else {
+      messageText = `Hola ${padrinoName} 😔
+
+Lamentablemente tu cita con ${dogName} no pudo ser aceptada en este momento.
+
+📅 Fecha solicitada: ${formattedDate}
+🕐 Hora solicitada: ${time}
+
+Te invitamos a agendar otra cita en una fecha diferente. ¡${dogName} te espera! 🐕
+
+- Fundación PetLink`;
+    }
+    
+    const whatsappResult = await twilioService.sendCustomMessage(formattedPhone, messageText);
+    
+    if (whatsappResult.success) {
+      console.log('✅ WhatsApp enviado exitosamente a:', formattedPhone);
+      res.status(200).json({
+        success: true,
+        message: `Cita ${decision === 'accepted' ? 'aceptada' : 'rechazada'} y WhatsApp enviado`,
+        appointment: result.data,
+        whatsappSent: true,
+        messageSid: whatsappResult.messageSid
+      });
+    } else {
+      console.log('⚠️ WhatsApp no pudo ser enviado:', whatsappResult.error);
+      // Aunque el WhatsApp falle, la cita sí se actualizó
+      res.status(200).json({
+        success: true,
+        message: `Cita ${decision === 'accepted' ? 'aceptada' : 'rechazada'} pero WhatsApp falló`,
+        appointment: result.data,
+        whatsappSent: false,
+        whatsappError: whatsappResult.error
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Error en handleAppointmentDecision:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
 export default {
   getAllAppointments,
   getAppointmentById,
@@ -171,5 +285,6 @@ export default {
   getAppointmentsByAdmin,
   createAppointment,
   updateAppointment,
-  deleteAppointment
+  deleteAppointment,
+  handleAppointmentDecision
 };

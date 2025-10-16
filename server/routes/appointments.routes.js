@@ -11,6 +11,9 @@ const router = express.Router();
 // GET /api/appointments - Traer todas las citas
 router.get('/', appointmentsController.getAllAppointments);
 
+// PUT /api/appointments/decision/:id - Aceptar o rechazar cita (con WhatsApp automático)
+router.put('/decision/:id', appointmentsController.handleAppointmentDecision);
+
 // GET /api/appointments/dog/:id_dog - Traer citas por perro
 router.get('/dog/:id_dog', appointmentsController.getAppointmentsByDog);
 

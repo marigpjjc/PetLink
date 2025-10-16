@@ -11,6 +11,9 @@ const router = express.Router();
 // GET /api/dogs - Traer todos los perritos
 router.get('/', dogsController.getAllDogs);
 
+// GET /api/dogs/search/:name - Buscar perritos por nombre
+router.get('/search/:name', dogsController.searchDogsByName);
+
 // GET /api/dogs/:id - Traer un perrito específico
 router.get('/:id', dogsController.getDogById);
 
