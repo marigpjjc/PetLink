@@ -1,4 +1,6 @@
-import renderScreen1 from "./screens/screen1.js";
+import renderAdminLogin from "./screens/admin-login.js";
+import renderAdminSignup from "./screens/admin-signup.js";
+import renderDashboard from "./screens/dashboard.js";
 
 const socket = io("/", { path: "/real-time" });
 
@@ -6,20 +8,34 @@ function clearScripts() {
   document.getElementById("app").innerHTML = "";
 }
 
-let route = { path: "/", data: {} };
+let route = { path: "/admin-login", data: {} };
 
-switch (route.path) {
-  case "/":
-    clearScripts();
-    renderScreen1(route.data);
-    break;
-  default:
-    const app = document.getElementById("app");
-    app.innerHTML = `<h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p>`;
+// Función para renderizar la pantalla actual
+function renderCurrentScreen() {
+  clearScripts();
+  
+  switch (route.path) {
+    case "/admin-login":
+      renderAdminLogin(route.data);
+      break;
+    case "/admin-signup":
+      renderAdminSignup(route.data);
+      break;
+    case "/dashboard":
+      renderDashboard(route.data);
+      break;
+    default:
+      const app = document.getElementById("app");
+      app.innerHTML = `<h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p>`;
+  }
 }
+
+// Renderizar la pantalla inicial
+renderCurrentScreen();
 
 function navigateTo(path, data) {
   route = { path, data };
+  renderCurrentScreen();
 }
 
 async function makeRequest(url, method, body) {
