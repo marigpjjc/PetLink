@@ -2,16 +2,27 @@
 
 import { navigateTo, makeRequest } from '../app.js';
 
-// Función para renderizar la pantalla de registro
+// Renderizar la pantalla de registro
 export default function renderAdminSignup() {
   const app = document.getElementById('app');
   
   app.innerHTML = `
     <div class="signup-container">
       <div class="signup-form">
-        <h1>Crear Cuenta - Admin</h1>
+        <h1>Registro de Administrador</h1>
         
         <form id="signupForm">
+          <div class="form-group">
+            <label for="foundationName">Nombre de la fundación:</label>
+            <input 
+              type="text" 
+              id="foundationName" 
+              name="foundationName" 
+              required 
+              placeholder="Ingresa el nombre de tu fundación"
+            />
+          </div>
+          
           <div class="form-group">
             <label for="name">Nombre completo:</label>
             <input 
@@ -46,18 +57,32 @@ export default function renderAdminSignup() {
           </div>
           
           <div class="form-group">
-            <label for="phone">Teléfono:</label>
+            <label for="password">Contraseña:</label>
             <input 
-              type="tel" 
-              id="phone" 
-              name="phone" 
-              placeholder="Ingresa tu número de teléfono"
+              type="password" 
+              id="password" 
+              name="password" 
+              required 
+              placeholder="Ingresa tu contraseña"
+              minlength="6"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar contraseña:</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              name="confirmPassword" 
+              required 
+              placeholder="Confirma tu contraseña"
+              minlength="6"
             />
           </div>
           
           <div class="form-actions">
-            <button type="submit" id="signupBtn">Crear Cuenta</button>
-            <button type="button" id="loginBtn">Ya tengo cuenta</button>
+            <button type="submit" id="signupBtn">Registrar</button>
+            <button type="button" id="loginBtn">Accede a tu cuenta</button>
           </div>
         </form>
         
@@ -74,32 +99,55 @@ function setupEventListeners() {
   const signupForm = document.getElementById('signupForm');
   const loginBtn = document.getElementById('loginBtn');
   
-  // El envío del formulario de registro
+  // Formulario de registro
   signupForm.addEventListener('submit', handleSignup);
   
   // click botón de login
   loginBtn.addEventListener('click', handleLogin);
+  
+  // validación
+  setupRealTimeValidation();
 }
 
-// Prooceso de registro
+// Proceso de registro
 async function handleSignup(event) {
   event.preventDefault();
   
+  const foundationName = document.getElementById('foundationName').value.trim();
   const name = document.getElementById('name').value.trim();
   const username = document.getElementById('username').value.trim();
   const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
   const signupBtn = document.getElementById('signupBtn');
   const errorMessage = document.getElementById('errorMessage');
   const successMessage = document.getElementById('successMessage');
   
-  // Validando campos obligatorios
-  if (!name || !username || !email) {
-    showError('Por favor completa los campos obligatorios: nombre, usuario y email');
+  // Validar campos obligatorios
+  if (!foundationName || !name || !username || !email || !password || !confirmPassword) {
+    showError('Por favor completa todos los campos obligatorios');
     return;
   }
   
-  // Deshabilitar botón y mostrar estado de carga
+  // Validar contraseñas
+  if (password !== confirmPassword) {
+    showError('Las contraseñas no coinciden');
+    return;
+  }
+  
+  // Validar longitud de contraseña
+  if (password.length < 6) {
+    showError('La contraseña debe tener al menos 6 caracteres');
+    return;
+  }
+  
+  // Validar formato de email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showError('Por favor ingresa un correo electrónico válido');
+    return;
+  }
+  
   signupBtn.disabled = true;
   signupBtn.textContent = 'Creando cuenta...';
   hideMessages();
@@ -110,34 +158,45 @@ async function handleSignup(event) {
       name: name,
       username: username,
       'e-mail': email,
-      phone_number: phone || null,
-      rol: 'admin' // Asignar rol de administrador
+      password: password, 
+      foundation_name: foundationName, 
+      rol: 'admin' 
     };
     
-    // Petición al backend
     const response = await makeRequest('/api/auth/register', 'POST', userData);
     
     if (response.success && response.token) {
-      // Verificar que sea un administrador
+
       if (response.user.rol === 'admin') {
         localStorage.setItem('adminToken', response.token);
         localStorage.setItem('adminUser', JSON.stringify(response.user));
         
         console.log('Registro exitoso:', response.user);
         
-        showSuccess('¡Cuenta creada exitosamente! Redirigiendo al dashboard...');
+        showSuccess('¡Registro exitoso! Bienvenido a PetLink Admin. Redirigiendo al dashboard...');
         
-        // Redirigir al dashboard
         setTimeout(() => {
           navigateTo('/dashboard', { user: response.user });
-        }, 2000);
+        }, 3000);
       } else {
         showError('Error: No se pudo asignar el rol de administrador');
       }
       
     } else {
-      // Mostrar error del servidor
-      const errorMsg = response.error || 'Error al crear la cuenta';
+      let errorMsg = 'Error al crear la cuenta';
+      
+      if (response.error) {
+        if (response.error.includes('username ya está en uso')) {
+          errorMsg = 'El nombre de usuario ya está registrado. Por favor elige otro.';
+        } else if (response.error.includes('email ya está registrado')) {
+          errorMsg = 'El correo electrónico ya está registrado. Por favor usa otro.';
+        } else if (response.error.includes('Faltan campos obligatorios')) {
+          errorMsg = 'Faltan campos obligatorios. Por favor completa todos los campos.';
+        } else {
+          errorMsg = response.error;
+        }
+      }
+      
       showError(errorMsg);
     }
     
@@ -145,9 +204,8 @@ async function handleSignup(event) {
     console.error('Error en registro:', error);
     showError('Error de conexión. Verifica que el servidor esté funcionando.');
   } finally {
-    // Restaurar botón
     signupBtn.disabled = false;
-    signupBtn.textContent = 'Crear Cuenta';
+    signupBtn.textContent = 'Registrar';
   }
 }
 
@@ -173,4 +231,36 @@ function hideMessages() {
   const successMessage = document.getElementById('successMessage');
   errorMessage.style.display = 'none';
   successMessage.style.display = 'none';
+}
+
+// Limpiar formulario
+function clearForm() {
+  document.getElementById('signupForm').reset();
+  hideMessages();
+}
+
+// Validar en tiempo real la confirmación de contraseña
+function setupRealTimeValidation() {
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  
+  if (confirmPassword) {
+    confirmPassword.addEventListener('input', function() {
+      if (this.value && this.value !== password.value) {
+        this.setCustomValidity('Las contraseñas no coinciden');
+      } else {
+        this.setCustomValidity('');
+      }
+    });
+  }
+  
+  if (password) {
+    password.addEventListener('input', function() {
+      if (confirmPassword.value && this.value !== confirmPassword.value) {
+        confirmPassword.setCustomValidity('Las contraseñas no coinciden');
+      } else {
+        confirmPassword.setCustomValidity('');
+      }
+    });
+  }
 }
