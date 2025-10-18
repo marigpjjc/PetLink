@@ -89,15 +89,18 @@ async function handleLogin(event) {
     
     // Verificar si el login fue exitoso
     if (response.success && response.token) {
-
-      localStorage.setItem('adminToken', response.token);
-      localStorage.setItem('adminUser', JSON.stringify(response.user));
-      
-      console.log('Login exitoso:', response.user);
-      
-      // Redirigir al dashboard
-      navigateTo('/dashboard', { user: response.user });
-      
+      // Verificar que sea un administrador
+      if (response.user.rol === 'admin') {
+        localStorage.setItem('adminToken', response.token);
+        localStorage.setItem('adminUser', JSON.stringify(response.user));
+        
+        console.log('Login exitoso:', response.user);
+        
+        // Redirigir al dashboard
+        navigateTo('/dashboard', { user: response.user });
+      } else {
+        showError('No tienes permisos de administrador');
+      }
     } else {
       // Mostrar error del servidor
       const errorMsg = response.error || 'Error al iniciar sesión';
@@ -108,7 +111,7 @@ async function handleLogin(event) {
     console.error('Error en login:', error);
     showError('Error de conexión. Verifica que el servidor esté funcionando.');
   } finally {
-    // Restaurar botón
+
     loginBtn.disabled = false;
     loginBtn.textContent = 'Iniciar Sesión';
   }
@@ -131,28 +134,65 @@ function hideError() {
 }
 
 // Verificar si hay una sesión activa
-export function checkAuth() {
+export async function checkAuth() {
   const token = localStorage.getItem('adminToken');
   const user = localStorage.getItem('adminUser');
   
-  if (token && user) {
-    try {
-      const userData = JSON.parse(user);
-      return { isAuthenticated: true, user: userData, token: token };
-    } catch (error) {
-      console.error('Error al parsear datos de usuario:', error);
-      localStorage.removeItem('adminToken');
-      localStorage.removeItem('adminUser');
-      return { isAuthenticated: false };
-    }
+  if (!token || !user) {
+    return { isAuthenticated: false };
   }
   
-  return { isAuthenticated: false };
+  try {
+    const userData = JSON.parse(user);
+    
+    // Verificar token con el backend
+    const response = await makeRequest('/api/auth/verify', 'POST', { token });
+    
+    if (response.success && response.user) {
+      // Verificar que sea un administrador
+      if (response.user.rol === 'admin') {
+        // Actualizar datos del usuario en localStorage
+        localStorage.setItem('adminUser', JSON.stringify(response.user));
+        return { isAuthenticated: true, user: response.user, token: token };
+      } else {
+        // No es administrador proceder a limpiar sesión
+        clearSession();
+        return { isAuthenticated: false, error: 'No tienes permisos de administrador' };
+      }
+    } else {
+      // Token inválido, proceder a limpiar sesión
+      clearSession();
+      return { isAuthenticated: false, error: 'Sesión expirada' };
+    }
+    
+  } catch (error) {
+    console.error('Error al verificar autenticación:', error);
+    clearSession();
+    return { isAuthenticated: false, error: 'Error de conexión' };
+  }
+}
+
+// Limpiar datos de sesión
+function clearSession() {
+  localStorage.removeItem('adminToken');
+  localStorage.removeItem('adminUser');
 }
 
 // Función para cerrar sesión
-export function logout() {
-  localStorage.removeItem('adminToken');
-  localStorage.removeItem('adminUser');
-  navigateTo('/admin-login', {});
+export async function logout() {
+  const token = localStorage.getItem('adminToken');
+  
+  try {
+  
+    if (token) {
+      await makeRequest('/api/auth/logout', 'POST', { token });
+    }
+  } catch (error) {
+    console.error('Error al cerrar sesión en el servidor:', error);
+  
+  } finally {
+
+    clearSession();
+    navigateTo('/admin-login', {});
+  }
 }

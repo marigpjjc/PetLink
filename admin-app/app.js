@@ -11,7 +11,7 @@ function clearScripts() {
 let route = { path: "/admin-login", data: {} };
 
 // Función para renderizar la pantalla actual
-function renderCurrentScreen() {
+async function renderCurrentScreen() {
   clearScripts();
   
   switch (route.path) {
@@ -22,7 +22,7 @@ function renderCurrentScreen() {
       renderAdminSignup(route.data);
       break;
     case "/dashboard":
-      renderDashboard(route.data);
+      await renderDashboard(route.data);
       break;
     default:
       const app = document.getElementById("app");

@@ -118,18 +118,22 @@ async function handleSignup(event) {
     const response = await makeRequest('/api/auth/register', 'POST', userData);
     
     if (response.success && response.token) {
-
-      localStorage.setItem('adminToken', response.token);
-      localStorage.setItem('adminUser', JSON.stringify(response.user));
-      
-      console.log('Registro exitoso:', response.user);
-      
-      showSuccess('¡Cuenta creada exitosamente! Redirigiendo al dashboard...');
-      
-      // Redirigir al dashboard
-      setTimeout(() => {
-        navigateTo('/dashboard', { user: response.user });
-      }, 2000);
+      // Verificar que sea un administrador
+      if (response.user.rol === 'admin') {
+        localStorage.setItem('adminToken', response.token);
+        localStorage.setItem('adminUser', JSON.stringify(response.user));
+        
+        console.log('Registro exitoso:', response.user);
+        
+        showSuccess('¡Cuenta creada exitosamente! Redirigiendo al dashboard...');
+        
+        // Redirigir al dashboard
+        setTimeout(() => {
+          navigateTo('/dashboard', { user: response.user });
+        }, 2000);
+      } else {
+        showError('Error: No se pudo asignar el rol de administrador');
+      }
       
     } else {
       // Mostrar error del servidor

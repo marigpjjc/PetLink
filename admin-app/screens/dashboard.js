@@ -4,9 +4,9 @@ import { navigateTo, makeRequest } from '../app.js';
 import { checkAuth, logout } from './admin-login.js';
 
 // Función para renderizar el dashboard
-export default function renderDashboard(data) {
+export default async function renderDashboard(data) {
   // Verificar autenticación
-  const auth = checkAuth();
+  const auth = await checkAuth();
   if (!auth.isAuthenticated) {
     navigateTo('/admin-login', {});
     return;
@@ -92,8 +92,8 @@ function setupEventListeners() {
 }
 
 // Cierre de sesión
-function handleLogout() {
+async function handleLogout() {
   if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-    logout();
+    await logout();
   }
 }
