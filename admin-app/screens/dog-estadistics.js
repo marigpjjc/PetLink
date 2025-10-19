@@ -220,17 +220,16 @@ function renderDogDetails() {
 }
 
 function renderEstadistics() {
-  if (!dogData || !dogData.stats) return;
+  if (!dogData) return;
   
   const estadisticsSection = document.getElementById('estadisticsSection');
   estadisticsSection.style.display = 'block';
   
-  const stats = dogData.stats;
-  
-  updateStatBar('food', stats.food || 0);
-  updateStatBar('health', stats.health || 0);
-  updateStatBar('wellness', stats.wellness || 0);
-  updateStatBar('love', stats.love || 0);
+  // Usar las columnas individuales en lugar del objeto stats
+  updateStatBar('food', dogData.food_level || 0);
+  updateStatBar('health', dogData.health_level || 0);
+  updateStatBar('wellness', dogData.wellbeing_level || 0);
+  updateStatBar('love', dogData.affection_level || 0);
 }
 
 // Actualizar barra de progreso 

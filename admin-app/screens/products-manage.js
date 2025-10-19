@@ -3,7 +3,7 @@
 import { navigateTo, makeRequest } from '../app.js';
 import { checkAuth } from './admin-login.js';
 
-export default async function renderProductsManage() {
+export default async function renderProductsManage(data) {
   // Verificar autenticación
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
@@ -11,13 +11,18 @@ export default async function renderProductsManage() {
     return;
   }
 
+  // Detectar si viene de dog-profile o add-dog
+  const fromDogProfile = data && data.fromDogProfile;
+  const fromAddDog = data && data.fromAddDog;
+  const dogId = data && data.dogId;
+
   const app = document.getElementById('app');
   
   app.innerHTML = `
     <div class="products-manage-container">
       <header class="page-header">
         <h1>Gestión de Necesidades/Productos</h1>
-        <button id="backBtn" class="back-btn">← Volver al Dashboard</button>
+        <button id="backBtn" class="back-btn">← ${fromDogProfile ? 'Volver' : fromAddDog ? 'Volver' : 'Volver al Dashboard'}</button>
       </header>
       
       <main class="products-content">
@@ -73,8 +78,8 @@ export default async function renderProductsManage() {
             </div>
             
             <div class="form-group">
-              <label for="state">Estado de la necesidad:</label>
-              <select id="state" name="state" required>
+              <label for="estado">Estado de la necesidad:</label>
+              <select id="estado" name="estado" required>
                 <option value="">Selecciona un estado</option>
                 <option value="pending">Pendiente</option>
                 <option value="urgent">Urgente</option>
@@ -108,10 +113,10 @@ export default async function renderProductsManage() {
     </div>
   `;
   
-  setupEventListeners();
+  setupEventListeners(fromDogProfile, fromAddDog, dogId);
 }
 
-function setupEventListeners() {
+function setupEventListeners(fromDogProfile, fromAddDog, dogId) {
   const productForm = document.getElementById('productForm');
   const clearBtn = document.getElementById('clearBtn');
   const backBtn = document.getElementById('backBtn');
@@ -122,8 +127,16 @@ function setupEventListeners() {
   // Limpiar formulario
   clearBtn.addEventListener('click', clearForm);
   
-  // Volver al dashboard
-  backBtn.addEventListener('click', () => navigateTo('/dashboard', {}));
+  // Volver según el origen
+  backBtn.addEventListener('click', () => {
+    if (fromDogProfile && dogId) {
+      navigateTo('/dog-profile', { dogId: dogId });
+    } else if (fromAddDog) {
+      navigateTo('/add-pet', {});
+    } else {
+      navigateTo('/dashboard', {});
+    }
+  });
 }
 
 // Envío del formulario
@@ -138,7 +151,7 @@ async function handleSubmit(event) {
   const description = document.getElementById('description').value.trim();
   const price = parseFloat(document.getElementById('price').value);
   const dogId = parseInt(document.getElementById('dogId').value);
-  const state = document.getElementById('state').value;
+  const state = document.getElementById('estado').value;
   const imageFile = document.getElementById('image').files[0];
   
   if (!name || !description || !price || !dogId || !state) {
@@ -161,8 +174,7 @@ async function handleSubmit(event) {
       description: description,
       price: price,
       id_dog: dogId,
-      state: state,
-      urgent: state === 'urgent'
+      estado: state
     };
     
     if (imageFile) {

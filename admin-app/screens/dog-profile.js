@@ -126,7 +126,7 @@ function setupEventListeners() {
   
   backBtn.addEventListener('click', () => navigateTo('/dog-management', {}));
   
-  addNeedBtn.addEventListener('click', () => navigateTo('/products-manage', {}));
+  addNeedBtn.addEventListener('click', () => navigateTo('/products-manage', { fromDogProfile: true, dogId: dogId }));
   
   statisticsBtn.addEventListener('click', () => navigateTo('/dog-estadistics', { dogId: dogId }));
   

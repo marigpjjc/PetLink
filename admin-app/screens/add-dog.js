@@ -228,16 +228,11 @@ async function handleSubmit(event) {
   const size = document.getElementById('size').value;
   const weight = parseFloat(document.getElementById('weight').value);
   const description = document.getElementById('description').value.trim();
-  const availability = document.getElementById('availability').value;
+  const availabilityValue = document.getElementById('availability').value;
+  const availability = availabilityValue === 'disponible';
   const imageFile = document.getElementById('image').files[0];
   
-  // Estadísticas
-  const health = parseInt(document.getElementById('health').value);
-  const food = parseInt(document.getElementById('food').value);
-  const wellness = parseInt(document.getElementById('wellness').value);
-  const love = parseInt(document.getElementById('love').value);
-  
-  if (!name || !age || !size || !weight || !description || !availability) {
+  if (!name || !age || !size || !weight || !description || !availabilityValue) {
     showError('Por favor completa todos los campos obligatorios');
     return;
   }
@@ -252,6 +247,14 @@ async function handleSubmit(event) {
     return;
   }
   
+  // Estadísticas
+  const health = parseInt(document.getElementById('health').value) || 0;
+  const food = parseInt(document.getElementById('food').value) || 0;
+  const wellness = parseInt(document.getElementById('wellness').value) || 0;
+  const love = parseInt(document.getElementById('love').value) || 0;
+  
+  console.log('Estadísticas:', { health, food, wellness, love });
+  
   submitBtn.disabled = true;
   submitBtn.textContent = 'Agregando perro...';
   hideMessages();
@@ -264,12 +267,10 @@ async function handleSubmit(event) {
       weight: weight,
       description: description,
       availability: availability,
-      stats: {
-        health: health,
-        food: food,
-        wellness: wellness,
-        love: love
-      }
+      health_level: health,
+      food_level: food,
+      wellbeing_level: wellness,
+      affection_level: love
     };
     
     if (imageFile) {
@@ -291,7 +292,7 @@ async function handleSubmit(event) {
       showSuccess('¡Perro agregado exitosamente! Redirigiendo...');
       
       setTimeout(() => {
-        navigateTo('/products-manage', {});
+        navigateTo('/products-manage', { fromAddDog: true });
       }, 2000);
     } else {
       showError('Error al agregar el perro. Inténtalo nuevamente');
