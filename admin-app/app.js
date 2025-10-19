@@ -8,6 +8,7 @@ import renderDonationsView from "./screens/donations-view.js";
 import renderDonationsProfileDog from "./screens/donations-profile-dog.js";
 import renderDogEstadistics from "./screens/dog-estadistics.js";
 import renderDogManagement from "./screens/dog-management.js";
+import renderDogProfile from "./screens/dog-profile.js";
 
 const socket = io("/", { path: "/real-time" });
 
@@ -51,6 +52,9 @@ async function renderCurrentScreen() {
       break;
     case "/dog-management":
       await renderDogManagement(route.data);
+      break;
+    case "/dog-profile":
+      await renderDogProfile(route.data);
       break;
     default:
       const app = document.getElementById("app");
