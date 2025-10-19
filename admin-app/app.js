@@ -2,6 +2,7 @@ import renderAdminLogin from "./screens/admin-login.js";
 import renderAdminSignup from "./screens/admin-signup.js";
 import renderDashboard from "./screens/dashboard.js";
 import renderProductsManage from "./screens/products-manage.js";
+import renderAddDog from "./screens/add-dog.js";
 
 const socket = io("/", { path: "/real-time" });
 
@@ -27,6 +28,9 @@ async function renderCurrentScreen() {
       break;
     case "/products-manage":
       await renderProductsManage(route.data);
+      break;
+    case "/add-pet":
+      await renderAddDog(route.data);
       break;
     default:
       const app = document.getElementById("app");
