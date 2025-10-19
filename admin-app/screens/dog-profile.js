@@ -196,7 +196,7 @@ function renderDogInfo() {
   
   // Obtener nombre de la fundación del usuario logueado
   const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-  const foundationName = adminUser.foundation_name || dogData.foundation_name || 'No especificada';
+  const foundationName = adminUser.foundation_name || adminUser.username || adminUser.name || 'No especificada';
   
   document.getElementById('dogName').textContent = dogData.name || 'Sin nombre';
   document.getElementById('foundationName').textContent = `Fundación: ${foundationName}`;

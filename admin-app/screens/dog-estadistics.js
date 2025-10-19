@@ -115,22 +115,6 @@ export default async function renderDogEstadistics(data) {
           </div>
         </div>
         
-        <div id="editSection" class="edit-section" style="display: none;">
-          <h3>Editar Disponibilidad</h3>
-          <div class="edit-form">
-            <div class="form-group">
-              <label for="availabilitySelect">Estado de disponibilidad:</label>
-              <select id="availabilitySelect" class="availability-select">
-                <option value="disponible">Disponible</option>
-                <option value="no_disponible">No disponible</option>
-              </select>
-            </div>
-            <div class="form-actions">
-              <button id="saveBtn" class="save-btn">Guardar Cambios</button>
-              <button id="cancelBtn" class="cancel-btn">Cancelar</button>
-            </div>
-          </div>
-        </div>
         
         <div class="messages-section">
           <div id="successMessage" class="success-message" style="display: none;"></div>
@@ -146,17 +130,9 @@ export default async function renderDogEstadistics(data) {
 
 function setupEventListeners() {
   const backBtn = document.getElementById('backBtn');
-  const saveBtn = document.getElementById('saveBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
   
-  // Volver al dashboard
-  backBtn.addEventListener('click', () => navigateTo('/dashboard', {}));
-  
-  // Guardar cambios de disponibilidad
-  saveBtn.addEventListener('click', handleSaveAvailability);
-  
-  // Cancelar edición
-  cancelBtn.addEventListener('click', handleCancelEdit);
+  // Volver al perfil del perro
+  backBtn.addEventListener('click', () => navigateTo('/dog-profile', { dogId: dogId }));
 }
 
 // Cargar datos del perro
@@ -169,14 +145,22 @@ async function loadDogData() {
       return;
     }
     
-    const response = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'GET', null, token);
+    // Cargar datos del perro
+    const dogResponse = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'GET', null, token);
     
-    if (response && response.id) {
-      dogData = response;
+    if (dogResponse && dogResponse.id) {
+      dogData = dogResponse;
+      
+      // Usar la fundación original del perro (del creador)
+      // Si el perro no tiene foundation_name, usar la del usuario logueado como fallback
+      if (!dogData.foundation_name) {
+        const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+        dogData.foundation_name = adminUser.foundation_name || adminUser.username || adminUser.name || 'Fundación no especificada';
+      }
+      
       renderDogProfile();
       renderDogDetails();
       renderEstadistics();
-      renderEditSection();
     } else {
       showError('No se pudo cargar la información del perro');
     }
@@ -243,74 +227,21 @@ function updateStatBar(statName, value) {
   }
 }
 
-function renderEditSection() {
-  if (!dogData) return;
-  
-  const editSection = document.getElementById('editSection');
-  editSection.style.display = 'block';
-  
-  const availabilitySelect = document.getElementById('availabilitySelect');
-  availabilitySelect.value = dogData.availability || 'disponible';
-}
-
-async function handleSaveAvailability() {
-  try {
-    const availabilitySelect = document.getElementById('availabilitySelect');
-    const newAvailability = availabilitySelect.value;
-    
-    if (newAvailability === dogData.availability) {
-      showError('No hay cambios para guardar');
-      return;
-    }
-    
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-      showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
-      return;
-    }
-    
-    const saveBtn = document.getElementById('saveBtn');
-    saveBtn.disabled = true;
-    saveBtn.textContent = 'Guardando...';
-    
-    const response = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'PUT', {
-      availability: newAvailability
-    }, token);
-    
-    if (response && response.id) {
-
-      dogData.availability = newAvailability;
-      
-      document.getElementById('dogAvailability').textContent = getAvailabilityText(newAvailability);
-      
-      showSuccess('Disponibilidad actualizada exitosamente');
-    } else {
-      showError('Error al actualizar la disponibilidad');
-    }
-    
-  } catch (error) {
-    console.error('Error al guardar disponibilidad:', error);
-    showError('Error al guardar los cambios');
-  } finally {
-    const saveBtn = document.getElementById('saveBtn');
-    saveBtn.disabled = false;
-    saveBtn.textContent = 'Guardar Cambios';
-  }
-}
-
-function handleCancelEdit() {
-  const availabilitySelect = document.getElementById('availabilitySelect');
-  availabilitySelect.value = dogData.availability || 'disponible';
-  showSuccess('Cambios cancelados');
-}
 
 function getAvailabilityText(availability) {
+  // Manejar valores booleanos
+  if (typeof availability === 'boolean') {
+    return availability ? 'Disponible' : 'No disponible';
+  }
+  
+  // Manejar valores de texto
   const availabilityMap = {
     'disponible': 'Disponible',
     'no_disponible': 'No disponible',
     'adoptado': 'Adoptado',
-    'en_proceso': 'En proceso de adopción'
+    'en_proceso': 'En proceso de adopción',
+    'true': 'Disponible',
+    'false': 'No disponible'
   };
   
   return availabilityMap[availability] || 'Desconocido';
