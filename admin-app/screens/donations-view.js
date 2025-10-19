@@ -135,7 +135,7 @@ async function handleSearch(event) {
   const searchTerm = event.target.value.trim();
   
   if (searchTerm === '') {
-    filteredDogs = [...allDogs];
+    // Si no hay término de búsqueda, usar todos los perros y aplicar filtro actual
     applyCurrentFilter();
   } else {
     try {
@@ -149,17 +149,18 @@ async function handleSearch(event) {
       const response = await makeRequestWithAuth(`/api/dogs/search/${encodeURIComponent(searchTerm)}`, 'GET', null, token);
       
       if (Array.isArray(response)) {
-        filteredDogs = response;
+        // Actualizar la lista base con los resultados de búsqueda
+        allDogs = response;
         applyCurrentFilter();
       } else {
-        filteredDogs = [];
+        allDogs = [];
         applyCurrentFilter();
       }
       
     } catch (error) {
       console.error('Error en búsqueda:', error);
       showError('Error al buscar perros');
-      filteredDogs = [];
+      allDogs = [];
       applyCurrentFilter();
     }
   }
@@ -180,17 +181,21 @@ function applyFilter(filterType) {
 }
 
 function applyCurrentFilter() {
+  // Siempre empezar con todos los perros disponibles
+  let baseDogs = [...allDogs];
+  
   switch (currentFilter) {
     case 'all':
-
+      // No aplicar filtro adicional, usar todos los perros
+      filteredDogs = baseDogs;
       break;
     case 'puppies':
-
-      filteredDogs = filteredDogs.filter(dog => dog.age && dog.age < 2);
+      // Filtrar solo cachorros (menores de 2 años)
+      filteredDogs = baseDogs.filter(dog => dog.age && dog.age < 2);
       break;
     case 'lessSponsored':
-  
-      filteredDogs = filteredDogs.filter(dog => {
+      // Filtrar perros con 2 o menos donaciones
+      filteredDogs = baseDogs.filter(dog => {
         const dogDonations = allDonations.filter(donation => donation.id_dog === dog.id);
         return dogDonations.length <= 2; 
       });
@@ -266,10 +271,35 @@ function renderDogsList() {
   }).join('');
 }
 
-function clearSearch() {
+async function clearSearch() {
   document.getElementById('searchInput').value = '';
-  filteredDogs = [...allDogs];
-  applyCurrentFilter();
+  
+  // Recargar todos los perros originales
+  try {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      showError('Sesión expirada. Por favor inicia sesión nuevamente');
+      navigateTo('/admin-login', {});
+      return;
+    }
+    
+    const response = await makeRequestWithAuth('/api/dogs', 'GET', null, token);
+    
+    if (Array.isArray(response)) {
+      allDogs = response;
+      applyCurrentFilter();
+    } else {
+      allDogs = [];
+      applyCurrentFilter();
+    }
+    
+  } catch (error) {
+    console.error('Error al limpiar búsqueda:', error);
+    showError('Error al limpiar búsqueda');
+    allDogs = [];
+    applyCurrentFilter();
+  }
+  
   renderDogsList();
   updateDogsCount();
 }
