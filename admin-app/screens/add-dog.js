@@ -292,7 +292,7 @@ async function handleSubmit(event) {
       showSuccess('¡Perro agregado exitosamente! Redirigiendo...');
       
       setTimeout(() => {
-        navigateTo('/products-manage', { fromAddDog: true });
+        navigateTo('/products-manage', { fromAddDog: true, dogId: response.id });
       }, 2000);
     } else {
       showError('Error al agregar el perro. Inténtalo nuevamente');

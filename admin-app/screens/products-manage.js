@@ -74,6 +74,7 @@ export default async function renderProductsManage(data) {
                 required 
                 min="1"
                 placeholder="Ingresa el ID del perro"
+                ${fromAddDog && dogId ? `value="${dogId}" readonly` : ''}
               />
             </div>
             
@@ -245,23 +246,35 @@ function clearForm() {
 }
 
 function showSuccess(message) {
+  console.log('Mostrando mensaje de éxito:', message);
   const successMessage = document.getElementById('successMessage');
-  successMessage.textContent = message;
-  successMessage.style.display = 'block';
-  
-  setTimeout(() => {
-    successMessage.style.display = 'none';
-  }, 5000);
+  if (successMessage) {
+    successMessage.textContent = message;
+    successMessage.style.display = 'block';
+    console.log('Mensaje de éxito mostrado');
+    
+    setTimeout(() => {
+      successMessage.style.display = 'none';
+    }, 5000);
+  } else {
+    console.error('No se encontró el elemento successMessage');
+  }
 }
 
 function showError(message) {
+  console.log('Mostrando mensaje de error:', message);
   const errorMessage = document.getElementById('errorMessage');
-  errorMessage.textContent = message;
-  errorMessage.style.display = 'block';
-  
-  setTimeout(() => {
-    errorMessage.style.display = 'none';
-  }, 7000);
+  if (errorMessage) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+    console.log('Mensaje de error mostrado');
+    
+    setTimeout(() => {
+      errorMessage.style.display = 'none';
+    }, 7000);
+  } else {
+    console.error('No se encontró el elemento errorMessage');
+  }
 }
 
 function hideMessages() {
