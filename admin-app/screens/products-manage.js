@@ -74,7 +74,7 @@ export default async function renderProductsManage(data) {
                 required 
                 min="1"
                 placeholder="Ingresa el ID del perro"
-                ${fromAddDog && dogId ? `value="${dogId}" readonly` : ''}
+                ${(fromAddDog || fromDogProfile) && dogId ? `value="${dogId}" readonly` : ''}
               />
             </div>
             
