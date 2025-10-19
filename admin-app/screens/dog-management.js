@@ -179,17 +179,26 @@ function applyFilter(filterType) {
 }
 
 function applyCurrentFilter() {
+  // Siempre empezar con todos los perros disponibles (después de búsqueda si aplica)
+  let baseDogs = [...allDogs];
+  
+  // Si hay búsqueda activa, usar los resultados de búsqueda como base
+  const searchTerm = document.getElementById('searchInput').value.trim();
+  if (searchTerm !== '') {
+    // Si hay búsqueda, filteredDogs ya contiene los resultados de búsqueda
+    baseDogs = [...filteredDogs];
+  }
+  
+  // Aplicar filtro según el tipo seleccionado
   switch (currentFilter) {
     case 'all':
-
+      filteredDogs = [...baseDogs];
       break;
     case 'puppies':
-
-      filteredDogs = filteredDogs.filter(dog => dog.age && dog.age < 2);
+      filteredDogs = baseDogs.filter(dog => dog.age && dog.age < 2);
       break;
     case 'lessSponsored':
-
-      filteredDogs = filteredDogs.filter(dog => {
+      filteredDogs = baseDogs.filter(dog => {
         const dogDonations = allDonations.filter(donation => donation.id_dog === dog.id);
         return dogDonations.length <= 2;
       });

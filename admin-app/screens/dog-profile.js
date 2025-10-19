@@ -170,6 +170,7 @@ async function loadNeedsData() {
     
     if (Array.isArray(response)) {
       needsData = response;
+      console.log('Necesidades cargadas:', needsData);
       renderNeedsList();
     } else {
       needsData = [];
@@ -193,8 +194,12 @@ function renderDogInfo() {
   loadingSection.style.display = 'none';
   dogInfoSection.style.display = 'block';
   
+  // Obtener nombre de la fundación del usuario logueado
+  const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+  const foundationName = adminUser.foundation_name || dogData.foundation_name || 'No especificada';
+  
   document.getElementById('dogName').textContent = dogData.name || 'Sin nombre';
-  document.getElementById('foundationName').textContent = `Fundación: ${dogData.foundation_name || 'No especificada'}`;
+  document.getElementById('foundationName').textContent = `Fundación: ${foundationName}`;
   document.getElementById('dogWeight').textContent = `${dogData.weight || 'No especificado'} kg`;
   document.getElementById('dogAge').textContent = `${dogData.age || 'No especificada'} años`;
   document.getElementById('dogAvailability').textContent = getAvailabilityText(dogData.availability);
@@ -257,7 +262,7 @@ function renderNeedsList() {
           </div>
           <div class="detail-item">
             <span class="label">Estado:</span>
-            <span class="value">${getNeedStatusText(need.status)}</span>
+            <span class="value">${getNeedStatusText(need.estado)}</span>
           </div>
         </div>
       </div>
@@ -346,25 +351,43 @@ async function handleDeleteDog() {
 }
 
 function getAvailabilityText(availability) {
+  // Manejar valores booleanos
+  if (typeof availability === 'boolean') {
+    return availability ? 'Disponible' : 'No disponible';
+  }
+  
+  // Manejar valores de texto
   const availabilityMap = {
     'disponible': 'Disponible',
     'no_disponible': 'No disponible',
     'adoptado': 'Adoptado',
-    'en_proceso': 'En proceso de adopción'
+    'en_proceso': 'En proceso de adopción',
+    'true': 'Disponible',
+    'false': 'No disponible'
   };
   
   return availabilityMap[availability] || 'Desconocido';
 }
 
 function getNeedStatusText(status) {
+  console.log('Estado recibido:', status, 'Tipo:', typeof status);
+  
   const statusMap = {
     'pendiente': 'Pendiente',
     'completada': 'Completada',
     'cancelada': 'Cancelada',
-    'en_proceso': 'En proceso'
+    'en_proceso': 'En proceso',
+    'urgente': 'Urgente',
+    'pending': 'Pendiente',
+    'completed': 'Completada',
+    'cancelled': 'Cancelada',
+    'in_progress': 'En proceso',
+    'urgent': 'Urgente'
   };
   
-  return statusMap[status] || 'Desconocido';
+  const result = statusMap[status] || 'Desconocido';
+  console.log('Estado mapeado:', result);
+  return result;
 }
 
 function formatAmount(amount) {

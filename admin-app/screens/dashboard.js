@@ -129,7 +129,7 @@ function setupEventListeners() {
   logoutBtn.addEventListener('click', handleLogout);
   
   // Navegación a otras pantallas
-  editCatalogBtn.addEventListener('click', () => navigateTo('/products-manage', {}));
+  editCatalogBtn.addEventListener('click', () => navigateTo('/dog-management', {}));
   addPetBtn.addEventListener('click', () => navigateTo('/add-pet', {}));
   donationsBtn.addEventListener('click', () => navigateTo('/donations', {}));
   appointmentsBtn.addEventListener('click', () => navigateTo('/appointments', {}));
