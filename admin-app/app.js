@@ -1,3 +1,4 @@
+import renderAdminLoginSignup from "./screens/admin-login-signup.js";
 import renderAdminLogin from "./screens/admin-login.js";
 import renderAdminSignup from "./screens/admin-signup.js";
 import renderDashboard from "./screens/dashboard.js";
@@ -16,13 +17,16 @@ function clearScripts() {
   document.getElementById("app").innerHTML = "";
 }
 
-let route = { path: "/admin-login", data: {} };
+let route = { path: "/admin-login-signup", data: {} };
 
 // Función para renderizar la pantalla actual
 async function renderCurrentScreen() {
   clearScripts();
   
   switch (route.path) {
+    case "/admin-login-signup":
+      renderAdminLoginSignup(route.data);
+      break;
     case "/admin-login":
       renderAdminLogin(route.data);
       break;
