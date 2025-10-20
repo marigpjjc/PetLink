@@ -5,7 +5,7 @@ import appointmentsController from '../controllers/appointments.controller.js';
 
 const router = express.Router();
 
-// 🔹 Rutas para las citas
+//  Rutas para las citas
 
 // GET /api/appointments - Traer todas las citas
 router.get('/', appointmentsController.getAllAppointments);

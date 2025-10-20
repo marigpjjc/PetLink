@@ -1,4 +1,3 @@
-// server/routes/users.routes.js
 // Este archivo define las RUTAS (URLs) para los usuarios
 
 import express from 'express';
@@ -6,7 +5,7 @@ import usersController from '../controllers/users.controller.js';
 
 const router = express.Router();
 
-// 🔹 Rutas para los usuarios
+// Rutas para los usuarios
 
 // GET /api/users - Traer todos los usuarios
 router.get('/', usersController.getAllUsers);

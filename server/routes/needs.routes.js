@@ -1,4 +1,3 @@
-// server/routes/needs.routes.js
 // Este archivo define las RUTAS (URLs) para las necesidades
 
 import express from 'express';
@@ -6,7 +5,7 @@ import needsController from '../controllers/needs.controller.js';
 
 const router = express.Router();
 
-// 🔹 Rutas para las necesidades
+//  Rutas para las necesidades
 
 // GET /api/needs - Traer todas las necesidades
 router.get('/', needsController.getAllNeeds);

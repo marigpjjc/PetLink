@@ -1,4 +1,3 @@
-// padrino-app/screens/dog-profile/dog-profile.js
 import { getDogById, getNeedsByDogId } from '../../services/api.js';
 
 // Obtener el ID del perro que guardamos en el home

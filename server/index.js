@@ -123,9 +123,7 @@ io.on('connection', (socket) => {
     count: connectedUsers
   });
   
-  // ============================================
   // EVENTOS DE DONACIONES
-  // ============================================
   
   // Escuchar cuando se crea una nueva donación
   socket.on('new-donation', (donationData) => {
@@ -139,9 +137,7 @@ io.on('connection', (socket) => {
     });
   });
   
-  // ============================================
   // EVENTOS DE NECESIDADES
-  // ============================================
   
   // Escuchar cuando se crea una nueva necesidad
   socket.on('new-need', (needData) => {
@@ -171,9 +167,7 @@ io.on('connection', (socket) => {
     });
   });
   
-  // ============================================
   // EVENTOS DE CITAS
-  // ============================================
   
   // Nueva cita agendada
   socket.on('new-appointment', (appointmentData) => {
@@ -188,9 +182,7 @@ io.on('connection', (socket) => {
     });
   });
   
-  // ============================================
   // EVENTOS DE ACCESORIOS
-  // ============================================
   
   // Cuando alguien compra un accesorio
   socket.on('accessory-purchased', (purchaseData) => {
@@ -205,9 +197,7 @@ io.on('connection', (socket) => {
   });
   
 
-  // ============================================
   // DESCONEXIÓN
-  // ============================================
   
   socket.on('disconnect', () => {
     connectedUsers--;

@@ -1,4 +1,3 @@
-// padrino-app/screens/dog-profile/dog-stadistics.js
 import { getDogById } from '../../services/api.js';
 
 // Obtener el ID del perro

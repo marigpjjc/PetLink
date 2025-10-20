@@ -1,4 +1,3 @@
-// padrino-app/screens/dog-profile/appointment.js
 import { getDogById, createAppointment } from '../../services/api.js';
 
 // Obtener el ID del perro

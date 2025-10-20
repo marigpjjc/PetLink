@@ -5,7 +5,7 @@ let io = null;
 // Guardar la instancia de Socket.IO
 export const setSocketIO = (socketInstance) => {
   io = socketInstance;
-  console.log('✅ Socket.IO instancia guardada en helper');
+  console.log('Socket.IO instancia guardada en helper');
 };
 
 // Obtener la instancia de Socket.IO
@@ -21,7 +21,7 @@ export const emitNewDonation = (donationData) => {
       donation: donationData,
       timestamp: new Date()
     });
-    console.log('📡 Evento emitido: donation-created');
+    console.log('Evento emitido: donation-created');
   }
 };
 
@@ -33,7 +33,7 @@ export const emitNewNeed = (needData) => {
       need: needData,
       timestamp: new Date()
     });
-    console.log('📡 Evento emitido: need-created');
+    console.log('Evento emitido: need-created');
   }
 };
 
@@ -41,12 +41,12 @@ export const emitNewNeed = (needData) => {
 export const emitUrgentNeed = (needData) => {
   if (io) {
     io.emit('urgent-need-alert', {
-      message: '🆘 ¡ALERTA! Necesidad urgente',
+      message: '¡ALERTA! Necesidad urgente',
       need: needData,
       priority: 'high',
       timestamp: new Date()
     });
-    console.log('📡 Evento emitido: urgent-need-alert');
+    console.log('Evento emitido: urgent-need-alert');
   }
 };
 
@@ -58,7 +58,7 @@ export const emitNewAppointment = (appointmentData) => {
       appointment: appointmentData,
       timestamp: new Date()
     });
-    console.log('📡 Evento emitido: appointment-created');
+    console.log('Evento emitido: appointment-created');
   }
 };
 
@@ -70,7 +70,7 @@ export const emitAccessoryPurchase = (purchaseData) => {
       purchase: purchaseData,
       timestamp: new Date()
     });
-    console.log('📡 Evento emitido: purchase-notification');
+    console.log('Evento emitido: purchase-notification');
   }
 };
 
@@ -82,7 +82,7 @@ export const emitNewDog = (dogData) => {
       dog: dogData,
       timestamp: new Date()
     });
-    console.log('📡 Evento emitido: dog-registered');
+    console.log('Evento emitido: dog-registered');
   }
 };
 
@@ -93,6 +93,6 @@ export const emitCustomEvent = (eventName, data) => {
       ...data,
       timestamp: new Date()
     });
-    console.log(`📡 Evento emitido: ${eventName}`);
+    console.log(`Evento emitido: ${eventName}`);
   }
 };

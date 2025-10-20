@@ -2,7 +2,7 @@
 
 import supabase from '../services/supabase.service.js';
 
-// 📅 Traer TODAS las citas
+// Traer TODAS las citas
 const getAllAppointments = async () => {
   try {
     const { data, error } = await supabase
@@ -16,7 +16,7 @@ const getAllAppointments = async () => {
   }
 };
 
-// 📅 Traer UNA cita por ID
+// Traer UNA cita por ID
 const getAppointmentById = async (id) => {
   try {
     const { data, error } = await supabase
@@ -32,7 +32,7 @@ const getAppointmentById = async (id) => {
   }
 };
 
-// 📅 Traer citas por id_dog
+// Traer citas por id_dog
 const getAppointmentsByDog = async (id_dog) => {
   try {
     const { data, error } = await supabase
@@ -47,7 +47,7 @@ const getAppointmentsByDog = async (id_dog) => {
   }
 };
 
-// 📅 Traer citas por id_padrino
+// Traer citas por id_padrino
 const getAppointmentsByPadrino = async (id_padrino) => {
   try {
     const { data, error } = await supabase
@@ -62,7 +62,7 @@ const getAppointmentsByPadrino = async (id_padrino) => {
   }
 };
 
-// 📅 Traer citas por id_admin
+// Traer citas por id_admin
 const getAppointmentsByAdmin = async (id_admin) => {
   try {
     const { data, error } = await supabase
@@ -77,7 +77,7 @@ const getAppointmentsByAdmin = async (id_admin) => {
   }
 };
 
-// 📅 Crear una NUEVA cita
+// Crear una NUEVA cita
 const createAppointment = async (appointmentData) => {
   try {
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ const createAppointment = async (appointmentData) => {
   }
 };
 
-// 📅 Actualizar una cita existente
+// Actualizar una cita existente
 const updateAppointment = async (id, appointmentData) => {
   try {
     const { data, error } = await supabase
@@ -108,7 +108,7 @@ const updateAppointment = async (id, appointmentData) => {
   }
 };
 
-// 📅 Eliminar una cita
+// Eliminar una cita
 const deleteAppointment = async (id) => {
   try {
     const { error } = await supabase

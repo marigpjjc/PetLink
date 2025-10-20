@@ -1,9 +1,8 @@
-// server/db/users.db.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
 import supabase from '../services/supabase.service.js';
 
-// 👤 Traer TODOS los usuarios
+// Traer TODOS los usuarios
 const getAllUsers = async () => {
   try {
     const { data, error } = await supabase
@@ -17,7 +16,7 @@ const getAllUsers = async () => {
   }
 };
 
-// 👤 Traer UN usuario por ID
+// Traer UN usuario por ID
 const getUserById = async (id) => {
   try {
     const { data, error } = await supabase
@@ -33,7 +32,7 @@ const getUserById = async (id) => {
   }
 };
 
-// 👤 Traer un usuario por email
+// Traer un usuario por email
 const getUserByEmail = async (email) => {
   try {
     const { data, error } = await supabase
@@ -49,7 +48,7 @@ const getUserByEmail = async (email) => {
   }
 };
 
-// 👤 Traer un usuario por username
+// Traer un usuario por username
 const getUserByUsername = async (username) => {
   try {
     const { data, error } = await supabase
@@ -65,7 +64,7 @@ const getUserByUsername = async (username) => {
   }
 };
 
-// 👤 Crear un NUEVO usuario
+// Crear un NUEVO usuario
 const createUser = async (userData) => {
   try {
     const { data, error } = await supabase
@@ -80,7 +79,7 @@ const createUser = async (userData) => {
   }
 };
 
-// 👤 Actualizar un usuario existente
+// Actualizar un usuario existente
 const updateUser = async (id, userData) => {
   try {
     const { data, error } = await supabase
@@ -96,7 +95,7 @@ const updateUser = async (id, userData) => {
   }
 };
 
-// 👤 Eliminar un usuario
+// Eliminar un usuario
 const deleteUser = async (id) => {
   try {
     const { error } = await supabase

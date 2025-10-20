@@ -1,4 +1,3 @@
-// server/routes/dogs.routes.js
 // Este archivo define las RUTAS (URLs) para los perritos
 
 import express from 'express';
@@ -6,7 +5,7 @@ import dogsController from '../controllers/dogs.controller.js';
 
 const router = express.Router();
 
-// 🔹 Rutas para los perritos
+//  Rutas para los perritos
 
 // GET /api/dogs - Traer todos los perritos
 router.get('/', dogsController.getAllDogs);
@@ -26,5 +25,4 @@ router.put('/:id', dogsController.updateDog);
 // DELETE /api/dogs/:id - Eliminar un perrito
 router.delete('/:id', dogsController.deleteDog);
 
-// ✅ IMPORTANTE: Exportar el router directamente, NO como objeto
 export default router;

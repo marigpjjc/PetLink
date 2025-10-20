@@ -1,4 +1,3 @@
-
 import { getAllDogs, searchDogsByName } from '../../services/api.js';
 
 // Donde se van a mostrar los perros

@@ -1,8 +1,8 @@
-// Este archivo maneja los PAGOS SIMULADOS 
+// Este archivo maneja los pagos simulados 
 
 import { getSocketIO } from '../utils/socket-helper.js';
 
-// PROCESAR PAGO - Simular un pago con tarjeta
+// procesa pago - Simular un pago con tarjeta
 const processPayment = async (req, res) => {
   try {
     const { 
@@ -36,7 +36,7 @@ const processPayment = async (req, res) => {
       });
     }
     
-    // SIMULAR procesamiento (esperar 2 segundos para que parezca real)
+    // SIMULAR procesamiento (esperar 2 segundos)
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Simular que el 95% de los pagos son exitosos
@@ -60,7 +60,7 @@ const processPayment = async (req, res) => {
       transactionId: transactionId,
       receiptNumber: receiptNumber,
       amount: amount,
-      currency: 'COP', // Pesos colombianos
+      currency: 'COP', 
       status: 'approved',
       cardLast4: cardNumber.slice(-4),
       cardName: cardName,
@@ -89,7 +89,7 @@ const processPayment = async (req, res) => {
     // Devolver respuesta exitosa
     res.status(200).json({
       success: true,
-      message: '¡Pago procesado exitosamente! 🎉',
+      message: '¡Pago procesado exitosamente!',
       payment: paymentData
     });
     
@@ -141,12 +141,12 @@ const verifyPayment = async (req, res) => {
   }
 };
 
-// 🧾 GENERAR RECIBO - Obtener recibo de un pago
+//  GENERAR RECIBO - Obtener recibo de un pago
 const getReceipt = async (req, res) => {
   try {
     const { paymentId } = req.params;
     
-    console.log('🧾 Petición recibida: GET /api/payments/receipt/' + paymentId);
+    console.log('Petición recibida: GET /api/payments/receipt/' + paymentId);
     
     if (!paymentId) {
       return res.status(400).json({ 

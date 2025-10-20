@@ -6,7 +6,7 @@ payButton.addEventListener('click', async () => {
     return;
   }
   
-  // Obtener el usuario actual (padrino)
+  // Obtener el usuario actual 
   const padrinoId = localStorage.getItem('userId') || 1;
   
   // Crear la donacion con los campos correctos de la tabla

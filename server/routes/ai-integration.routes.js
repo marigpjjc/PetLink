@@ -1,4 +1,3 @@
-// server/routes/ai-integration.routes.js
 // Este archivo define las rutas para usar las APIs externas
 
 import express from 'express';
@@ -6,16 +5,10 @@ import aiIntegrationController from '../controllers/ai-integration.controller.js
 
 const router = express.Router();
 
-// ============================================
-// 🎨 RUTAS DE STABILITY AI (Generación de Imágenes)
-// ============================================
+//  RUTAS DE STABILITY AI (generador de imagenes)
 
-// 🎯 RUTA PRINCIPAL: Generar imagen de perro CON accesorio
+//  RUTA PRINCIPAL: Generar imagen de perro con accesorio
 // POST /api/ai/generate-dog-with-accessory
-// Body: { 
-//   dogData: { name, breed, age, size },
-//   accessoryData: { category, description }
-// }
 router.post('/generate-dog-with-accessory', aiIntegrationController.generateDogWithAccessoryImage);
 
 // POST /api/ai/generate-dog-image
@@ -30,9 +23,7 @@ router.post('/generate-accessory-image', aiIntegrationController.generateAccesso
 // Body: { prompt }
 router.post('/generate-custom-image', aiIntegrationController.generateCustomImage);
 
-// ============================================
-// 📱 RUTAS DE TWILIO (WhatsApp)
-// ============================================
+//  RUTAS DE TWILIO (WhatsApp)
 
 // POST /api/ai/send-welcome-message
 // Body: { phoneNumber, userName }
@@ -54,18 +45,9 @@ router.post('/send-urgent-need-alert', aiIntegrationController.sendUrgentNeedAle
 // Body: { phoneNumber, messageText }
 router.post('/send-custom-message', aiIntegrationController.sendCustomMessage);
 
-// ============================================
-// 🎁 RUTA COMBINADA (Imagen + WhatsApp)
-// ============================================
-
-// 🎯 Confirmar compra de accesorio (genera imagen Y envía WhatsApp)
+//  RUTA COMBINADA (Imagen + WhatsApp)
+// Confirmar compra de accesorio (genera imagen Y envía WhatsApp)
 // POST /api/ai/confirm-accessory-purchase
-// Body: { 
-//   phoneNumber,
-//   dogData: { name, breed, age, size },
-//   accessoryData: { category, description },
-//   purchaseData: { amount }
-// }
 router.post('/confirm-accessory-purchase', aiIntegrationController.confirmAccessoryPurchase);
 
 export default router;

@@ -1,4 +1,3 @@
-// server/services/stability.service.js
 // Este archivo genera imágenes usando Stability AI
 
 import axios from 'axios';
@@ -10,12 +9,12 @@ dotenv.config();
 const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
 const API_URL = 'https://api.stability.ai/v2beta/stable-image/generate/core';
 
-// 🎨 Generar imagen de un perro con un accesorio
+// Generar imagen de un perro con un accesorio
 const generateDogWithAccessoryImage = async (dogData, accessoryData) => {
   try {
-    console.log('🎨 Generando imagen con Stability AI...');
-    console.log('📝 Datos del perro:', dogData);
-    console.log('📝 Datos del accesorio:', accessoryData);
+    console.log('Generando imagen con Stability AI...');
+    console.log('Datos del perro:', dogData);
+    console.log('Datos del accesorio:', accessoryData);
     
     // Crear el prompt en inglés
     const prompt = `A photorealistic portrait of a ${dogData.breed || 'dog'} 
@@ -25,7 +24,7 @@ Professional pet photography, natural outdoor lighting, happy and friendly expre
 The ${accessoryData.category} should be clearly visible and well-fitted.
 High quality, detailed, 4K resolution.`;
     
-    console.log('📝 Prompt:', prompt);
+    console.log('Prompt:', prompt);
     
     // Crear FormData para la petición
     const formData = new FormData();
@@ -47,7 +46,7 @@ High quality, detailed, 4K resolution.`;
     const imageBase64 = Buffer.from(response.data).toString('base64');
     const imageDataUrl = `data:image/jpeg;base64,${imageBase64}`;
     
-    console.log('✅ Imagen generada exitosamente con Stability AI');
+    console.log('Imagen generada exitosamente con Stability AI');
     
     return {
       success: true,
@@ -58,7 +57,7 @@ High quality, detailed, 4K resolution.`;
     };
     
   } catch (error) {
-    console.error('❌ Error al generar imagen:', error.message);
+    console.error('Error al generar imagen:', error.message);
     
     let errorMessage = error.message;
     
@@ -82,10 +81,10 @@ High quality, detailed, 4K resolution.`;
   }
 };
 
-// 🎨 Generar solo imagen de un perro
+//  Generar solo imagen de un perro
 const generateDogImage = async (dogData) => {
   try {
-    console.log('🎨 Generando imagen de perro con Stability AI...');
+    console.log(' Generando imagen de perro con Stability AI...');
     
     const prompt = `A photorealistic portrait of a ${dogData.breed || 'dog'}.
 ${dogData.size || 'Medium'} sized, ${dogData.age || 'adult'} age.
@@ -93,7 +92,7 @@ Friendly and adorable expression.
 Professional pet photography, natural lighting, outdoor setting.
 High quality, detailed fur texture, 4K resolution.`;
     
-    console.log('📝 Prompt:', prompt);
+    console.log('Prompt:', prompt);
     
     const formData = new FormData();
     formData.append('prompt', prompt);
@@ -112,7 +111,7 @@ High quality, detailed fur texture, 4K resolution.`;
     const imageBase64 = Buffer.from(response.data).toString('base64');
     const imageDataUrl = `data:image/jpeg;base64,${imageBase64}`;
     
-    console.log('✅ Imagen de perro generada');
+    console.log('Imagen de perro generada');
     
     return {
       success: true,
@@ -123,7 +122,7 @@ High quality, detailed fur texture, 4K resolution.`;
     };
     
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('Error:', error.message);
     
     let errorMessage = error.message;
     if (error.response?.status === 401) {
@@ -139,17 +138,17 @@ High quality, detailed fur texture, 4K resolution.`;
   }
 };
 
-// 🎨 Generar imagen de un accesorio
+//  Generar imagen de un accesorio
 const generateAccessoryImage = async (accessoryData) => {
   try {
-    console.log('🎨 Generando imagen de accesorio...');
+    console.log(' Generando imagen de accesorio...');
     
     const prompt = `A high-quality product photograph of a pet ${accessoryData.category || 'accessory'}.
 ${accessoryData.description || 'Modern design'}.
 Professional product photography, white background, studio lighting.
 Detailed texture, commercial quality, sharp focus, 4K resolution.`;
     
-    console.log('📝 Prompt:', prompt);
+    console.log('Prompt:', prompt);
     
     const formData = new FormData();
     formData.append('prompt', prompt);
@@ -168,7 +167,7 @@ Detailed texture, commercial quality, sharp focus, 4K resolution.`;
     const imageBase64 = Buffer.from(response.data).toString('base64');
     const imageDataUrl = `data:image/jpeg;base64,${imageBase64}`;
     
-    console.log('✅ Imagen de accesorio generada');
+    console.log('Imagen de accesorio generada');
     
     return {
       success: true,
@@ -179,7 +178,7 @@ Detailed texture, commercial quality, sharp focus, 4K resolution.`;
     };
     
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('Error:', error.message);
     
     let errorMessage = error.message;
     if (error.response?.status === 401) {
@@ -195,11 +194,11 @@ Detailed texture, commercial quality, sharp focus, 4K resolution.`;
   }
 };
 
-// 🎨 Generar imagen con prompt personalizado
+//  Generar imagen con prompt personalizado
 const generateCustomImage = async (customPrompt) => {
   try {
-    console.log('🎨 Generando imagen personalizada...');
-    console.log('📝 Prompt:', customPrompt);
+    console.log(' Generando imagen personalizada...');
+    console.log('Prompt:', customPrompt);
     
     const formData = new FormData();
     formData.append('prompt', customPrompt);
@@ -218,7 +217,7 @@ const generateCustomImage = async (customPrompt) => {
     const imageBase64 = Buffer.from(response.data).toString('base64');
     const imageDataUrl = `data:image/jpeg;base64,${imageBase64}`;
     
-    console.log('✅ Imagen personalizada generada');
+    console.log('Imagen personalizada generada');
     
     return {
       success: true,
@@ -229,7 +228,7 @@ const generateCustomImage = async (customPrompt) => {
     };
     
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('Error:', error.message);
     
     let errorMessage = error.message;
     if (error.response?.status === 401) {

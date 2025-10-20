@@ -1,4 +1,3 @@
-// padrino-app/screens/dog-profile/donation.js
 import { getDogById } from '../../services/api.js';
 
 // Obtener el ID de la necesidad

@@ -1,5 +1,3 @@
-// padrino-app/screens/dog-profile/error.js
-
 const errorMessage = document.getElementById('errorMessage');
 const retryButton = document.getElementById('retryButton');
 

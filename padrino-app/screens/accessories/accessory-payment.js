@@ -1,4 +1,3 @@
-// padrino-app/screens/accessories/accessory-payment.js
 import { getAccessoryById, getDogById, generateDogWithAccessory } from '../../services/api.js';
 
 // Obtener el ID del accesorio
@@ -58,7 +57,7 @@ payButton.addEventListener('click', async () => {
   // Generar imagen con Stability AI
   const dogData = {
     name: currentDog.name,
-    breed: currentDog.size, // Usamos size como breed
+    breed: currentDog.size, 
     age: currentDog.age,
     size: currentDog.size
   };

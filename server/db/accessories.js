@@ -1,9 +1,8 @@
-// server/db/accessories.db.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
 import supabase from '../services/supabase.service.js';
 
-// 🎁 Traer TODOS los accesorios
+// Traer TODOS los accesorios
 const getAllAccessories = async () => {
   try {
     const { data, error } = await supabase
@@ -17,7 +16,7 @@ const getAllAccessories = async () => {
   }
 };
 
-// 🎁 Traer UN accesorio por ID
+// Traer UN accesorio por ID
 const getAccessoryById = async (id) => {
   try {
     const { data, error } = await supabase
@@ -33,7 +32,7 @@ const getAccessoryById = async (id) => {
   }
 };
 
-// 🎁 Traer accesorios por ID de perro
+// Traer accesorios por ID de perro
 const getAccessoriesByDogId = async (dogId) => {
   try {
     const { data, error } = await supabase
@@ -48,7 +47,7 @@ const getAccessoriesByDogId = async (dogId) => {
   }
 };
 
-// 🎁 Traer accesorios por ID de usuario
+// Traer accesorios por ID de usuario
 const getAccessoriesByUserId = async (userId) => {
   try {
     const { data, error } = await supabase
@@ -63,7 +62,7 @@ const getAccessoriesByUserId = async (userId) => {
   }
 };
 
-// 🎁 Traer accesorios por categoría
+// Traer accesorios por categoría
 const getAccessoriesByCategory = async (category) => {
   try {
     const { data, error } = await supabase
@@ -78,7 +77,7 @@ const getAccessoriesByCategory = async (category) => {
   }
 };
 
-// 🎁 Crear un NUEVO accesorio
+// Crear un NUEVO accesorio
 const createAccessory = async (accessoryData) => {
   try {
     const { data, error } = await supabase
@@ -93,7 +92,7 @@ const createAccessory = async (accessoryData) => {
   }
 };
 
-// 🎁 Actualizar un accesorio existente
+// Actualizar un accesorio existente
 const updateAccessory = async (id, accessoryData) => {
   try {
     const { data, error } = await supabase
@@ -109,7 +108,7 @@ const updateAccessory = async (id, accessoryData) => {
   }
 };
 
-// 🎁 Eliminar un accesorio
+// Eliminar un accesorio
 const deleteAccessory = async (id) => {
   try {
     const { error } = await supabase

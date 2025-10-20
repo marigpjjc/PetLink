@@ -1,4 +1,3 @@
-// padrino-app/screens/accessories/accessories.js
 import { getDogById, getAllAccessories } from '../../services/api.js';
 
 // Obtener el ID del perro

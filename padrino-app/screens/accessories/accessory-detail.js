@@ -1,4 +1,3 @@
-// padrino-app/screens/accessories/accessory-detail.js
 import { getAccessoryById } from '../../services/api.js';
 
 // Obtener el ID del accesorio

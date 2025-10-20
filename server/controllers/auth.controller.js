@@ -7,7 +7,7 @@ const login = async (req, res) => {
   try {
     const { username, email } = req.body;
     
-    console.log('🔐 Petición recibida: POST /api/auth/login', { username, email });
+    console.log('Petición recibida: POST /api/auth/login', { username, email });
     
     // Validar que al menos uno esté presente
     if (!username && !email) {
@@ -146,7 +146,7 @@ const verifyToken = async (req, res) => {
       });
     }
     
-    // Extraer el ID del token (formato: token_123_1234567890)
+    // Extraer el ID del token 
     const parts = token.split('_');
     if (parts.length !== 3 || parts[0] !== 'token') {
       return res.status(401).json({ 

@@ -1,4 +1,3 @@
-// server/routes/donations.routes.js
 // Este archivo define las RUTAS (URLs) para las donaciones
 
 import express from 'express';
@@ -6,7 +5,7 @@ import donationsController from '../controllers/donations.controller.js';
 
 const router = express.Router();
 
-// 🔹 Rutas para las donaciones
+//  Rutas para las donaciones
 
 // GET /api/donations - Traer todas las donaciones
 router.get('/', donationsController.getAllDonations);

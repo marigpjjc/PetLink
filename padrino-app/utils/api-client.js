@@ -1,8 +1,8 @@
-// Este archivo tiene las funciones para hablar con el backend
+//Este archivo tiene las funciones para hablar con el backend
 
 const API_URL = 'http://localhost:5050/api';
 
-// 🐕 Función para traer TODOS los perritos
+// Función para traer TODOS los perritos
 export async function getAllDogs() {
   try {
     const response = await fetch(`${API_URL}/dogs`);
@@ -19,7 +19,7 @@ export async function getAllDogs() {
   }
 }
 
-// 🐕 Función para traer UN perrito por su ID
+// Función para traer UN perrito por su ID
 export async function getDogById(id) {
   try {
     const response = await fetch(`${API_URL}/dogs/${id}`);

@@ -1,4 +1,3 @@
-// server/routes/accessories.routes.js
 // Este archivo define las RUTAS (URLs) para los accesorios
 
 import express from 'express';
@@ -6,7 +5,7 @@ import accessoriesController from '../controllers/accessories.controller.js';
 
 const router = express.Router();
 
-// 🔹 Rutas para los accesorios
+//  Rutas para los accesorios
 
 // GET /api/accessories - Traer todos los accesorios
 router.get('/', accessoriesController.getAllAccessories);

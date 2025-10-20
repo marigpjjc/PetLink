@@ -1,9 +1,8 @@
-// server/services/dogs.service.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
 import supabase from '../services/supabase.service.js';
 
-// 🐕 Traer TODOS los perritos
+// Traer TODOS los perritos
 const getAllDogs = async () => {
   try {
     const { data, error } = await supabase
@@ -17,7 +16,7 @@ const getAllDogs = async () => {
   }
 };
 
-// 🐕 Traer UN perrito por ID
+// Traer UN perrito por ID
 const getDogById = async (id) => {
   try {
     const { data, error } = await supabase
@@ -33,7 +32,7 @@ const getDogById = async (id) => {
   }
 };
 
-// 🐕 Crear un NUEVO perrito
+// Crear un NUEVO perrito
 const createDog = async (dogData) => {
   try {
     const { data, error } = await supabase
@@ -48,7 +47,7 @@ const createDog = async (dogData) => {
   }
 };
 
-// 🐕 Actualizar un perrito existente
+// Actualizar un perrito existente
 const updateDog = async (id, dogData) => {
   try {
     const { data, error } = await supabase
@@ -64,7 +63,7 @@ const updateDog = async (id, dogData) => {
   }
 };
 
-// 🐕 Eliminar un perrito
+// Eliminar un perrito
 const deleteDog = async (id) => {
   try {
     const { error } = await supabase

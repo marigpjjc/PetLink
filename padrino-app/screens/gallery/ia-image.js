@@ -1,4 +1,3 @@
-// padrino-app/screens/gallery/ia-image.js
 import { getDogById } from '../../services/api.js';
 
 // Obtener el ID del perro

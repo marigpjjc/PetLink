@@ -1,4 +1,3 @@
-// padrino-app/services/api.js
 const API_URL = 'http://localhost:5050/api';
 
 // Traer todos los perros

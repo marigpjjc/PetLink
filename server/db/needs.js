@@ -1,9 +1,8 @@
-// server/db/needs.db.js
 // Este archivo habla DIRECTAMENTE con Supabase
 
 import supabase from '../services/supabase.service.js'
 
-// 🐾 Traer TODAS las necesidades
+// Traer TODAS las necesidades
 const getAllNeeds = async () => {
   try {
     const { data, error } = await supabase
@@ -17,7 +16,7 @@ const getAllNeeds = async () => {
   }
 };
 
-// 🐾 Traer UNA necesidad por ID
+// Traer UNA necesidad por ID
 const getNeedById = async (id) => {
   try {
     const { data, error } = await supabase
@@ -33,7 +32,7 @@ const getNeedById = async (id) => {
   }
 };
 
-// 🐾 Traer necesidades por ID de perro
+// Traer necesidades por ID de perro
 const getNeedsByDogId = async (dogId) => {
   try {
     const { data, error } = await supabase
@@ -48,7 +47,7 @@ const getNeedsByDogId = async (dogId) => {
   }
 };
 
-// 🐾 Traer necesidades por estado (state)
+// Traer necesidades por estado (state)
 const getNeedsByState = async (state) => {
   try {
     const { data, error } = await supabase
@@ -63,7 +62,7 @@ const getNeedsByState = async (state) => {
   }
 };
 
-// 🐾 Crear una NUEVA necesidad
+// Crear una NUEVA necesidad
 const createNeed = async (needData) => {
   try {
     const { data, error } = await supabase
@@ -78,7 +77,7 @@ const createNeed = async (needData) => {
   }
 };
 
-// 🐾 Actualizar una necesidad existente
+// Actualizar una necesidad existente
 const updateNeed = async (id, needData) => {
   try {
     const { data, error } = await supabase
@@ -94,7 +93,7 @@ const updateNeed = async (id, needData) => {
   }
 };
 
-// 🐾 Eliminar una necesidad
+// Eliminar una necesidad
 const deleteNeed = async (id) => {
   try {
     const { error } = await supabase

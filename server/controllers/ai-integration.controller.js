@@ -1,18 +1,15 @@
-// server/controllers/ai-integration.controller.js
-// Este archivo maneja las peticiones para usar las APIs externas
+// Este archivo es pa manejar las peticiones para usar las APIs externas
 
 import stabilityService from '../services/stability.service.js';
 import twilioService from '../services/twilio.service.js';
 
-// ============================================
-// 🎨 ENDPOINTS DE STABILITY AI (Imágenes)
-// ============================================
+// ENDPOINTS DE STABILITY AI 
 
-// 🎯 PRINCIPAL: Generar imagen de perro CON accesorio (cuando se compra)
+// Generar imagen de perro CON accesorio (cuando se compra)
 const generateDogWithAccessoryImage = async (req, res) => {
   try {
     const { dogData, accessoryData } = req.body;
-    console.log('🔥 Petición: Generar imagen de perro con accesorio');
+    console.log('Petición: Generar imagen de perro con accesorio');
     
     if (!dogData || !accessoryData) {
       return res.status(400).json({
@@ -38,7 +35,7 @@ const generateDogWithAccessoryImage = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en generateDogWithAccessoryImage:', error);
+    console.error('Error en generateDogWithAccessoryImage:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -47,7 +44,7 @@ const generateDogWithAccessoryImage = async (req, res) => {
 const generateDogImage = async (req, res) => {
   try {
     const dogData = req.body;
-    console.log('🔥 Petición: Generar imagen de perro');
+    console.log('Petición: Generar imagen de perro');
     
     const result = await stabilityService.generateDogImage(dogData);
     
@@ -66,16 +63,16 @@ const generateDogImage = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en generateDogImage:', error);
+    console.error('Error en generateDogImage:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
-// Generar solo imagen de accesorio
+//Generar solo imagen de accesorio
 const generateAccessoryImage = async (req, res) => {
   try {
     const accessoryData = req.body;
-    console.log('🔥 Petición: Generar imagen de accesorio');
+    console.log('Petición: Generar imagen de accesorio');
     
     const result = await stabilityService.generateAccessoryImage(accessoryData);
     
@@ -94,7 +91,7 @@ const generateAccessoryImage = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en generateAccessoryImage:', error);
+    console.error('Error en generateAccessoryImage:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -103,7 +100,7 @@ const generateAccessoryImage = async (req, res) => {
 const generateCustomImage = async (req, res) => {
   try {
     const { prompt } = req.body;
-    console.log('🔥 Petición: Generar imagen personalizada');
+    console.log('Petición: Generar imagen personalizada');
     
     if (!prompt) {
       return res.status(400).json({
@@ -129,20 +126,18 @@ const generateCustomImage = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en generateCustomImage:', error);
+    console.error('Error en generateCustomImage:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
-// ============================================
-// 📱 ENDPOINTS DE TWILIO (WhatsApp)
-// ============================================
+// ENDPOINTS DE TWILIO (WhatsApp)
 
 // Enviar mensaje de bienvenida
 const sendWelcomeMessage = async (req, res) => {
   try {
     const { phoneNumber, userName } = req.body;
-    console.log('🔥 Petición: Enviar mensaje de bienvenida');
+    console.log('Petición: Enviar mensaje de bienvenida');
     
     if (!phoneNumber || !userName) {
       return res.status(400).json({
@@ -166,7 +161,7 @@ const sendWelcomeMessage = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en sendWelcomeMessage:', error);
+    console.error('Error en sendWelcomeMessage:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -175,7 +170,7 @@ const sendWelcomeMessage = async (req, res) => {
 const sendDonationConfirmation = async (req, res) => {
   try {
     const { phoneNumber, donationData } = req.body;
-    console.log('🔥 Petición: Enviar confirmación de donación');
+    console.log('Petición: Enviar confirmación de donación');
     
     if (!phoneNumber || !donationData) {
       return res.status(400).json({
@@ -199,7 +194,7 @@ const sendDonationConfirmation = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en sendDonationConfirmation:', error);
+    console.error('Error en sendDonationConfirmation:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -208,7 +203,7 @@ const sendDonationConfirmation = async (req, res) => {
 const sendAppointmentReminder = async (req, res) => {
   try {
     const { phoneNumber, appointmentData } = req.body;
-    console.log('🔥 Petición: Enviar recordatorio de cita');
+    console.log('Petición: Enviar recordatorio de cita');
     
     if (!phoneNumber || !appointmentData) {
       return res.status(400).json({
@@ -232,7 +227,7 @@ const sendAppointmentReminder = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en sendAppointmentReminder:', error);
+    console.error('Error en sendAppointmentReminder:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -241,7 +236,7 @@ const sendAppointmentReminder = async (req, res) => {
 const sendUrgentNeedAlert = async (req, res) => {
   try {
     const { phoneNumber, needData } = req.body;
-    console.log('🔥 Petición: Enviar alerta de necesidad urgente');
+    console.log('Petición: Enviar alerta de necesidad urgente');
     
     if (!phoneNumber || !needData) {
       return res.status(400).json({
@@ -265,7 +260,7 @@ const sendUrgentNeedAlert = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en sendUrgentNeedAlert:', error);
+    console.error('Error en sendUrgentNeedAlert:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -274,7 +269,7 @@ const sendUrgentNeedAlert = async (req, res) => {
 const sendCustomMessage = async (req, res) => {
   try {
     const { phoneNumber, messageText } = req.body;
-    console.log('🔥 Petición: Enviar mensaje personalizado');
+    console.log('Petición: Enviar mensaje personalizado');
     
     if (!phoneNumber || !messageText) {
       return res.status(400).json({
@@ -298,20 +293,18 @@ const sendCustomMessage = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Error en sendCustomMessage:', error);
+    console.error('Error en sendCustomMessage:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
-// ============================================
-// 🎁 ENDPOINT COMBINADO (Imagen + WhatsApp)
-// ============================================
+// ENDPOINT COMBINADO (Imagen + WhatsApp)
 
-// Confirmar compra de accesorio (genera imagen Y envía WhatsApp)
+/// Confirmar compra de accesorio (genera imagen Y envía WhatsApp)
 const confirmAccessoryPurchase = async (req, res) => {
   try {
     const { phoneNumber, dogData, accessoryData, purchaseData } = req.body;
-    console.log('🔥 Petición: Confirmar compra de accesorio con imagen');
+    console.log('Petición: Confirmar compra de accesorio con imagen');
     
     if (!phoneNumber || !dogData || !accessoryData || !purchaseData) {
       return res.status(400).json({
@@ -321,7 +314,7 @@ const confirmAccessoryPurchase = async (req, res) => {
     }
     
     // 1. Generar la imagen del perro con el accesorio
-    console.log('📸 Generando imagen...');
+    console.log('Generando imagen...');
     const imageResult = await stabilityService.generateDogWithAccessoryImage(dogData, accessoryData);
     
     if (!imageResult.success) {
@@ -331,24 +324,24 @@ const confirmAccessoryPurchase = async (req, res) => {
       });
     }
     
-    console.log('✅ Imagen generada');
+    console.log('Imagen generada');
     
     // 2. Enviar mensaje de WhatsApp
-    console.log('📱 Enviando WhatsApp...');
-    const messageText = `¡Gracias por tu compra! 🎁
+    console.log('Enviando WhatsApp...');
+    const messageText = `¡Gracias por tu compra! 
 
 Has comprado: ${accessoryData.category}
 Para: ${dogData.name}
 Monto: $${purchaseData.amount}
 
-¡Tu compra ayuda a ${dogData.name} y a muchos perritos más! 🐕💝
+¡Tu compra ayuda a ${dogData.name} y a muchos perritos más! 
 
 Hemos generado una imagen especial de ${dogData.name} con su nuevo ${accessoryData.category}.`;
     
     const messageResult = await twilioService.sendCustomMessage(phoneNumber, messageText);
     
     if (messageResult.success) {
-      console.log('✅ WhatsApp enviado');
+      console.log('WhatsApp enviado');
       res.status(200).json({
         success: true,
         message: 'Compra confirmada, imagen generada y WhatsApp enviado',
@@ -369,7 +362,7 @@ Hemos generado una imagen especial de ${dogData.name} con su nuevo ${accessoryDa
     }
     
   } catch (error) {
-    console.error('❌ Error en confirmAccessoryPurchase:', error);
+    console.error('Error en confirmAccessoryPurchase:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
