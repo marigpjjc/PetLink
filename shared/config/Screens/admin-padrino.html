@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PetLink - Selección de Rol</title>
+  <!-- Usar los estilos del proyecto para mantener consistencia -->
+  <link rel="stylesheet" href="../../../admin-app/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <div class="login-signup-container">
+      <div class="welcome-section">
+        <div class="app-logo">
+          <h1>Bienvenidos a PetLink</h1>
+          <p class="app-subtitle">¿Quién eres?</p>
+        </div>
+      </div>
+
+      <div class="auth-options">
+        <div class="auth-card">
+          <div class="auth-icon"></div>
+          <p>Ingresa como Padrino para apoyar a una mascota.</p>
+          <button id="padrinoBtn" class="auth-btn signup-btn">Padrino</button>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-icon"></div>
+          <p>Ingresa al panel administrativo de tu fundación.</p>
+          <button id="adminBtn" class="auth-btn login-btn">Administrador</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lógica de la pantalla -->
+  <script src="./admin-padrino.js"></script>
+</body>
+</html>
