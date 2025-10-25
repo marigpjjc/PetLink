@@ -1,8 +1,9 @@
-// Esta es la pantalla de PAGO SIMULADO
+// Esta es la pantalla de PAGO SIMULADO (versión simplificada para debugging)
 
-import { createDonation } from '../services/api.js';
+import { createDonation, generateAIImage } from '../services/api.js';
 import router from '../utils/router.js';
 import { getCurrentUserId, isUserLoggedIn, createMockUser } from '../utils/auth.js';
+import supabase from '../supabase.service.js';
 
 // Renderizar (mostrar) la pantalla de pago
 export function renderPayment() {
@@ -18,41 +19,50 @@ export function renderPayment() {
     userId = mockUser.id;
   }
   
-  // Obtener parametros de la URL
+  // Obtener parámetros de la URL
   const params = new URLSearchParams(window.location.search);
-  const needId = params.get('needId');
+  const type = params.get('type'); // 'accessory' o 'need'
   const price = params.get('price');
   const dogId = params.get('dogId');
   
-  // Si no hay parametros, volver atras
-  if (!needId || !price || !dogId) {
-    console.error('Faltan parametros en la URL');
+  // Verificar tipo de pago
+  const isAccessory = type === 'accessory';
+  
+  // Validar parámetros según el tipo
+  if (!price || !dogId) {
+    console.error('Faltan parámetros en la URL');
     router.navigateTo('/');
     return;
   }
   
+  // Título según tipo
+  const title = isAccessory ? 'Comprar Accesorio' : 'Realizar Donación';
+  const summaryTitle = isAccessory ? 'Resumen de tu compra' : 'Resumen de tu donación';
+  const summaryLabel = isAccessory ? 'Monto a pagar:' : 'Monto a donar:';
+  const buttonText = isAccessory ? `Confirmar Compra de $${price}` : `Confirmar Donación de $${price}`;
+  
   app.innerHTML = `
     <div class="payment-container">
-      <!-- Boton de volver -->
+      <!-- Botón de volver -->
       <button class="btn-back" id="btn-back">← Volver</button>
       
-      <h1 class="payment-title">Realizar Donacion</h1>
+      <h1 class="payment-title">${title}</h1>
       
-      <!-- Resumen de la donacion -->
+      <!-- Resumen -->
       <div class="payment-summary">
-        <h3>Resumen de tu donacion</h3>
+        <h3>${summaryTitle}</h3>
         <div class="summary-item">
-          <span>Monto a donar:</span>
+          <span>${summaryLabel}</span>
           <span class="summary-price">$${price}</span>
         </div>
       </div>
       
       <!-- Formulario de pago (simulado) -->
       <form class="payment-form" id="payment-form">
-        <h3>Informacion de pago</h3>
+        <h3>Información de pago</h3>
         
         <div class="form-group">
-          <label for="card-number">Numero de tarjeta</label>
+          <label for="card-number">Número de tarjeta</label>
           <input 
             type="text" 
             id="card-number" 
@@ -64,7 +74,7 @@ export function renderPayment() {
         
         <div class="form-row">
           <div class="form-group">
-            <label for="card-expiry">Fecha de expiracion</label>
+            <label for="card-expiry">Fecha de expiración</label>
             <input 
               type="text" 
               id="card-expiry" 
@@ -91,34 +101,34 @@ export function renderPayment() {
           <input 
             type="text" 
             id="card-name" 
-            placeholder="Juan Perez"
+            placeholder="Juan Pérez"
             required
           >
         </div>
         
         <button type="submit" class="btn-pay" id="btn-pay">
-          Confirmar Donacion de $${price}
+          ${buttonText}
         </button>
       </form>
       
       <p class="payment-note">
-        Esta es una simulacion de pago. No se procesara ninguna transaccion real.
+        Esta es una simulación de pago. No se procesará ninguna transacción real.
       </p>
     </div>
   `;
   
   // Agregar eventos
-  setupPaymentEvents(needId, price, dogId, userId);
+  setupPaymentEvents(params, userId, isAccessory);
 }
 
 // Configurar eventos de la pantalla de pago
-function setupPaymentEvents(needId, price, dogId, userId) {
-  // Boton volver
+function setupPaymentEvents(params, userId, isAccessory) {
+  // Botón volver
   document.getElementById('btn-back').addEventListener('click', () => {
     window.history.back();
   });
   
-  // Formatear numero de tarjeta mientras se escribe
+  // Formatear número de tarjeta mientras se escribe
   const cardNumberInput = document.getElementById('card-number');
   cardNumberInput.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\s/g, '');
@@ -126,7 +136,7 @@ function setupPaymentEvents(needId, price, dogId, userId) {
     e.target.value = formattedValue;
   });
   
-  // Formatear fecha de expiracion
+  // Formatear fecha de expiración
   const cardExpiryInput = document.getElementById('card-expiry');
   cardExpiryInput.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\D/g, '');
@@ -136,7 +146,7 @@ function setupPaymentEvents(needId, price, dogId, userId) {
     e.target.value = value;
   });
   
-  // Solo permitir numeros en CVV
+  // Solo permitir números en CVV
   const cardCvvInput = document.getElementById('card-cvv');
   cardCvvInput.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
@@ -146,23 +156,123 @@ function setupPaymentEvents(needId, price, dogId, userId) {
   const form = document.getElementById('payment-form');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    await processPayment(needId, price, dogId, userId);
+    if (isAccessory) {
+      await processAccessoryPayment(params, userId);
+    } else {
+      await processNeedPayment(params, userId);
+    }
   });
 }
 
-// Procesar el pago (simulado)
-async function processPayment(needId, price, dogId, userId) {
+// Procesar pago de ACCESORIO (VERSIÓN SIMPLIFICADA)
+async function processAccessoryPayment(params, userId) {
   const btnPay = document.getElementById('btn-pay');
   
-  // Deshabilitar boton mientras se procesa
+  // Deshabilitar botón mientras se procesa
+  btnPay.disabled = true;
+  btnPay.textContent = 'Procesando compra...';
+  
+  try {
+    const dogId = params.get('dogId');
+    const price = params.get('price');
+    
+    console.log('Procesando compra de accesorio...');
+    
+    // Paso 1: Generar imagen con IA
+    btnPay.textContent = 'Generando imagen IA...';
+    
+    const dogData = {
+      id: parseInt(dogId),
+      breed: params.get('dogBreed') || 'dog',
+      size: params.get('dogSize') || 'medium',
+      age: params.get('dogAge') || 'adult'
+    };
+    
+    const accessoryData = {
+      category: params.get('accessoryCategory') || 'accesorio',
+      description: params.get('accessoryName') || ''
+    };
+    
+    console.log('Generando imagen IA:', { dogData, accessoryData });
+    
+    const imageResult = await generateAIImage(dogData, accessoryData);
+    
+    if (!imageResult.success) {
+      throw new Error('No se pudo generar la imagen: ' + imageResult.error);
+    }
+    
+    console.log('Imagen generada:', imageResult.imageUrl);
+    
+    // Paso 2: Insertar DIRECTAMENTE con Supabase (sin usar API)
+    btnPay.textContent = 'Guardando compra...';
+    
+    const imageUrl = imageResult.storageUrl || imageResult.imageUrl;
+    
+    console.log('Creando registro de compra:', {
+      id_dog: parseInt(dogId),
+      id_user: userId,
+      category: params.get('accessoryCategory'),
+      name: params.get('accessoryName'),
+      price: parseFloat(price),
+      imagen_ia: imageUrl
+    });
+    
+    // Insertar directamente con Supabase
+    const { data, error } = await supabase
+      .from('Accessories')
+      .insert([{
+        id_dog: parseInt(dogId),
+        id_user: userId,
+        category: params.get('accessoryCategory'),
+        name: params.get('accessoryName'),
+        price: parseFloat(price),
+        imagen_ia: imageUrl
+      }])
+      .select();
+    
+    if (error) {
+      console.error('Error de Supabase:', error);
+      throw new Error(error.message);
+    }
+    
+    console.log('Compra registrada:', data);
+    
+    // Paso 3: Mostrar mensaje de éxito
+    showAccessorySuccessMessage(data[0], imageUrl, dogId);
+    
+    // Paso 4: Redirigir a galería después de 4 segundos
+    setTimeout(() => {
+      router.navigateTo(`/gallery/${dogId}`);
+    }, 4000);
+    
+  } catch (error) {
+    console.error('Error al procesar compra de accesorio:', error);
+    
+    // Mostrar mensaje de error
+    btnPay.disabled = false;
+    btnPay.textContent = 'Reintentar';
+    
+    alert('Error al procesar la compra: ' + error.message);
+  }
+}
+
+// Procesar pago de NECESIDAD (donación)
+async function processNeedPayment(params, userId) {
+  const btnPay = document.getElementById('btn-pay');
+  
+  // Deshabilitar botón mientras se procesa
   btnPay.disabled = true;
   btnPay.textContent = 'Procesando...';
   
   try {
-    // Generar un ID de transaccion simulado
+    const needId = params.get('needId');
+    const price = params.get('price');
+    const dogId = params.get('dogId');
+    
+    // Generar un ID de transacción simulado
     const transactionId = 'TXN-' + Date.now();
     
-    // Crear la donacion
+    // Crear la donación
     const donationData = {
       id_padrino: userId,
       id_dog: parseInt(dogId),
@@ -172,45 +282,71 @@ async function processPayment(needId, price, dogId, userId) {
       state: 'completed'
     };
     
-    console.log('Enviando donacion:', donationData);
+    console.log('Enviando donación:', donationData);
     
     const donation = await createDonation(donationData);
     
-    console.log('Donacion creada exitosamente:', donation);
+    console.log('Donación creada exitosamente:', donation);
     
-    // Mostrar mensaje de exito
-    showSuccessMessage(donation);
+    // Mostrar mensaje de éxito
+    showNeedSuccessMessage(donation);
     
-    // Redirigir al home despues de 3 segundos
+    // Redirigir al perfil del perro después de 3 segundos
     setTimeout(() => {
-      router.navigateTo('/');
+      router.navigateTo(`/dog/${dogId}`);
     }, 3000);
     
   } catch (error) {
-    console.error('Error al procesar pago:', error);
+    console.error('Error al procesar donación:', error);
     
     // Mostrar mensaje de error
     btnPay.disabled = false;
     btnPay.textContent = 'Reintentar';
     
-    alert('Error al procesar la donacion. Por favor intenta de nuevo.');
+    alert('Error al procesar la donación. Por favor intenta de nuevo.');
   }
 }
 
-// Mostrar mensaje de exito
-function showSuccessMessage(donation) {
+// Mostrar mensaje de éxito para ACCESORIO
+function showAccessorySuccessMessage(purchase, imageUrl, dogId) {
   const app = document.getElementById('app');
   
   app.innerHTML = `
     <div class="payment-success">
       <div class="success-icon">✓</div>
-      <h1>Donacion Exitosa</h1>
+      <h1>Compra Exitosa</h1>
+      <p>Tu accesorio ha sido comprado</p>
+      
+      <!-- Mostrar la imagen generada -->
+      <div class="success-image-preview">
+        <img src="${imageUrl}" alt="Foto generada" class="generated-image">
+      </div>
+      
+      <div class="success-details">
+        <p>Accesorio: ${purchase.category}</p>
+        <p>Monto: $${purchase.price}</p>
+      </div>
+      
+      <p class="redirect-message">Generamos una foto especial para ti</p>
+      <p class="redirect-message">Redirigiendo a la galería...</p>
+    </div>
+  `;
+}
+
+// Mostrar mensaje de éxito para NECESIDAD
+function showNeedSuccessMessage(donation) {
+  const app = document.getElementById('app');
+  
+  app.innerHTML = `
+    <div class="payment-success">
+      <div class="success-icon">✓</div>
+      <h1>Donación Exitosa</h1>
       <p>Gracias por tu generosidad</p>
       <div class="success-details">
-        <p>Transaccion: ${donation.transaction_id}</p>
+        <p>Transacción: ${donation.transaction_id}</p>
         <p>Monto: $${donation.price}</p>
       </div>
-      <p class="redirect-message">Redirigiendo al inicio...</p>
+      <p class="redirect-message">Redirigiendo al perfil...</p>
     </div>
   `;
 }

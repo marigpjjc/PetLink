@@ -937,3 +937,431 @@ body {
 .stat-bar-affection {
   background-color: #f44336;
 }
+/* =============================================
+   ACCESORIOS - LISTA
+   ============================================= */
+
+.accessories-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.accessories-title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.accessories-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.accessories-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.accessory-card {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.accessory-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.accessory-image-container {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.accessory-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.accessory-info {
+  padding: 15px;
+}
+
+.accessory-category {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.accessory-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.accessory-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6b35;
+  margin-bottom: 10px;
+}
+
+.btn-view-accessory {
+  width: 100%;
+  padding: 8px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-view-accessory:hover {
+  background-color: #e55a2b;
+}
+
+.no-accessories {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+/* =============================================
+   ACCESORIO - DETALLE
+   ============================================= */
+
+.accessory-detail-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.accessory-detail-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+}
+
+.accessory-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.accessory-detail-info {
+  margin-bottom: 30px;
+}
+
+.accessory-detail-category {
+  font-size: 14px;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.accessory-detail-name {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.accessory-detail-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.accessory-detail-for {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.accessory-detail-price {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff6b35;
+  margin-bottom: 20px;
+}
+
+.btn-buy-accessory {
+  width: 100%;
+  padding: 18px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.btn-buy-accessory:hover {
+  background-color: #e55a2b;
+}
+
+.accessory-note {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+/* =============================================
+   GALERÍA
+   ============================================= */
+
+.gallery-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.gallery-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+}
+
+.gallery-dog-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gallery-dog-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-dog-info {
+  flex: 1;
+}
+
+.gallery-dog-name {
+  font-size: 24px;
+  color: #ff6b35;
+  margin-bottom: 5px;
+}
+
+.gallery-dog-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.gallery-photo-count {
+  font-size: 12px;
+  color: #999;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.gallery-photo-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.gallery-photo-card:hover {
+  transform: scale(1.05);
+}
+
+.gallery-photo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  padding: 10px;
+  color: white;
+}
+
+.gallery-photo-category {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.gallery-photo-date {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.no-photos {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+}
+
+.no-photos p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Modal de foto grande */
+.photo-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.photo-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.photo-modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 5px 15px;
+}
+
+.photo-modal-image {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 10px;
+}
+
+.photo-modal-info {
+  text-align: center;
+  color: white;
+  margin-top: 15px;
+}
+
+.photo-modal-category {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.photo-modal-date {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* =============================================
+   PAGO - ACTUALIZACIONES
+   ============================================= */
+
+.success-image-preview {
+  width: 100%;
+  max-width: 300px;
+  margin: 20px auto;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.generated-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =============================================
+   SECCIÓN DE ACCESORIOS EN PERFIL
+   ============================================= */
+
+.dog-accessories-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+}
+
+.dog-accessories-section h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.accessories-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.accessories-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-accessories,
+.btn-gallery {
+  padding: 15px;
+  background-color: #4ECDC4;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-accessories:hover {
+  background-color: #3db8af;
+}
+
+.btn-gallery {
+  background-color: #95E1D3;
+}
+
+.btn-gallery:hover {
+  background-color: #7dd4c5;
+}

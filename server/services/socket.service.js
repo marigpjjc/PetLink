@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import { Server } from "./supabase.service.js";
 
 let io;
 

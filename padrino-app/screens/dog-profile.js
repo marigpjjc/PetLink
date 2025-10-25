@@ -56,7 +56,7 @@ function displayDogProfile(dog, needs) {
       <!-- Informacion del perro -->
       <div class="dog-profile-info">
         <h1 class="dog-profile-name">${dog.name}</h1>
-        <p class="dog-profile-location">📍 ${dog.location || 'Sin ubicacion'}</p>
+        <p class="dog-profile-location">${dog.location || 'Sin ubicacion'}</p>
         
         <!-- Caracteristicas -->
         <div class="dog-characteristics">
@@ -100,9 +100,10 @@ function displayDogProfile(dog, needs) {
       <!-- Seccion de accesorios -->
       <div class="dog-accessories-section">
         <h2>Accesorios</h2>
+        <p class="accessories-description">Dale un regalo especial a ${dog.name}</p>
         <div class="accessories-buttons">
-          <button class="btn-accessories" id="btn-view-accessories">Ver accesorios</button>
-          <button class="btn-gallery" id="btn-view-gallery">Ver galeria</button>
+          <button class="btn-accessories" id="btn-accessories">Ver Accesorios</button>
+          <button class="btn-gallery" id="btn-gallery">Ver Galeria</button>
         </div>
       </div>
     </div>
@@ -154,13 +155,19 @@ function setupProfileEvents(dog, needs) {
     router.navigateTo(`/dog/${dog.id}/statistics`);
   });
   
-  // Boton ver accesorios
-  document.getElementById('btn-view-accessories').addEventListener('click', () => {
-    router.navigateTo(`/accessories`);
-  });
+  // Boton ver accesorios (CORREGIDO)
+  const btnAccessories = document.getElementById('btn-accessories');
+  if (btnAccessories) {
+    btnAccessories.addEventListener('click', () => {
+      router.navigateTo(`/accessories/${dog.id}`);
+    });
+  }
   
-  // Boton ver galeria
-  document.getElementById('btn-view-gallery').addEventListener('click', () => {
-    router.navigateTo(`/dog/${dog.id}/gallery`);
-  });
+  // Boton ver galeria (CORREGIDO)
+  const btnGallery = document.getElementById('btn-gallery');
+  if (btnGallery) {
+    btnGallery.addEventListener('click', () => {
+      router.navigateTo(`/gallery/${dog.id}`);
+    });
+  }
 }

@@ -7,6 +7,9 @@ import { renderNeedDetail } from './screens/need-detail.js';
 import { renderPayment } from './screens/payment.js';
 import { renderScheduleAppointment } from './screens/schedule-appointment.js';
 import { renderDogStatistics } from './screens/dog-stats.js'; 
+import { renderAccessoriesList } from './screens/accessories-list.js';
+import { renderAccessoryDetail } from './screens/accessory-detail.js';
+import { renderGallery } from './screens/gallery.js';
 
 // Configurar las rutas
 function setupRoutes() {
@@ -38,8 +41,28 @@ function setupRoutes() {
   router.addRoute('/dog/:id/statistics', (params) => {
     const dogId = params.id;
     renderDogStatistics(dogId);
+
+  });
+
+   // Ruta de lista de accesorios
+  router.addRoute('/accessories/:dogId', (params) => {
+    const dogId = params.dogId;
+    renderAccessoriesList(dogId);
+  });
+  
+  // Ruta de detalle de accesorio
+  router.addRoute('/accessory/:id', (params) => {
+    const accessoryId = params.id;
+    renderAccessoryDetail(accessoryId);
+  });
+  
+  // Ruta de galería
+  router.addRoute('/gallery/:dogId', (params) => {
+    const dogId = params.dogId;
+    renderGallery(dogId);
   });
 }
+
 
 // Iniciar la aplicacion
 function initApp() {
