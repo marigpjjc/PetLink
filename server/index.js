@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { setSocketIO } from './utils/socket-helper.js';
+import path from 'path';                    
+import { fileURLToPath } from 'url';        
 
 // Cargar variables de entorno PRIMERO
 dotenv.config();
@@ -24,6 +26,20 @@ const io = new Server(httpServer, {
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Configuración para __dirname en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Servir archivos estáticos de las aplicaciones frontend
+app.use('/admin-app', express.static(path.join(__dirname, '../admin-app')));
+app.use('/padrino-app', express.static(path.join(__dirname, '../padrino-app')));
+
+console.log('Aplicaciones frontend configuradas:');
+console.log('   - Admin App: http://localhost:5050/admin-app');
+console.log('   - Padrino App: http://localhost:5050/padrino-app');
+
+
 
 console.log('Express iniciado');
 
@@ -99,6 +115,12 @@ const authRoutesModule = await import('./routes/auth.routes.js');
 const authRoutes = authRoutesModule.default;
 app.use('/api/auth', authRoutes);
 console.log('Ruta /api/auth registrada exitosamente');
+
+// Importar rutas de statistics
+const statisticsRoutesModule = await import('./routes/statistics.routes.js');
+const statisticsRoutes = statisticsRoutesModule.default;
+app.use('/api/statistics', statisticsRoutes);
+console.log('Ruta /api/statistics registrada exitosamente');
 
 // CONFIGURACIÓN DE SOCKET.IO
 

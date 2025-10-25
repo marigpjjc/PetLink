@@ -1,34 +1,58 @@
-import renderScreen1 from "./screens/screen1.js";
-import renderScreen2 from "./screens/screen2.js";
+// Este es el CEREBRO de la aplicacion (conecta todo)
 
-const socket = io("/", { path: "/real-time" });
+import router from './utils/router.js';
+import { renderHome } from './screens/home.js';
+import { renderDogProfile } from './screens/dog-profile.js';
+import { renderNeedDetail } from './screens/need-detail.js';
+import { renderPayment } from './screens/payment.js';
+import { renderScheduleAppointment } from './screens/schedule-appointment.js';
+import { renderDogStatistics } from './screens/dog-stats.js'; 
 
-function clearScripts() {
-  document.getElementById("app").innerHTML = "";
+// Configurar las rutas
+function setupRoutes() {
+  // Ruta del HOME
+  router.addRoute('/', renderHome);
+  
+  // Ruta del perfil del perro
+  router.addRoute('/dog/:id', (params) => {
+    const dogId = params.id;
+    renderDogProfile(dogId);
+  });
+  
+  // Ruta del detalle de necesidad
+  router.addRoute('/need/:id', (params) => {
+    const needId = params.id;
+    renderNeedDetail(needId);
+  });
+  
+  // Ruta de pago
+  router.addRoute('/payment', renderPayment);
+  
+  // Ruta de agendar cita
+  router.addRoute('/dog/:id/schedule', (params) => {
+    const dogId = params.id;
+    renderScheduleAppointment(dogId);
+  });
+  
+  // Ruta de estadísticas (ESTA ES NUEVA)
+  router.addRoute('/dog/:id/statistics', (params) => {
+    const dogId = params.id;
+    renderDogStatistics(dogId);
+  });
 }
 
-let route = { path: "/", data: {} };
-renderRoute(route);
-
-function renderRoute(currentRoute) {
-  switch (currentRoute?.path) {
-    case "/":
-      clearScripts();
-      renderScreen1(currentRoute?.data);
-      break;
-    case "/screen2":
-      clearScripts();
-      renderScreen2(currentRoute?.data);
-      break;
-    default:
-      const app = document.getElementById("app");
-      app.innerHTML = `<h1>404 - Not Found</h1><p>The page you are looking for does not exist.</p>`;
-  }
+// Iniciar la aplicacion
+function initApp() {
+  console.log('Iniciando aplicacion...');
+  
+  // Configurar las rutas
+  setupRoutes();
+  
+  // Iniciar el router
+  router.init();
+  
+  console.log('Aplicacion iniciada!');
 }
 
-function navigateTo(path, data) {
-  route = { path, data };
-  renderRoute(route);
-}
-
-export { navigateTo, socket };
+// Cuando el HTML este listo, iniciar la app
+document.addEventListener('DOMContentLoaded', initApp);

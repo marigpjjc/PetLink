@@ -1,6 +1,0 @@
-const doneButton = document.getElementById('doneButton');
-
-// Boton para volver al perfil del perro
-doneButton.addEventListener('click', () => {
-  window.location.href = 'dog-profile.html';
-});

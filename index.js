@@ -17,8 +17,8 @@ const httpServer = createServer(app);
 
 // Middlewares
 app.use(express.json());
-app.use("/app1", express.static(path.join(__dirname, "app1")));
-app.use("/app2", express.static(path.join(__dirname, "app2")));
+app.use("/admin-app", express.static(path.join(__dirname, "admin-app")));
+app.use("/padrino-app", express.static(path.join(__dirname, "padrino-app")));
 
 // Routes
 app.use("/", usersRouter);

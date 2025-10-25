@@ -7,7 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon server/index.js",
+    "dev:client": "vite --config padrino-app/vite.config.js",
+    "build:client": "vite build --config padrino-app/vite.config.js",
+    "preview:client": "vite preview --config padrino-app/vite.config.js"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +28,8 @@
     "twilio": "^5.10.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "vite": "^5.0.0"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,939 @@
+/* Estilos BASICOS para la app */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+#app {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: white;
+  min-height: 100vh;
+}
+
+/* HOME */
+
+.home-container {
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  background-color: #ff6b35;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 5px;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Titulo */
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Filtros */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-btn.active {
+  background-color: #ffd93d;
+  font-weight: bold;
+}
+
+/* Lista de perros */
+.dogs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Card de perro */
+.dog-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.dog-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dog-image-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ff6b35;
+  flex-shrink: 0;
+}
+
+.dog-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dog-info {
+  flex: 1;
+}
+
+.dog-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.dog-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6b35;
+  margin-bottom: 5px;
+}
+
+.dog-location {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.btn-ver-mas {
+  padding: 6px 16px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-ver-mas:hover {
+  background-color: #e55a2b;
+}
+
+/* Mensajes */
+.loading,
+.error,
+.no-dogs {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.error {
+  color: #ff0000;
+}
+
+/* PERFIL DEL PERRO */
+
+.dog-profile-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.btn-back:hover {
+  color: #333;
+}
+
+.dog-profile-image {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.dog-profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dog-profile-info {
+  margin-bottom: 30px;
+}
+
+.dog-profile-name {
+  font-size: 32px;
+  color: #ff6b35;
+  margin-bottom: 10px;
+}
+
+.dog-profile-location {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.dog-characteristics {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.characteristic {
+  flex: 1;
+}
+
+.characteristic-label {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 5px;
+}
+
+.characteristic-value {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dog-description {
+  margin-bottom: 20px;
+}
+
+.dog-description h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.dog-description p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.btn-schedule {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-schedule:hover {
+  background-color: #e55a2b;
+}
+
+/* Necesidades */
+
+.dog-needs-section {
+  margin-bottom: 30px;
+}
+
+.dog-needs-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.needs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.need-card {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.need-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.need-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.need-info {
+  flex: 1;
+}
+
+.need-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.need-description {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.need-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+.no-needs {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+/* Estadisticas */
+
+.btn-statistics {
+  width: 100%;
+  padding: 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-statistics:hover {
+  background-color: #45a049;
+}
+
+/* Accesorios */
+
+.dog-accessories-section {
+  margin-bottom: 30px;
+}
+
+.dog-accessories-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.accessories-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-accessories,
+.btn-gallery {
+  flex: 1;
+  padding: 15px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-accessories:hover,
+.btn-gallery:hover {
+  background-color: #0b7dda;
+}
+
+/* DETALLE DE NECESIDAD */
+
+.need-detail-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.need-detail-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.need-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.need-detail-info {
+  margin-bottom: 30px;
+}
+
+.need-detail-name {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.need-detail-category {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+  text-transform: capitalize;
+}
+
+.need-detail-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.need-detail-price {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ff6b35;
+  margin-bottom: 20px;
+}
+
+.btn-donate {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-donate:hover {
+  background-color: #e55a2b;
+}
+
+/* PANTALLA DE PAGO */
+
+.payment-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.payment-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.payment-summary {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.payment-summary h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.summary-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+.payment-form {
+  margin-bottom: 20px;
+}
+
+.payment-form h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff6b35;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.btn-pay {
+  width: 100%;
+  padding: 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-pay:hover {
+  background-color: #45a049;
+}
+
+.btn-pay:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.payment-note {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+}
+
+/* PAGO EXITOSO */
+
+.payment-success {
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.payment-success h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.payment-success > p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.success-details {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.success-details p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.redirect-message {
+  font-size: 14px;
+  color: #999;
+  font-style: italic;
+}
+
+/* AGENDAR CITA */
+
+.schedule-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.schedule-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Calendario */
+
+.calendar-container {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-nav {
+  background-color: #f5f5f5;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.calendar-nav:hover {
+  background-color: #e0e0e0;
+}
+
+.calendar-month {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.calendar-day-name {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  font-weight: bold;
+  padding: 10px 0;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.calendar-day:hover:not(.disabled):not(.empty) {
+  background-color: #f5f5f5;
+}
+
+.calendar-day.selected {
+  background-color: #ff6b35;
+  color: white;
+  font-weight: bold;
+}
+
+.calendar-day.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.calendar-day.empty {
+  cursor: default;
+}
+
+/* Inputs de fecha y hora */
+
+.date-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #f5f5f5;
+  color: #333;
+  cursor: default;
+}
+
+.time-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.time-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #fff8e1;
+  box-sizing: border-box;
+}
+
+.time-input:focus {
+  outline: none;
+  border-color: #ff6b35;
+}
+
+/* Boton de agendar */
+
+.btn-schedule-appointment {
+  width: 100%;
+  padding: 18px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-schedule-appointment:hover {
+  background-color: #e55a2b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-schedule-appointment:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Pantalla de exito */
+
+.schedule-success {
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.schedule-success .success-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.schedule-success h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.schedule-success > p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.success-note {
+  font-size: 14px;
+  color: #999;
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+.btn-back-home {
+  padding: 15px 30px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-back-home:hover {
+  background-color: #e55a2b;
+}
+
+/* ESTADÍSTICAS */
+
+.statistics-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.statistics-title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.statistics-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.stat-item {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #666;
+}
+
+.stat-bar-container {
+  width: 100%;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.stat-bar {
+  height: 100%;
+  border-radius: 15px;
+  transition: width 0.5s ease;
+}
+
+.stat-bar-food {
+  background-color: #9c27b0;
+}
+
+.stat-bar-health {
+  background-color: #00bcd4;
+}
+
+.stat-bar-wellbeing {
+  background-color: #ff9800;
+}
+
+.stat-bar-affection {
+  background-color: #f44336;
+}

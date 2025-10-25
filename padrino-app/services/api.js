@@ -1,205 +1,123 @@
+// Este archivo se comunica con el BACKEND (trae y envia datos)
+
 const API_URL = 'http://localhost:5050/api';
 
-// Traer todos los perros
-const getAllDogs = async () => {
+// Funcion helper para hacer peticiones
+async function fetchAPI(endpoint, options = {}) {
   try {
-    const response = await fetch(`${API_URL}/dogs`);
-    if (!response.ok) throw new Error('Error al traer los perros');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-};
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
 
-// Traer un perro por ID
-const getDogById = async (id) => {
-  try {
-    const response = await fetch(`${API_URL}/dogs/${id}`);
-    if (!response.ok) throw new Error('Error al traer el perro');
-    const data = await response.json();
-    return data;
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    return await response.json();
   } catch (error) {
-    console.error('Error:', error);
-    return null;
+    console.error('Error en la peticion:', error);
+    throw error;
   }
-};
+}
+
+// PERROS (Dogs)
+
+// Traer todos los perros
+function getAllDogs() {
+  return fetchAPI('/dogs');
+}
+
+// Traer un perro especifico
+function getDogById(id) {
+  return fetchAPI(`/dogs/${id}`);
+}
 
 // Buscar perros por nombre
-const searchDogsByName = async (name) => {
-  try {
-    const response = await fetch(`${API_URL}/dogs/search/${name}`);
-    if (!response.ok) throw new Error('Error al buscar perros');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-};
+function searchDogsByName(name) {
+  return fetchAPI(`/dogs/search/${name}`);
+}
 
-// Traer las necesidades de un perro
-const getNeedsByDogId = async (dogId) => {
-  try {
-    const response = await fetch(`${API_URL}/needs/dog/${dogId}`);
-    if (!response.ok) throw new Error('Error al traer necesidades');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-};
+// CITAS (Appointments)
 
 // Crear una cita
-const createAppointment = async (appointmentData) => {
-  try {
-    const response = await fetch(`${API_URL}/appointments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(appointmentData)
-    });
-    if (!response.ok) throw new Error('Error al crear la cita');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
-};
+function createAppointment(appointmentData) {
+  return fetchAPI('/appointments', {
+    method: 'POST',
+    body: JSON.stringify(appointmentData),
+  });
+}
+
+// Traer citas de un perro
+function getAppointmentsByDog(dogId) {
+  return fetchAPI(`/appointments/dog/${dogId}`);
+}
+
+// Traer citas de un padrino
+function getAppointmentsByPadrino(padrinoId) {
+  return fetchAPI(`/appointments/padrino/${padrinoId}`);
+}
+
+// ACCESORIOS (Accessories)
 
 // Traer todos los accesorios
-const getAllAccessories = async () => {
-  try {
-    const response = await fetch(`${API_URL}/accessories`);
-    if (!response.ok) throw new Error('Error al traer accesorios');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-};
+function getAllAccessories() {
+  return fetchAPI('/accessories');
+}
 
-// Traer un accesorio por ID
-const getAccessoryById = async (id) => {
-  try {
-    const response = await fetch(`${API_URL}/accessories/${id}`);
-    if (!response.ok) throw new Error('Error al traer el accesorio');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
-};
+// Traer un accesorio especifico
+function getAccessoryById(id) {
+  return fetchAPI(`/accessories/${id}`);
+}
 
-// Traer las imagenes de IA de un perro
-const getIAImagesByDogId = async (dogId) => {
-  try {
-    const response = await fetch(`${API_URL}/ia-images/dog/${dogId}`);
-    if (!response.ok) throw new Error('Error al traer imagenes IA');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
-};
-
-// Crear una nueva imagen de IA
-const createIAImage = async (imageData) => {
-  try {
-    const response = await fetch(`${API_URL}/ia-images`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(imageData)
-    });
-    if (!response.ok) throw new Error('Error al crear imagen IA');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
-};
-
-// Generar imagen del perro con accesorio usando Stability AI
-const generateDogWithAccessory = async (dogData, accessoryData) => {
-  try {
-    const response = await fetch(`${API_URL}/ai/generate-dog-with-accessory`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ dogData, accessoryData })
-    });
-    if (!response.ok) throw new Error('Error al generar imagen');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
-};
+// DONACIONES (Donations)
 
 // Crear una donacion
-const createDonation = async (donationData) => {
-  try {
-    console.log('Enviando donacion:', donationData);
-    
-    const response = await fetch(`${API_URL}/donations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(donationData)
-    });
-    
-    console.log('Status de respuesta:', response.status);
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error del servidor:', errorData);
-      throw new Error('Error al crear la donacion: ' + JSON.stringify(errorData));
-    }
-    
-    const data = await response.json();
-    console.log('Donacion creada exitosamente:', data);
-    return data;
-  } catch (error) {
-    console.error('Error completo:', error);
-    return null;
-  }
-};
+function createDonation(donationData) {
+  return fetchAPI('/donations', {
+    method: 'POST',
+    body: JSON.stringify(donationData),
+  });
+}
 
-// Traer una necesidad por ID
-const getNeedById = async (id) => {
-  try {
-    const response = await fetch(`${API_URL}/needs/${id}`);
-    if (!response.ok) throw new Error('Error al traer la necesidad');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
-};
+// Traer donaciones de un perro
+function getDonationsByDog(dogId) {
+  return fetchAPI(`/donations/dog/${dogId}`);
+}
 
-export { 
-  getAllDogs, 
-  getDogById, 
-  searchDogsByName, 
-  getNeedsByDogId,
+// NECESIDADES (Needs)
+
+// Traer necesidades de un perro
+function getNeedsByDog(dogId) {
+  return fetchAPI(`/needs/dog/${dogId}`);
+}
+
+// Traer una necesidad especifica
+function getNeedById(id) {
+  return fetchAPI(`/needs/${id}`);
+}
+
+// Traer estadísticas de un perro
+function getDogStatistics(dogId) {
+  return fetchAPI(`/statistics/${dogId}`);
+}
+
+// EXPORTAR todas las funciones
+export {
+  getAllDogs,
+  getDogById,
+  searchDogsByName,
   createAppointment,
+  getAppointmentsByDog,
+  getAppointmentsByPadrino,
   getAllAccessories,
   getAccessoryById,
-  generateDogWithAccessory,
   createDonation,
-  getNeedById
+  getDonationsByDog,
+  getNeedsByDog,
+  getNeedById,
+  getDogStatistics
 };
