@@ -1,4 +1,4 @@
-// Este archivo ayuda a emitir eventos de Socket.IO desde cualquier parte del código
+// Este archivo ayuda a emitir eventos de Socket.IO desde cualquier parte del codigo
 
 let io = null;
 
@@ -13,11 +13,11 @@ export const getSocketIO = () => {
   return io;
 };
 
-// Emitir evento de nueva donación
+// Emitir evento de nueva donacion
 export const emitNewDonation = (donationData) => {
   if (io) {
     io.emit('donation-created', {
-      message: '¡Nueva donación recibida!',
+      message: 'Nueva donacion recibida',
       donation: donationData,
       timestamp: new Date()
     });
@@ -25,11 +25,24 @@ export const emitNewDonation = (donationData) => {
   }
 };
 
+// NUEVO: Emitir evento de estadisticas actualizadas
+export const emitStatsUpdated = (dogId, newStats, updates) => {
+  if (io) {
+    io.emit('stats-updated', {
+      dogId: dogId,
+      stats: newStats,
+      changes: updates,
+      timestamp: new Date()
+    });
+    console.log('Evento emitido: stats-updated para perro', dogId);
+  }
+};
+
 // Emitir evento de nueva necesidad
 export const emitNewNeed = (needData) => {
   if (io) {
     io.emit('need-created', {
-      message: '¡Nueva necesidad registrada!',
+      message: 'Nueva necesidad registrada',
       need: needData,
       timestamp: new Date()
     });
@@ -41,7 +54,7 @@ export const emitNewNeed = (needData) => {
 export const emitUrgentNeed = (needData) => {
   if (io) {
     io.emit('urgent-need-alert', {
-      message: '¡ALERTA! Necesidad urgente',
+      message: 'ALERTA! Necesidad urgente',
       need: needData,
       priority: 'high',
       timestamp: new Date()
@@ -66,7 +79,7 @@ export const emitNewAppointment = (appointmentData) => {
 export const emitAccessoryPurchase = (purchaseData) => {
   if (io) {
     io.emit('purchase-notification', {
-      message: '¡Nueva compra realizada!',
+      message: 'Nueva compra realizada',
       purchase: purchaseData,
       timestamp: new Date()
     });
@@ -78,7 +91,7 @@ export const emitAccessoryPurchase = (purchaseData) => {
 export const emitNewDog = (dogData) => {
   if (io) {
     io.emit('dog-registered', {
-      message: '¡Nuevo perro registrado!',
+      message: 'Nuevo perro registrado',
       dog: dogData,
       timestamp: new Date()
     });

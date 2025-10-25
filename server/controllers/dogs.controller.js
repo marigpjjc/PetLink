@@ -132,11 +132,38 @@ const deleteDog = async (req, res) => {
   }
 };
 
+// POST - Actualizar estadisticas de un perro manualmente
+const updateDogStats = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { category } = req.body;
+    
+    console.log(`Peticion: Actualizar stats del perro ${id}, categoria: ${category}`);
+    
+    const result = await dogsService.updateDogStatistics(id, category);
+    
+    if (result.success) {
+      console.log('Estadisticas actualizadas');
+      
+      // Emitir evento via WebSocket
+      emitStatsUpdated(id, result.data, result.updates);
+      
+      res.status(200).json(result.data);
+    } else {
+      console.log('Error:', result.error);
+      res.status(400).json({ error: result.error });
+    }
+  } catch (error) {
+    console.error('Error en updateDogStats:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
 export default {
   getAllDogs,
   getDogById,
   searchDogsByName,  
   createDog,
   updateDog,
-  deleteDog
+  deleteDog,
+  updateDogStats
 };

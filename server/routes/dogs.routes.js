@@ -25,4 +25,6 @@ router.put('/:id', dogsController.updateDog);
 // DELETE /api/dogs/:id - Eliminar un perrito
 router.delete('/:id', dogsController.deleteDog);
 
+router.post('/:id/update-stats', dogsController.updateDogStats);
+
 export default router;

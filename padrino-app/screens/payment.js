@@ -237,6 +237,22 @@ async function processAccessoryPayment(params, userId) {
     
     console.log('Compra registrada:', data);
     
+    // Actualizar estadisticas del perro (accesorio = wellbeing_level)
+    try {
+      const response = await fetch(`http://localhost:5050/api/dogs/${dogId}/update-stats`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: 'accesorio' })
+      });
+      
+      if (response.ok) {
+        console.log('Estadisticas actualizadas por compra de accesorio');
+      }
+    } catch (statsError) {
+      console.error('Error al actualizar estadisticas:', statsError);
+      // No fallar la compra si falla la actualizacion de stats
+    }
+    
     // Paso 3: Mostrar mensaje de éxito
     showAccessorySuccessMessage(data[0], imageUrl, dogId);
     
