@@ -3,9 +3,13 @@
 import router from '../utils/router.js';
 import { getAllAppointments, updateAppointmentDecision } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
+import { addEventListener, removeEventListener } from '../services/websocket-admin.js';
 
 let allAppointments = [];
 let filteredAppointments = [];
+
+// Referencias a los listeners para poder limpiarlos
+let appointmentCreatedListener = null;
 
 export default async function renderAppointmentsManage() {
   const auth = await checkAuth();
@@ -62,6 +66,28 @@ export default async function renderAppointmentsManage() {
   
   setupEventListeners();
   await loadAppointments();
+  setupRealtimeListeners();
+}
+
+/**
+ * Configurar listeners en tiempo real
+ */
+function setupRealtimeListeners() {
+  // Limpiar listeners previos si existen
+  if (appointmentCreatedListener) {
+    removeEventListener('appointment-created', appointmentCreatedListener);
+  }
+  
+  // Listener para nuevas citas
+  appointmentCreatedListener = async (data) => {
+    console.log('📅 Nueva cita recibida:', data);
+    
+    // Recargar citas automáticamente
+    await loadAppointments();
+    showSuccess('Nueva cita recibida - Vista actualizada');
+  };
+  
+  addEventListener('appointment-created', appointmentCreatedListener);
 }
 
 function setupEventListeners() {

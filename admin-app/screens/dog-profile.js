@@ -3,10 +3,15 @@
 import router from '../utils/router.js';
 import { getDogById, getNeedsByDog, deleteNeed, deleteDog } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
+import { addEventListener, removeEventListener } from '../services/websocket-admin.js';
 
 let dogData = null;
 let needsData = [];
 let dogId = null;
+
+// Referencias a los listeners para poder limpiarlos
+let needCreatedListener = null;
+let donationCreatedListener = null;
 
 export default async function renderDogProfile(id) {
   const auth = await checkAuth();
@@ -117,6 +122,45 @@ export default async function renderDogProfile(id) {
   setupEventListeners();
   await loadDogData();
   await loadNeedsData();
+  setupRealtimeListeners();
+}
+
+/**
+ * Configurar listeners en tiempo real para el perfil del perro
+ */
+function setupRealtimeListeners() {
+  // Limpiar listeners previos si existen
+  if (needCreatedListener) {
+    removeEventListener('need-created', needCreatedListener);
+  }
+  if (donationCreatedListener) {
+    removeEventListener('donation-created', donationCreatedListener);
+  }
+  
+  // Listener para nuevas necesidades
+  needCreatedListener = async (data) => {
+    console.log('📋 Nueva necesidad creada:', data);
+    
+    // Solo actualizar si la necesidad es de este perro
+    if (data.need && data.need.id_dog === parseInt(dogId)) {
+      await loadNeedsData();
+      showSuccess('Nueva necesidad agregada a este perro');
+    }
+  };
+  
+  // Listener para nuevas donaciones
+  donationCreatedListener = async (data) => {
+    console.log('🎉 Nueva donación recibida:', data);
+    
+    // Solo actualizar si la donación es para este perro
+    if (data.donation && data.donation.id_dog === parseInt(dogId)) {
+      await loadDogData();
+      showSuccess('Nueva donación recibida para este perro');
+    }
+  };
+  
+  addEventListener('need-created', needCreatedListener);
+  addEventListener('donation-created', donationCreatedListener);
 }
 
 function setupEventListeners() {

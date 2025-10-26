@@ -3,6 +3,14 @@
 import router from '../utils/router.js';
 import { getAllDogs, getAllDonations, getAllAppointments, getAllAccessories } from '../services/admin-api.js';
 import { checkAuth, logout } from './admin-login.js';
+import { addEventListener, removeEventListener } from '../services/websocket-admin.js';
+
+// Referencias a los listeners para poder limpiarlos
+let donationCreatedListener = null;
+let appointmentCreatedListener = null;
+let needCreatedListener = null;
+let purchaseListener = null;
+let urgentNeedListener = null;
 
 export default async function renderDashboard() {
   const auth = await checkAuth();
@@ -104,9 +112,69 @@ export default async function renderDashboard() {
   `;
   
   setupEventListeners();
+  setupRealtimeListeners();
   
   // Actualización automática de datos cada 30 segundos
   setupAutoRefresh();
+}
+
+/**
+ * Configurar listeners en tiempo real para el dashboard
+ */
+function setupRealtimeListeners() {
+  // Limpiar listeners previos si existen
+  if (donationCreatedListener) {
+    removeEventListener('donation-created', donationCreatedListener);
+  }
+  if (appointmentCreatedListener) {
+    removeEventListener('appointment-created', appointmentCreatedListener);
+  }
+  if (needCreatedListener) {
+    removeEventListener('need-created', needCreatedListener);
+  }
+  if (purchaseListener) {
+    removeEventListener('purchase-notification', purchaseListener);
+  }
+  if (urgentNeedListener) {
+    removeEventListener('urgent-need-alert', urgentNeedListener);
+  }
+  
+  // Listener para nuevas donaciones
+  donationCreatedListener = async (data) => {
+    console.log('🎉 Dashboard: Nueva donación recibida:', data);
+    await refreshDashboardData();
+  };
+  
+  // Listener para nuevas citas
+  appointmentCreatedListener = async (data) => {
+    console.log('📅 Dashboard: Nueva cita recibida:', data);
+    await refreshDashboardData();
+  };
+  
+  // Listener para nuevas necesidades
+  needCreatedListener = async (data) => {
+    console.log('📋 Dashboard: Nueva necesidad creada:', data);
+    await refreshDashboardData();
+  };
+  
+  // Listener para nuevas compras
+  purchaseListener = async (data) => {
+    console.log('🛍️ Dashboard: Nueva compra de accesorio:', data);
+    await refreshDashboardData();
+  };
+  
+  // Listener para necesidades urgentes
+  urgentNeedListener = async (data) => {
+    console.log('🚨 Dashboard: ¡ALERTA! Necesidad urgente:', data);
+    // Aquí se podría mostrar una alerta visual especial
+    await refreshDashboardData();
+  };
+  
+  addEventListener('donation-created', donationCreatedListener);
+  addEventListener('appointment-created', appointmentCreatedListener);
+  addEventListener('need-created', needCreatedListener);
+  addEventListener('purchase-notification', purchaseListener);
+  addEventListener('urgent-need-alert', urgentNeedListener);
 }
 
 function setupAutoRefresh() {

@@ -3,10 +3,14 @@
 import router from '../utils/router.js';
 import { getDogById, getDonationsByDog } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
+import { addEventListener, removeEventListener } from '../services/websocket-admin.js';
 
 let dogData = null;
 let donationsData = [];
 let dogId = null;
+
+// Referencias a los listeners para poder limpiarlos
+let donationCreatedListener = null;
 
 export default async function renderDonationsProfileDog(id) {
   const auth = await checkAuth();
@@ -77,6 +81,30 @@ export default async function renderDonationsProfileDog(id) {
   setupEventListeners();
   await loadDogData();
   await loadDonationsData();
+  setupRealtimeListeners();
+}
+
+/**
+ * Configurar listeners en tiempo real para las donaciones del perro
+ */
+function setupRealtimeListeners() {
+  // Limpiar listeners previos si existen
+  if (donationCreatedListener) {
+    removeEventListener('donation-created', donationCreatedListener);
+  }
+  
+  // Listener para nuevas donaciones
+  donationCreatedListener = async (data) => {
+    console.log('🎉 Nueva donación recibida:', data);
+    
+    // Solo actualizar si la donación es para este perro
+    if (data.donation && data.donation.id_dog === parseInt(dogId)) {
+      await loadDonationsData();
+      showSuccess('Nueva donación recibida para este perro - Vista actualizada');
+    }
+  };
+  
+  addEventListener('donation-created', donationCreatedListener);
 }
 
 function setupEventListeners() {

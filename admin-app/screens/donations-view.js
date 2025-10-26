@@ -3,11 +3,15 @@
 import router from '../utils/router.js';
 import { getAllDogs, getAllDonations, searchDogsByName } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
+import { addEventListener, removeEventListener } from '../services/websocket-admin.js';
 
 let allDogs = [];
 let filteredDogs = [];
 let allDonations = [];
 let currentFilter = 'all';
+
+// Referencias a los listeners para poder limpiarlos
+let donationCreatedListener = null;
 
 export default async function renderDonationsView() {
   const auth = await checkAuth();
@@ -73,6 +77,37 @@ export default async function renderDonationsView() {
   
   setupEventListeners();
   await loadInitialData();
+  setupRealtimeListeners();
+}
+
+/**
+ * Configurar listeners en tiempo real
+ */
+function setupRealtimeListeners() {
+  // Limpiar listeners previos si existen
+  if (donationCreatedListener) {
+    removeEventListener('donation-created', donationCreatedListener);
+  }
+  
+  // Listener para nuevas donaciones
+  donationCreatedListener = async (data) => {
+    console.log('🎉 Nueva donación recibida:', data);
+    
+    // Recargar donaciones automáticamente
+    try {
+      const donationsResponse = await getAllDonations();
+      if (Array.isArray(donationsResponse)) {
+        allDonations = donationsResponse;
+        renderDogsList();
+        updateDogsCount();
+        showSuccess('Nueva donación recibida - Vista actualizada');
+      }
+    } catch (error) {
+      console.error('Error al actualizar donaciones en tiempo real:', error);
+    }
+  };
+  
+  addEventListener('donation-created', donationCreatedListener);
 }
 
 function setupEventListeners() {
