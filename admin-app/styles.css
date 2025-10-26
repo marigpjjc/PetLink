@@ -1533,17 +1533,63 @@ textarea {
    ESTADÍSTICAS
    ============================================= */
 
-.estadistics-container {
+/* =============================================
+   ESTADÍSTICAS - Igual que padrino-app
+   ============================================= */
+
+.estadistics-container,
+.statistics-container {
   padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.estadistics-title {
+.estadistics-title,
+.statistics-title {
   font-size: 28px;
   color: #333;
   margin-bottom: 30px;
   text-align: center;
 }
 
+/* Indicador de tiempo real */
+.realtime-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+}
+
+.realtime-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #4caf50;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.realtime-text {
+  font-size: 14px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+/* Barras de estadísticas */
 .statistics-bars {
   display: flex;
   flex-direction: column;
@@ -1554,6 +1600,14 @@ textarea {
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+/* Animación cuando se actualiza una estadística */
+.stat-item.stat-updated {
+  background-color: #fff9c4;
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
 }
 
 .stat-header {
@@ -1586,7 +1640,7 @@ textarea {
 .stat-bar {
   height: 100%;
   border-radius: 15px;
-  transition: width 0.5s ease;
+  transition: width 0.5s ease-in-out;
 }
 
 .stat-bar-food {
@@ -1603,6 +1657,29 @@ textarea {
 
 .stat-bar-affection {
   background-color: #f44336;
+}
+
+/* Notificación flotante de actualización */
+.stats-notification {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background-color: #4caf50;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateX(400px);
+  transition: all 0.3s ease;
+}
+
+.stats-notification.show {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* =============================================
