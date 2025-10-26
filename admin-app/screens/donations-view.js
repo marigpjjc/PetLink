@@ -264,31 +264,7 @@ function renderDogsList() {
           </div>
           <div class="dog-info">
             <h3>${dog.name || 'Sin nombre'}</h3>
-            <p class="dog-age">Edad: ${dog.age || 'No especificada'} años</p>
-            <p class="donation-count">Donaciones: ${donationCount}</p>
-          </div>
-        </div>
-        
-        <div class="card-body">
-          <div class="dog-details">
-            <div class="detail-item">
-              <span class="label">Tamaño:</span>
-              <span class="value">${dog.size || 'No especificado'}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Peso:</span>
-              <span class="value">${dog.weight || 'No especificado'} kg</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Disponibilidad:</span>
-              <span class="value">${dog.availability === 'disponible' ? 'Disponible' : 'No disponible'}</span>
-            </div>
-            ${dog.description ? `
-              <div class="detail-item">
-                <span class="label">Descripción:</span>
-                <span class="value">${dog.description.substring(0, 100)}${dog.description.length > 100 ? '...' : ''}</span>
-              </div>
-            ` : ''}
+            <p class="dog-age">${dog.age || 'No especificada'} años</p>
           </div>
         </div>
         

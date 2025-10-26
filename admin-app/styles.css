@@ -1328,7 +1328,7 @@ textarea {
   margin-bottom: 20px;
 }
 
-/* Estructura de cards igual a dog-management - SOLO nombre y edad */
+/* Estructura de cards - SOLO nombre y edad */
 .donations-container .dog-card {
   display: flex !important;
   align-items: center !important;
@@ -1337,7 +1337,6 @@ textarea {
   background-color: white !important;
   border: 1px solid #e0e0e0 !important;
   border-radius: 10px !important;
-  cursor: pointer !important;
   transition: transform 0.2s, box-shadow 0.2s !important;
   margin-bottom: 15px;
 }
@@ -1347,8 +1346,18 @@ textarea {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
 }
 
+/* Card header reorganizado - solo imagen e info */
+.donations-container .card-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+  flex: 1 !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 /* Imagen circular del perro */
-.donations-container .dog-image-container,
 .donations-container .dog-image {
   width: 80px !important;
   height: 80px !important;
@@ -1360,29 +1369,53 @@ textarea {
   overflow: hidden !important;
   background-color: #ff6b35 !important;
   flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.donations-container .dog-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
 /* Información del perro */
 .donations-container .dog-info {
   flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
 }
 
-.donations-container .dog-info h3,
-.donations-container .dog-name {
+.donations-container .dog-info h3 {
   font-size: 18px !important;
   font-weight: bold !important;
   color: #ff6b35 !important;
-  margin: 0 0 5px 0 !important;
+  margin: 0 !important;
 }
 
-.donations-container .dog-age,
-.donations-container .dog-breed {
+/* Edad SIN el texto "Edad:" */
+.donations-container .dog-age {
   font-size: 14px !important;
   color: #666 !important;
-  margin: 0 0 5px 0 !important;
+  margin: 0 !important;
+  font-weight: normal !important;
+}
+
+/* Ocultar el texto "Edad:" antes del valor */
+.donations-container .dog-age::before {
+  content: none !important;
 }
 
 /* Botón Ver Donaciones */
+.donations-container .card-actions {
+  display: flex !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.donations-container .view-donations-btn,
 .donations-container .btn-view-donations {
   padding: 8px 16px !important;
   background-color: #ff6b35 !important;
@@ -1394,18 +1427,21 @@ textarea {
   white-space: nowrap !important;
 }
 
+.donations-container .view-donations-btn:hover,
 .donations-container .btn-view-donations:hover {
   background-color: #e55a2b !important;
 }
 
-/* OCULTAR TODO LO DEMÁS - solo mostrar nombre y edad */
+/* OCULTAR TODO LO DEMÁS - solo mostrar nombre, edad y botón */
 .donations-container .donation-count,
 .donations-container .card-body,
 .donations-container .dog-details,
 .donations-container .card-header .status-badge,
 .donations-container .dog-card .donation-count,
 .donations-container .dog-card .card-body,
-.donations-container .dog-card .dog-details {
+.donations-container .dog-card .dog-details,
+.donations-container .detail-item,
+.donations-container .dog-breed {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -1413,6 +1449,7 @@ textarea {
   margin: 0 !important;
   padding: 0 !important;
   opacity: 0 !important;
+  max-height: 0 !important;
 }
 
 .dogs-filter {
