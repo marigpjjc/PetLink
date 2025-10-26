@@ -365,7 +365,7 @@ async function handleDeleteDog() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
@@ -373,7 +373,7 @@ async function handleDeleteDog() {
     deleteBtn.disabled = true;
     deleteBtn.textContent = 'Eliminando...';
     
-    const response = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'DELETE', null, token);
+    const response = await deleteDog(dogId);
     
     if (response && response.message) {
       showSuccess('Perro eliminado exitosamente');

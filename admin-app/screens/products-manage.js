@@ -68,16 +68,13 @@ export default async function renderProductsManage(params = {}) {
               />
             </div>
             
-            <div class="form-group">
-              <label for="dogId">ID del Perro:</label>
+            <div class="form-group" style="display: none;">
               <input 
-                type="number" 
+                type="hidden" 
                 id="dogId" 
                 name="dogId" 
                 required 
-                min="1"
-                placeholder="Ingresa el ID del perro"
-                ${(fromAddDog || fromDogProfile) && dogId ? `value="${dogId}" readonly` : ''}
+                ${(fromAddDog || fromDogProfile) && dogId ? `value="${dogId}"` : ''}
               />
             </div>
             

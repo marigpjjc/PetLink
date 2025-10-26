@@ -58,25 +58,6 @@ export default async function renderDashboard() {
       </header>
       
       <main class="dashboard-content">
-        <div class="dashboard-stats">
-          <div class="stat-card">
-            <h3>Mascotas Registradas</h3>
-            <span class="stat-number">${dashboardData.petsCount || 0}</span>
-          </div>
-          <div class="stat-card">
-            <h3>Donaciones Recibidas</h3>
-            <span class="stat-number">${dashboardData.donationsCount || 0}</span>
-          </div>
-          <div class="stat-card">
-            <h3>Citas Pendientes</h3>
-            <span class="stat-number">${dashboardData.appointmentsCount || 0}</span>
-          </div>
-          <div class="stat-card">
-            <h3>Productos en Catálogo</h3>
-            <span class="stat-number">${dashboardData.productsCount || 0}</span>
-          </div>
-        </div>
-        
         <div class="dashboard-menu">
           <h2>Menú Principal</h2>
           <div class="menu-grid">
