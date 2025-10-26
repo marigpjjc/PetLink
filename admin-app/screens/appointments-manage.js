@@ -78,11 +78,7 @@ function setupRealtimeListeners() {
     removeEventListener('appointment-created', appointmentCreatedListener);
   }
   
-  // Listener para nuevas citas
-  appointmentCreatedListener = async (data) => {
-    console.log('📅 Nueva cita recibida:', data);
-    
-    // Recargar citas automáticamente
+  appointmentCreatedListener = async () => {
     await loadAppointments();
     showSuccess('Nueva cita recibida - Vista actualizada');
   };

@@ -77,44 +77,21 @@ function setupRealtimeListeners() {
     
     // Listener para nuevas donaciones
     addEventListener('donation-created', (data) => {
-      console.log('🎉 Nueva donación recibida en tiempo real:', data);
-      
-      // Mostrar notificación visual
       showNotification('Nueva donación recibida', 'success');
-      
-      // Si estamos en la pantalla de donaciones, recargar datos
-      if (router.getCurrentRoute()?.includes('/donations')) {
-        // Aquí se puede implementar lógica para recargar datos
-        console.log('Actualizar vista de donaciones');
-      }
     });
     
     // Listener para nuevas citas
     addEventListener('appointment-created', (data) => {
-      console.log('📅 Nueva cita creada en tiempo real:', data);
-      
-      // Mostrar notificación visual
       showNotification('Nueva cita registrada', 'info');
-      
-      // Si estamos en la pantalla de citas, recargar datos
-      if (router.getCurrentRoute() === '/appointments') {
-        console.log('Actualizar vista de citas');
-      }
     });
     
     // Listener para necesidades urgentes
     addEventListener('urgent-need-alert', (data) => {
-      console.log('🚨 ALERTA: Necesidad urgente:', data);
-      
-      // Mostrar notificación de alerta
       showNotification('¡NECESIDAD URGENTE! - ' + (data.need?.name || 'Ver detalles'), 'warning');
     });
     
     // Listener para nuevas compras
     addEventListener('purchase-notification', (data) => {
-      console.log('🛍️ Nueva compra de accesorio:', data);
-      
-      // Mostrar notificación
       showNotification('Nueva compra de accesorio', 'success');
     });
   });
@@ -159,21 +136,10 @@ function showNotification(message, type = 'info') {
  * Iniciar la aplicación
  */
 function initApp() {
-  console.log('🚀 Iniciando aplicación admin-app...');
-  
-  // Configurar las rutas
   setupRoutes();
-  
-  // Iniciar el router
   router.init();
-  
-  // Inicializar WebSocket para comunicación en tiempo real
   initWebSocket();
-  
-  // Configurar listeners de eventos en tiempo real
   setupRealtimeListeners();
-  
-  console.log('✅ Aplicación admin-app iniciada correctamente');
 }
 
 // Cuando el HTML esté listo, iniciar la app

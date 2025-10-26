@@ -137,22 +137,14 @@ function setupRealtimeListeners() {
     removeEventListener('donation-created', donationCreatedListener);
   }
   
-  // Listener para nuevas necesidades
   needCreatedListener = async (data) => {
-    console.log('📋 Nueva necesidad creada:', data);
-    
-    // Solo actualizar si la necesidad es de este perro
     if (data.need && data.need.id_dog === parseInt(dogId)) {
       await loadNeedsData();
       showSuccess('Nueva necesidad agregada a este perro');
     }
   };
   
-  // Listener para nuevas donaciones
   donationCreatedListener = async (data) => {
-    console.log('🎉 Nueva donación recibida:', data);
-    
-    // Solo actualizar si la donación es para este perro
     if (data.donation && data.donation.id_dog === parseInt(dogId)) {
       await loadDogData();
       showSuccess('Nueva donación recibida para este perro');

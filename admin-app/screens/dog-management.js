@@ -93,11 +93,7 @@ function setupRealtimeListeners() {
     removeEventListener('need-created', needCreatedListener);
   }
   
-  // Listener para nuevas donaciones - actualizar contador
-  donationCreatedListener = async (data) => {
-    console.log('🎉 Nueva donación recibida:', data);
-    
-    // Recargar donaciones automáticamente
+  donationCreatedListener = async () => {
     try {
       const donationsResponse = await getAllDonations();
       if (Array.isArray(donationsResponse)) {
@@ -107,15 +103,11 @@ function setupRealtimeListeners() {
         showSuccess('Nueva donación recibida - Vista actualizada');
       }
     } catch (error) {
-      console.error('Error al actualizar donaciones en tiempo real:', error);
+      console.error('Error al actualizar donaciones:', error);
     }
   };
   
-  // Listener para nuevas necesidades
-  needCreatedListener = async (data) => {
-    console.log('📋 Nueva necesidad creada:', data);
-    
-    // Recargar perros para reflejar nuevas necesidades
+  needCreatedListener = async () => {
     try {
       const dogsResponse = await getAllDogs();
       if (Array.isArray(dogsResponse)) {
@@ -126,7 +118,7 @@ function setupRealtimeListeners() {
         showSuccess('Nueva necesidad registrada - Vista actualizada');
       }
     } catch (error) {
-      console.error('Error al actualizar perros en tiempo real:', error);
+      console.error('Error al actualizar perros:', error);
     }
   };
   

@@ -89,11 +89,7 @@ function setupRealtimeListeners() {
     removeEventListener('donation-created', donationCreatedListener);
   }
   
-  // Listener para nuevas donaciones
-  donationCreatedListener = async (data) => {
-    console.log('🎉 Nueva donación recibida:', data);
-    
-    // Recargar donaciones automáticamente
+  donationCreatedListener = async () => {
     try {
       const donationsResponse = await getAllDonations();
       if (Array.isArray(donationsResponse)) {
@@ -103,7 +99,7 @@ function setupRealtimeListeners() {
         showSuccess('Nueva donación recibida - Vista actualizada');
       }
     } catch (error) {
-      console.error('Error al actualizar donaciones en tiempo real:', error);
+      console.error('Error al actualizar donaciones:', error);
     }
   };
   

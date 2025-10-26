@@ -93,11 +93,7 @@ function setupRealtimeListeners() {
     removeEventListener('donation-created', donationCreatedListener);
   }
   
-  // Listener para nuevas donaciones
   donationCreatedListener = async (data) => {
-    console.log('🎉 Nueva donación recibida:', data);
-    
-    // Solo actualizar si la donación es para este perro
     if (data.donation && data.donation.id_dog === parseInt(dogId)) {
       await loadDonationsData();
       showSuccess('Nueva donación recibida para este perro - Vista actualizada');

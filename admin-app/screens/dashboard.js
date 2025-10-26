@@ -15,13 +15,11 @@ let urgentNeedListener = null;
 export default async function renderDashboard() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    console.log('Usuario no autenticado, redirigiendo al login');
     router.navigateTo('/admin-login');
     return;
   }
   
   if (!verifySession()) {
-    console.log('Sesión inválida, redirigiendo al login');
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
     router.navigateTo('/admin-login');
@@ -139,34 +137,23 @@ function setupRealtimeListeners() {
     removeEventListener('urgent-need-alert', urgentNeedListener);
   }
   
-  // Listener para nuevas donaciones
-  donationCreatedListener = async (data) => {
-    console.log('🎉 Dashboard: Nueva donación recibida:', data);
+  donationCreatedListener = async () => {
     await refreshDashboardData();
   };
   
-  // Listener para nuevas citas
-  appointmentCreatedListener = async (data) => {
-    console.log('📅 Dashboard: Nueva cita recibida:', data);
+  appointmentCreatedListener = async () => {
     await refreshDashboardData();
   };
   
-  // Listener para nuevas necesidades
-  needCreatedListener = async (data) => {
-    console.log('📋 Dashboard: Nueva necesidad creada:', data);
+  needCreatedListener = async () => {
     await refreshDashboardData();
   };
   
-  // Listener para nuevas compras
-  purchaseListener = async (data) => {
-    console.log('🛍️ Dashboard: Nueva compra de accesorio:', data);
+  purchaseListener = async () => {
     await refreshDashboardData();
   };
   
-  // Listener para necesidades urgentes
-  urgentNeedListener = async (data) => {
-    console.log('🚨 Dashboard: ¡ALERTA! Necesidad urgente:', data);
-    // Aquí se podría mostrar una alerta visual especial
+  urgentNeedListener = async () => {
     await refreshDashboardData();
   };
   
