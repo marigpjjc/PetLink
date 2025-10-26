@@ -259,7 +259,17 @@ async function handleAppointmentDecision(appointmentId, decision, dogName, padri
     
     if (response.success) {
       const actionTextSuccess = decision === 'accepted' ? 'aceptada' : 'rechazada';
-      showSuccess(`Cita ${actionTextSuccess} exitosamente${response.whatsappSent ? ' y WhatsApp enviado' : ''}`);
+      
+      // Mostrar mensaje según si el WhatsApp se envió o no
+      if (response.whatsappSent) {
+        showSuccess(`✅ Cita ${actionTextSuccess} exitosamente y notificación enviada por WhatsApp a ${padrinoName}`);
+      } else {
+        // La cita se procesó pero el WhatsApp falló
+        showSuccess(`Cita ${actionTextSuccess} exitosamente`);
+        setTimeout(() => {
+          showError(`⚠️ Advertencia: No se pudo enviar WhatsApp. ${response.whatsappError || 'Verifica la configuración de Twilio'}`);
+        }, 2000);
+      }
       
       allAppointments = allAppointments.filter(apt => apt.id !== appointmentId);
       filteredAppointments = filteredAppointments.filter(apt => apt.id !== appointmentId);
