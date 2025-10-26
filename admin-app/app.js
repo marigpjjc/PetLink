@@ -20,8 +20,19 @@ import renderDogProfile from "./screens/dog-profile.js";
 
 /**
  * Configurar todas las rutas de la aplicación
+ * Patrón igual a padrino-app: usar parámetros en la URL
  */
 function setupRoutes() {
+  // Ruta por defecto (redirigir a login si no hay sesión)
+  router.addRoute('/', () => {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      router.navigateTo('/dashboard');
+    } else {
+      router.navigateTo('/admin-login');
+    }
+  });
+  
   // Rutas de autenticación
   router.addRoute('/admin-login-signup', renderAdminLoginSignup);
   router.addRoute('/admin-login', renderAdminLogin);
@@ -32,27 +43,28 @@ function setupRoutes() {
   
   // Rutas de gestión
   router.addRoute('/dog-management', renderDogManagement);
-  router.addRoute('/products-manage', renderProductsManage);
   router.addRoute('/add-pet', renderAddDog);
-  
-  // Rutas de visualización
   router.addRoute('/appointments', renderAppointmentsManage);
   router.addRoute('/donations', renderDonationsView);
   
-  // Rutas con parámetros
-  router.addRoute('/donations-profile-dog', renderDonationsProfileDog);
-  router.addRoute('/dog-estadistics', renderDogEstadistics);
-  router.addRoute('/dog-profile', renderDogProfile);
-  
-  // Ruta por defecto (redirigir a login si no hay sesión)
-  router.addRoute('/', () => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      router.navigateTo('/dashboard', {});
-    } else {
-      router.navigateTo('/admin-login', {});
-    }
+  // Rutas con parámetros (igual que padrino-app)
+  router.addRoute('/dog-profile/:dogId', (params) => {
+    const dogId = params.dogId;
+    renderDogProfile(dogId);
   });
+  
+  router.addRoute('/dog-estadistics/:dogId', (params) => {
+    const dogId = params.dogId;
+    renderDogEstadistics(dogId);
+  });
+  
+  router.addRoute('/donations-profile-dog/:dogId', (params) => {
+    const dogId = params.dogId;
+    renderDonationsProfileDog(dogId);
+  });
+  
+  // Ruta simple para products-manage (usa sessionStorage para contexto)
+  router.addRoute('/products-manage', renderProductsManage);
 }
 
 /**

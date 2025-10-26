@@ -177,7 +177,7 @@ async function handleSignup(event) {
         showSuccess('¡Registro exitoso! Bienvenido a PetLink Admin. Redirigiendo al dashboard...');
         
         setTimeout(() => {
-          router.navigateTo('/dashboard', { user: response.user });
+          router.navigateTo('/dashboard');
         }, 3000);
       } else {
         showError('Error: No se pudo asignar el rol de administrador');
@@ -210,9 +210,9 @@ async function handleSignup(event) {
   }
 }
 
-// Redirección a login
+// Redirección a login (igual que padrino-app)
 function handleLogin() {
-  router.navigateTo('/admin-login', {});
+  router.navigateTo('/admin-login');
 }
 
 function showError(message) {

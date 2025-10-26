@@ -12,7 +12,7 @@ let currentFilter = 'all';
 export default async function renderDogManagement() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
@@ -87,7 +87,7 @@ function setupEventListeners() {
   
   clearSearchBtn.addEventListener('click', clearSearch);
   
-  backBtn.addEventListener('click', () => router.navigateTo('/dashboard', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dashboard'));
   
   filterAll.addEventListener('click', () => applyFilter('all'));
   filterPuppies.addEventListener('click', () => applyFilter('puppies'));
@@ -99,7 +99,7 @@ async function loadInitialData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
@@ -285,9 +285,9 @@ function clearSearch() {
   updateDogsCount();
 }
 
-// Editar perro
+// Editar perro (navegar con parámetro en URL como padrino-app)
 function editDog(dogId) {
-  router.navigateTo('/dog-profile', { dogId: dogId });
+  router.navigateTo(`/dog-profile/${dogId}`);
 }
 
 function getAvailabilityText(availability) {

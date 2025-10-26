@@ -55,14 +55,14 @@ function setupEventListeners() {
   const loginBtn = document.getElementById('loginBtn');
   const signupBtn = document.getElementById('signupBtn');
   
-  // Navegar a la pantalla de login
+  // Navegar a la pantalla de login (igual que padrino-app)
   loginBtn.addEventListener('click', () => {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
   });
   
-  // Navegar a la pantalla de registro
+  // Navegar a la pantalla de registro (igual que padrino-app)
   signupBtn.addEventListener('click', () => {
-    router.navigateTo('/admin-signup', {});
+    router.navigateTo('/admin-signup');
   });
 }
 
@@ -73,7 +73,7 @@ export function checkExistingSession() {
   
   if (token && adminUser) {
     // Si hay una sesión activa, redirigir al dashboard
-    router.navigateTo('/dashboard', {});
+    router.navigateTo('/dashboard');
     return true;
   }
   
@@ -84,5 +84,5 @@ export function checkExistingSession() {
 export function clearSession() {
   localStorage.removeItem('adminToken');
   localStorage.removeItem('adminUser');
-  router.navigateTo('/admin-login-signup', {});
+  router.navigateTo('/admin-login-signup');
 }

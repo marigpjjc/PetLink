@@ -7,7 +7,7 @@ import { checkAuth } from './admin-login.js';
 export default async function renderAddDog() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
@@ -201,7 +201,7 @@ function setupEventListeners() {
   
   clearBtn.addEventListener('click', clearForm);
   
-  backBtn.addEventListener('click', () => router.navigateTo('/dashboard', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dashboard'));
   
   setupStatSliders();
 }
@@ -283,7 +283,7 @@ async function handleSubmit(event) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
@@ -294,7 +294,10 @@ async function handleSubmit(event) {
       showSuccess('¡Perro agregado exitosamente! Redirigiendo...');
       
       setTimeout(() => {
-        router.navigateTo('/products-manage', { fromAddDog: true, dogId: response.id });
+        // Guardar contexto en sessionStorage y navegar
+        sessionStorage.setItem('productsManageOrigin', 'add-pet');
+        sessionStorage.setItem('productsManageDogId', response.id);
+        router.navigateTo('/products-manage');
       }, 2000);
     } else {
       showError('Error al agregar el perro. Inténtalo nuevamente');

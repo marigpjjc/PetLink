@@ -4,11 +4,11 @@ import router from '../utils/router.js';
 import { getAllDogs, getAllDonations, getAllAppointments, getAllAccessories } from '../services/admin-api.js';
 import { checkAuth, logout } from './admin-login.js';
 
-export default async function renderDashboard(data) {
+export default async function renderDashboard() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
     console.log('Usuario no autenticado, redirigiendo al login');
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
   
@@ -16,11 +16,11 @@ export default async function renderDashboard(data) {
     console.log('Sesión inválida, redirigiendo al login');
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
   
-  const user = auth.user || data.user;
+  const user = auth.user;
   const app = document.getElementById('app');
   
   app.innerHTML = `
@@ -129,11 +129,11 @@ function setupEventListeners() {
   // Cerrar sesión
   logoutBtn.addEventListener('click', handleLogout);
   
-  // Navegación a otras pantallas
-  editCatalogBtn.addEventListener('click', () => router.navigateTo('/dog-management', {}));
-  addPetBtn.addEventListener('click', () => router.navigateTo('/add-pet', {}));
-  donationsBtn.addEventListener('click', () => router.navigateTo('/donations', {}));
-  appointmentsBtn.addEventListener('click', () => router.navigateTo('/appointments', {}));
+  // Navegación a otras pantallas (igual que padrino-app)
+  editCatalogBtn.addEventListener('click', () => router.navigateTo('/dog-management'));
+  addPetBtn.addEventListener('click', () => router.navigateTo('/add-pet'));
+  donationsBtn.addEventListener('click', () => router.navigateTo('/donations'));
+  appointmentsBtn.addEventListener('click', () => router.navigateTo('/appointments'));
 }
 
 // Cargar datos
@@ -192,7 +192,7 @@ async function handleLogout() {
       console.error('Error al cerrar sesión:', error);
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
     }
   }
 }

@@ -8,18 +8,18 @@ let dogData = null;
 let donationsData = [];
 let dogId = null;
 
-export default async function renderDonationsProfileDog(data) {
+export default async function renderDonationsProfileDog(id) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
-  dogId = data.dogId;
+  dogId = id;
   
   if (!dogId) {
     showError('ID del perro no proporcionado');
-    router.navigateTo('/donations', {});
+    router.navigateTo('/donations');
     return;
   }
 
@@ -82,7 +82,7 @@ export default async function renderDonationsProfileDog(data) {
 function setupEventListeners() {
   const backBtn = document.getElementById('backBtn');
   
-  backBtn.addEventListener('click', () => router.navigateTo('/donations', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/donations'));
 }
 
 async function loadDogData() {
@@ -90,7 +90,7 @@ async function loadDogData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
@@ -115,7 +115,7 @@ async function loadDonationsData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     

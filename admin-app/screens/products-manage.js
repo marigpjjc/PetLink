@@ -4,18 +4,20 @@ import router from '../utils/router.js';
 import { createNeed } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
-export default async function renderProductsManage(data) {
+export default async function renderProductsManage(params = {}) {
   // Verificar autenticación
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
-  // Detectar si viene de dog-profile o add-dog
-  const fromDogProfile = data && data.fromDogProfile;
-  const fromAddDog = data && data.fromAddDog;
-  const dogId = data && data.dogId;
+  // Detectar origen desde sessionStorage (igual que padrino-app usa context)
+  const origin = sessionStorage.getItem('productsManageOrigin') || params.from || '';
+  const dogId = sessionStorage.getItem('productsManageDogId') || params.dogId || '';
+  
+  const fromDogProfile = origin === 'dog-profile';
+  const fromAddDog = origin === 'add-pet';
 
   const app = document.getElementById('app');
   
@@ -129,14 +131,18 @@ function setupEventListeners(fromDogProfile, fromAddDog, dogId) {
   // Limpiar formulario
   clearBtn.addEventListener('click', clearForm);
   
-  // Volver según el origen
+  // Volver según el origen (limpiar sessionStorage)
   backBtn.addEventListener('click', () => {
+    // Limpiar contexto
+    sessionStorage.removeItem('productsManageOrigin');
+    sessionStorage.removeItem('productsManageDogId');
+    
     if (fromDogProfile && dogId) {
-      router.navigateTo('/dog-profile', { dogId: dogId });
+      router.navigateTo(`/dog-profile/${dogId}`);
     } else if (fromAddDog) {
-      router.navigateTo('/add-pet', {});
+      router.navigateTo('/add-pet');
     } else {
-      router.navigateTo('/dashboard', {});
+      router.navigateTo('/dashboard');
     }
   });
 }
@@ -188,7 +194,7 @@ async function handleSubmit(event) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
@@ -197,6 +203,11 @@ async function handleSubmit(event) {
     
     if (response && response.id) {
       showSuccess('¡Necesidad agregada exitosamente!');
+      
+      // Limpiar contexto después de agregar
+      sessionStorage.removeItem('productsManageOrigin');
+      sessionStorage.removeItem('productsManageDogId');
+      
       clearForm();
     } else {
       showError('Error al agregar la necesidad. Inténtalo nuevamente');

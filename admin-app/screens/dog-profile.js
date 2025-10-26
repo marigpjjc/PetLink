@@ -8,18 +8,18 @@ let dogData = null;
 let needsData = [];
 let dogId = null;
 
-export default async function renderDogProfile(data) {
+export default async function renderDogProfile(id) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
-  dogId = data.dogId;
+  dogId = id;
   
   if (!dogId) {
     showError('ID del perro no proporcionado');
-    router.navigateTo('/dog-management', {});
+    router.navigateTo('/dog-management');
     return;
   }
 
@@ -125,11 +125,16 @@ function setupEventListeners() {
   const statisticsBtn = document.getElementById('statisticsBtn');
   const deleteDogBtn = document.getElementById('deleteDogBtn');
   
-  backBtn.addEventListener('click', () => router.navigateTo('/dog-management', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dog-management'));
   
-  addNeedBtn.addEventListener('click', () => router.navigateTo('/products-manage', { fromDogProfile: true, dogId: dogId }));
+  addNeedBtn.addEventListener('click', () => {
+    // Guardar contexto en sessionStorage
+    sessionStorage.setItem('productsManageOrigin', 'dog-profile');
+    sessionStorage.setItem('productsManageDogId', dogId);
+    router.navigateTo('/products-manage');
+  });
   
-  statisticsBtn.addEventListener('click', () => router.navigateTo('/dog-estadistics', { dogId: dogId }));
+  statisticsBtn.addEventListener('click', () => router.navigateTo(`/dog-estadistics/${dogId}`));
   
   deleteDogBtn.addEventListener('click', handleDeleteDog);
 }
@@ -338,7 +343,7 @@ async function handleDeleteDog() {
       showSuccess('Perro eliminado exitosamente');
       
       setTimeout(() => {
-        router.navigateTo('/dog-management', {});
+        router.navigateTo('/dog-management');
       }, 2000);
     } else {
       showError('Error al eliminar el perro');

@@ -97,8 +97,8 @@ async function handleLogin(event) {
         
         console.log('Login exitoso:', response.user);
         
-        // Redirigir al dashboard usando el router
-        router.navigateTo('/dashboard', { user: response.user });
+        // Redirigir al dashboard usando el router (igual que padrino-app)
+        router.navigateTo('/dashboard');
       } else {
         showError('No tienes permisos de administrador');
       }
@@ -118,9 +118,9 @@ async function handleLogin(event) {
   }
 }
 
-// Redirección a registro
+// Redirección a registro (igual que padrino-app)
 function handleSignup() {
-  router.navigateTo('/admin-signup', {});
+  router.navigateTo('/admin-signup');
 }
 
 function showError(message) {
@@ -194,6 +194,6 @@ export async function logout() {
   } finally {
 
     clearSession();
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
   }
 }

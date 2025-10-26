@@ -7,19 +7,19 @@ import { checkAuth } from './admin-login.js';
 let dogData = null;
 let dogId = null;
 
-export default async function renderDogEstadistics(data) {
+export default async function renderDogEstadistics(id) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
-  // Obtener ID del perro
-  dogId = data.dogId;
+  // Obtener ID del perro desde parámetro de URL
+  dogId = id;
   
   if (!dogId) {
     showError('ID del perro no proporcionado');
-    router.navigateTo('/dashboard', {});
+    router.navigateTo('/dashboard');
     return;
   }
 
@@ -132,8 +132,8 @@ export default async function renderDogEstadistics(data) {
 function setupEventListeners() {
   const backBtn = document.getElementById('backBtn');
   
-  // Volver al perfil del perro
-  backBtn.addEventListener('click', () => router.navigateTo('/dog-profile', { dogId: dogId }));
+  // Volver al perfil del perro (pasar dogId en URL como padrino-app)
+  backBtn.addEventListener('click', () => router.navigateTo(`/dog-profile/${dogId}`));
 }
 
 // Cargar datos del perro
@@ -142,7 +142,7 @@ async function loadDogData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     

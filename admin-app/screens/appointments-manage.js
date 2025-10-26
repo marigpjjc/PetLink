@@ -10,7 +10,7 @@ let filteredAppointments = [];
 export default async function renderAppointmentsManage() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    router.navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login');
     return;
   }
 
@@ -73,7 +73,7 @@ function setupEventListeners() {
   
   clearSearchBtn.addEventListener('click', clearSearch);
   
-  backBtn.addEventListener('click', () => router.navigateTo('/dashboard', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dashboard'));
 }
 
 // Cargar citas desde el backend
@@ -82,7 +82,7 @@ async function loadAppointments() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
@@ -206,7 +206,7 @@ async function handleAppointmentDecision(appointmentId, decision, dogName, padri
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      router.navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login');
       return;
     }
     
