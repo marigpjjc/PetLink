@@ -7,10 +7,26 @@ const getAllDonations = async () => {
   try {
     const { data, error } = await supabase
       .from('Donations')
-      .select('*');
+      .select(`
+        *,
+        padrino:Users!id_padrino(id, username),
+        dog:Dogs!id_dog(id, name),
+        need:Needs!id_need(id, name, price)
+      `)
+      .order('created_at', { ascending: false });
     
     if (error) throw error;
-    return { success: true, data };
+    
+    // Transformar datos
+    const transformedData = data.map(donation => ({
+      ...donation,
+      padrino_name: donation.padrino?.username || 'Anónimo',
+      dog_name: donation.dog?.name || 'Desconocido',
+      need_name: donation.need?.name || 'N/A',
+      amount: donation.price
+    }));
+    
+    return { success: true, data: transformedData };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -21,12 +37,27 @@ const getDonationById = async (id) => {
   try {
     const { data, error } = await supabase
       .from('Donations')
-      .select('*')
+      .select(`
+        *,
+        padrino:Users!id_padrino(id, username),
+        dog:Dogs!id_dog(id, name),
+        need:Needs!id_need(id, name, price)
+      `)
       .eq('id', id)
       .single();
     
     if (error) throw error;
-    return { success: true, data };
+    
+    // Transformar datos
+    const transformedData = {
+      ...data,
+      padrino_name: data.padrino?.username || 'Anónimo',
+      dog_name: data.dog?.name || 'Desconocido',
+      need_name: data.need?.name || 'N/A',
+      amount: data.price
+    };
+    
+    return { success: true, data: transformedData };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -37,11 +68,25 @@ const getDonationsByPadrino = async (id_padrino) => {
   try {
     const { data, error } = await supabase
       .from('Donations')
-      .select('*')
-      .eq('id_padrino', id_padrino);
+      .select(`
+        *,
+        dog:Dogs!id_dog(id, name),
+        need:Needs!id_need(id, name, price)
+      `)
+      .eq('id_padrino', id_padrino)
+      .order('created_at', { ascending: false });
     
     if (error) throw error;
-    return { success: true, data };
+    
+    // Transformar datos
+    const transformedData = data.map(donation => ({
+      ...donation,
+      dog_name: donation.dog?.name || 'Desconocido',
+      need_name: donation.need?.name || 'N/A',
+      amount: donation.price
+    }));
+    
+    return { success: true, data: transformedData };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -52,11 +97,27 @@ const getDonationsByDog = async (id_dog) => {
   try {
     const { data, error } = await supabase
       .from('Donations')
-      .select('*')
-      .eq('id_dog', id_dog);
+      .select(`
+        *,
+        padrino:Users!id_padrino(id, username),
+        dog:Dogs!id_dog(id, name),
+        need:Needs!id_need(id, name, price)
+      `)
+      .eq('id_dog', id_dog)
+      .order('created_at', { ascending: false });
     
     if (error) throw error;
-    return { success: true, data };
+    
+    // Transformar datos
+    const transformedData = data.map(donation => ({
+      ...donation,
+      padrino_name: donation.padrino?.username || 'Anónimo',
+      dog_name: donation.dog?.name || 'Desconocido',
+      need_name: donation.need?.name || 'N/A',
+      amount: donation.price
+    }));
+    
+    return { success: true, data: transformedData };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -67,11 +128,27 @@ const getDonationsByNeed = async (id_need) => {
   try {
     const { data, error } = await supabase
       .from('Donations')
-      .select('*')
-      .eq('id_need', id_need);
+      .select(`
+        *,
+        padrino:Users!id_padrino(id, username),
+        dog:Dogs!id_dog(id, name),
+        need:Needs!id_need(id, name, price)
+      `)
+      .eq('id_need', id_need)
+      .order('created_at', { ascending: false });
     
     if (error) throw error;
-    return { success: true, data };
+    
+    // Transformar datos
+    const transformedData = data.map(donation => ({
+      ...donation,
+      padrino_name: donation.padrino?.username || 'Anónimo',
+      dog_name: donation.dog?.name || 'Desconocido',
+      need_name: donation.need?.name || 'N/A',
+      amount: donation.price
+    }));
+    
+    return { success: true, data: transformedData };
   } catch (error) {
     return { success: false, error: error.message };
   }
@@ -82,11 +159,27 @@ const getDonationsByState = async (state) => {
   try {
     const { data, error } = await supabase
       .from('Donations')
-      .select('*')
-      .eq('state', state);
+      .select(`
+        *,
+        padrino:Users!id_padrino(id, username),
+        dog:Dogs!id_dog(id, name),
+        need:Needs!id_need(id, name, price)
+      `)
+      .eq('state', state)
+      .order('created_at', { ascending: false });
     
     if (error) throw error;
-    return { success: true, data };
+    
+    // Transformar datos
+    const transformedData = data.map(donation => ({
+      ...donation,
+      padrino_name: donation.padrino?.username || 'Anónimo',
+      dog_name: donation.dog?.name || 'Desconocido',
+      need_name: donation.need?.name || 'N/A',
+      amount: donation.price
+    }));
+    
+    return { success: true, data: transformedData };
   } catch (error) {
     return { success: false, error: error.message };
   }

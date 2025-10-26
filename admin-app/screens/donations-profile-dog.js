@@ -203,49 +203,9 @@ function renderDonationsList() {
   
   donationsList.innerHTML = donationsData.map(donation => `
     <div class="donation-card" data-donation-id="${donation.id}">
-      <div class="card-header">
-        <div class="donation-info">
-          <h4>Donación #${donation.id}</h4>
-          <p class="donation-date">${formatDate(donation.created_at || donation.date)}</p>
-        </div>
-        <div class="donation-status">
-          <span class="status-badge ${donation.status || 'completed'}">${getStatusText(donation.status)}</span>
-        </div>
-      </div>
-      
-      <div class="card-body">
-        <div class="donation-details">
-          <div class="detail-item">
-            <span class="label">Padrino:</span>
-            <span class="value">${donation.padrino_name || donation.user_name || 'Anónimo'}</span>
-          </div>
-          <div class="detail-item">
-            <span class="label">Monto:</span>
-            <span class="value">$${formatAmount(donation.amount)}</span>
-          </div>
-          ${donation.product_name ? `
-            <div class="detail-item">
-              <span class="label">Producto:</span>
-              <span class="value">${donation.product_name}</span>
-            </div>
-          ` : ''}
-          ${donation.description ? `
-            <div class="detail-item">
-              <span class="label">Descripción:</span>
-              <span class="value">${donation.description}</span>
-            </div>
-          ` : ''}
-          ${donation.payment_method ? `
-            <div class="detail-item">
-              <span class="label">Método de pago:</span>
-              <span class="value">${donation.payment_method}</span>
-            </div>
-          ` : ''}
-        </div>
-        
-        <div class="donation-message">
-          <p><strong>${donation.padrino_name || donation.user_name || 'Un padrino'}</strong> ha donado <strong>$${formatAmount(donation.amount)}</strong>${donation.product_name ? ` en ${donation.product_name}` : ''}</p>
-        </div>
+      <div class="donation-message">
+        <p class="donation-date">${formatDate(donation.created_at || donation.date)}</p>
+        <p><strong>${donation.padrino_name || donation.user_name || 'Padrino Anónimo'}</strong> ha donado <strong>$${formatAmount(donation.price || donation.amount || 0)}</strong>${donation.need_name ? ` en ${donation.need_name}` : ''}</p>
       </div>
     </div>
   `).join('');

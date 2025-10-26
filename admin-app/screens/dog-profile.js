@@ -314,7 +314,7 @@ function renderNeedsList() {
       <div class="card-actions">
         <button 
           class="action-btn delete-need-btn" 
-          onclick="deleteNeed(${need.id})"
+          onclick="handleDeleteNeed(${need.id})"
         >
           Eliminar
         </button>
@@ -324,7 +324,7 @@ function renderNeedsList() {
 }
 
 // Eliminar necesidad
-async function deleteNeed(needId) {
+async function handleDeleteNeed(needId) {
   try {
     if (!confirm('¿Estás seguro de que quieres eliminar esta necesidad?')) {
       return;
@@ -486,4 +486,4 @@ function showError(message) {
   }, 7000);
 }
 
-window.deleteNeed = deleteNeed;
+window.handleDeleteNeed = handleDeleteNeed;
