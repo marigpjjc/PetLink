@@ -1,6 +1,7 @@
 // Solicitud de citas
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { getAllAppointments, updateAppointmentDecision } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
 let allAppointments = [];
@@ -9,7 +10,7 @@ let filteredAppointments = [];
 export default async function renderAppointmentsManage() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
 
@@ -72,7 +73,7 @@ function setupEventListeners() {
   
   clearSearchBtn.addEventListener('click', clearSearch);
   
-  backBtn.addEventListener('click', () => navigateTo('/dashboard', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dashboard', {}));
 }
 
 // Cargar citas desde el backend
@@ -81,12 +82,12 @@ async function loadAppointments() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    // Petición al backend
-    const response = await makeRequestWithAuth('/api/appointments', 'GET', null, token);
+    // Usar el servicio API centralizado
+    const response = await getAllAppointments();
     
     if (Array.isArray(response)) {
       allAppointments = response;
@@ -205,7 +206,7 @@ async function handleAppointmentDecision(appointmentId, decision, dogName, padri
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
@@ -220,19 +221,15 @@ async function handleAppointmentDecision(appointmentId, decision, dogName, padri
       btn.textContent = 'Procesando...';
     });
     
-    const response = await makeRequestWithAuth(
-      `/api/appointments/decision/${appointmentId}`, 
-      'PUT', 
-      {
-        decision: decision,
-        phoneNumber: phoneNumber,
-        padrinoName: padrinoName,
-        dogName: dogName,
-        date: date,
-        time: time
-      }, 
-      token
-    );
+    // Usar el servicio API centralizado
+    const response = await updateAppointmentDecision(appointmentId, {
+      decision: decision,
+      phoneNumber: phoneNumber,
+      padrinoName: padrinoName,
+      dogName: dogName,
+      date: date,
+      time: time
+    });
     
     if (response.success) {
       const actionTextSuccess = decision === 'accepted' ? 'aceptada' : 'rechazada';
@@ -264,25 +261,7 @@ async function handleAppointmentDecision(appointmentId, decision, dogName, padri
   }
 }
 
-async function makeRequestWithAuth(url, method, body, token) {
-  const BASE_URL = "http://localhost:5050";
-  
-  const response = await fetch(`${BASE_URL}${url}`, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: body ? JSON.stringify(body) : undefined
-  });
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Error en la petición');
-  }
-  
-  return await response.json();
-}
+// Nota: makeRequestWithAuth ya no es necesario, usamos el servicio API centralizado
 
 function formatDate(dateString) {
   if (!dateString) return 'No especificada';

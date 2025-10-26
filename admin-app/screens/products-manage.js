@@ -1,13 +1,14 @@
 // Pantalla para agregar necesidades para los perros
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { createNeed } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
 export default async function renderProductsManage(data) {
   // Verificar autenticación
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
 
@@ -131,11 +132,11 @@ function setupEventListeners(fromDogProfile, fromAddDog, dogId) {
   // Volver según el origen
   backBtn.addEventListener('click', () => {
     if (fromDogProfile && dogId) {
-      navigateTo('/dog-profile', { dogId: dogId });
+      router.navigateTo('/dog-profile', { dogId: dogId });
     } else if (fromAddDog) {
-      navigateTo('/add-pet', {});
+      router.navigateTo('/add-pet', {});
     } else {
-      navigateTo('/dashboard', {});
+      router.navigateTo('/dashboard', {});
     }
   });
 }
@@ -187,11 +188,12 @@ async function handleSubmit(event) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth('/api/needs', 'POST', needData, token);
+    // Usar el servicio API centralizado
+    const response = await createNeed(needData);
     
     if (response && response.id) {
       showSuccess('¡Necesidad agregada exitosamente!');
@@ -219,26 +221,7 @@ function convertFileToBase64(file) {
   });
 }
 
-// Petición con autenticación
-async function makeRequestWithAuth(url, method, body, token) {
-  const BASE_URL = "http://localhost:5050";
-  
-  const response = await fetch(`${BASE_URL}${url}`, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify(body)
-  });
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Error en la petición');
-  }
-  
-  return await response.json();
-}
+// Nota: makeRequestWithAuth ya no es necesario, usamos el servicio API centralizado
 
 function clearForm() {
   document.getElementById('productForm').reset();

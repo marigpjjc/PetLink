@@ -1,13 +1,14 @@
 // Dashboard del administrador, tras iniciar sesión muestra (citas, donaciones, agergar mascotas y editar catalogo)
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { getAllDogs, getAllDonations, getAllAppointments, getAllAccessories } from '../services/admin-api.js';
 import { checkAuth, logout } from './admin-login.js';
 
 export default async function renderDashboard(data) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
     console.log('Usuario no autenticado, redirigiendo al login');
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
   
@@ -15,7 +16,7 @@ export default async function renderDashboard(data) {
     console.log('Sesión inválida, redirigiendo al login');
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
   
@@ -129,10 +130,10 @@ function setupEventListeners() {
   logoutBtn.addEventListener('click', handleLogout);
   
   // Navegación a otras pantallas
-  editCatalogBtn.addEventListener('click', () => navigateTo('/dog-management', {}));
-  addPetBtn.addEventListener('click', () => navigateTo('/add-pet', {}));
-  donationsBtn.addEventListener('click', () => navigateTo('/donations', {}));
-  appointmentsBtn.addEventListener('click', () => navigateTo('/appointments', {}));
+  editCatalogBtn.addEventListener('click', () => router.navigateTo('/dog-management', {}));
+  addPetBtn.addEventListener('click', () => router.navigateTo('/add-pet', {}));
+  donationsBtn.addEventListener('click', () => router.navigateTo('/donations', {}));
+  appointmentsBtn.addEventListener('click', () => router.navigateTo('/appointments', {}));
 }
 
 // Cargar datos
@@ -143,12 +144,12 @@ async function loadDashboardData() {
       return { petsCount: 0, donationsCount: 0, appointmentsCount: 0, productsCount: 0 };
     }
 
-    // Obtener datos
+    // Obtener datos usando el servicio API centralizado
     const [petsData, donationsData, appointmentsData, productsData] = await Promise.allSettled([
-      makeRequest('/api/dogs', 'GET'),
-      makeRequest('/api/donations', 'GET'),
-      makeRequest('/api/appointments', 'GET'),
-      makeRequest('/api/products', 'GET')
+      getAllDogs(),
+      getAllDonations(),
+      getAllAppointments(),
+      getAllAccessories()
     ]);
 
     return {
@@ -191,7 +192,7 @@ async function handleLogout() {
       console.error('Error al cerrar sesión:', error);
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminUser');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
     }
   }
 }

@@ -1,6 +1,7 @@
 // Pantalla de perfil individual del perro
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { getDogById, getNeedsByDog, deleteNeed, deleteDog } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
 let dogData = null;
@@ -10,7 +11,7 @@ let dogId = null;
 export default async function renderDogProfile(data) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
 
@@ -18,7 +19,7 @@ export default async function renderDogProfile(data) {
   
   if (!dogId) {
     showError('ID del perro no proporcionado');
-    navigateTo('/dog-management', {});
+    router.navigateTo('/dog-management', {});
     return;
   }
 
@@ -124,11 +125,11 @@ function setupEventListeners() {
   const statisticsBtn = document.getElementById('statisticsBtn');
   const deleteDogBtn = document.getElementById('deleteDogBtn');
   
-  backBtn.addEventListener('click', () => navigateTo('/dog-management', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dog-management', {}));
   
-  addNeedBtn.addEventListener('click', () => navigateTo('/products-manage', { fromDogProfile: true, dogId: dogId }));
+  addNeedBtn.addEventListener('click', () => router.navigateTo('/products-manage', { fromDogProfile: true, dogId: dogId }));
   
-  statisticsBtn.addEventListener('click', () => navigateTo('/dog-estadistics', { dogId: dogId }));
+  statisticsBtn.addEventListener('click', () => router.navigateTo('/dog-estadistics', { dogId: dogId }));
   
   deleteDogBtn.addEventListener('click', handleDeleteDog);
 }
@@ -138,11 +139,12 @@ async function loadDogData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'GET', null, token);
+    // Usar el servicio API centralizado
+    const response = await getDogById(dogId);
     
     if (response && response.id) {
       dogData = response;
@@ -162,11 +164,12 @@ async function loadNeedsData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth(`/api/needs/dog/${dogId}`, 'GET', null, token);
+    // Usar el servicio API centralizado
+    const response = await getNeedsByDog(dogId);
     
     if (Array.isArray(response)) {
       needsData = response;
@@ -289,11 +292,12 @@ async function deleteNeed(needId) {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth(`/api/needs/${needId}`, 'DELETE', null, token);
+    // Usar el servicio API centralizado
+    const response = await deleteNeed(needId);
     
     if (response && response.message) {
       showSuccess('Necesidad eliminada exitosamente');
@@ -334,7 +338,7 @@ async function handleDeleteDog() {
       showSuccess('Perro eliminado exitosamente');
       
       setTimeout(() => {
-        navigateTo('/dog-management', {});
+        router.navigateTo('/dog-management', {});
       }, 2000);
     } else {
       showError('Error al eliminar el perro');
@@ -397,6 +401,9 @@ function formatAmount(amount) {
   return new Intl.NumberFormat('es-CO').format(numAmount);
 }
 
+// Nota: makeRequestWithAuth ya no es necesario, usamos el servicio API centralizado
+
+/*
 async function makeRequestWithAuth(url, method, body, token) {
   const BASE_URL = "http://localhost:5050";
   
@@ -416,6 +423,7 @@ async function makeRequestWithAuth(url, method, body, token) {
   
   return await response.json();
 }
+*/
 
 function showSuccess(message) {
   const successMessage = document.getElementById('successMessage');

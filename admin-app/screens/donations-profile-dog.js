@@ -1,6 +1,7 @@
 // Pantalla de perfil de donaciones de un perro específico
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { getDogById, getDonationsByDog } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
 let dogData = null;
@@ -10,7 +11,7 @@ let dogId = null;
 export default async function renderDonationsProfileDog(data) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
 
@@ -18,7 +19,7 @@ export default async function renderDonationsProfileDog(data) {
   
   if (!dogId) {
     showError('ID del perro no proporcionado');
-    navigateTo('/donations', {});
+    router.navigateTo('/donations', {});
     return;
   }
 
@@ -81,7 +82,7 @@ export default async function renderDonationsProfileDog(data) {
 function setupEventListeners() {
   const backBtn = document.getElementById('backBtn');
   
-  backBtn.addEventListener('click', () => navigateTo('/donations', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/donations', {}));
 }
 
 async function loadDogData() {
@@ -89,11 +90,12 @@ async function loadDogData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'GET', null, token);
+    // Usar el servicio API centralizado
+    const response = await getDogById(dogId);
     
     if (response && response.id) {
       dogData = response;
@@ -113,11 +115,12 @@ async function loadDonationsData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth(`/api/donations/dog/${dogId}`, 'GET', null, token);
+    // Usar el servicio API centralizado
+    const response = await getDonationsByDog(dogId);
     
     if (Array.isArray(response)) {
       donationsData = response;
@@ -224,6 +227,9 @@ function renderDonationsList() {
   `).join('');
 }
 
+// Nota: makeRequestWithAuth ya no es necesario, usamos el servicio API centralizado
+
+/*
 async function makeRequestWithAuth(url, method, body, token) {
   const BASE_URL = "http://localhost:5050";
   
@@ -243,6 +249,7 @@ async function makeRequestWithAuth(url, method, body, token) {
   
   return await response.json();
 }
+*/
 
 function formatDate(dateString) {
   if (!dateString) return 'No especificada';

@@ -1,6 +1,7 @@
 // Pantalla de estadísticas detalladas de un perro específico
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { getDogById, getDogStatistics } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
 let dogData = null;
@@ -9,7 +10,7 @@ let dogId = null;
 export default async function renderDogEstadistics(data) {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
 
@@ -18,7 +19,7 @@ export default async function renderDogEstadistics(data) {
   
   if (!dogId) {
     showError('ID del perro no proporcionado');
-    navigateTo('/dashboard', {});
+    router.navigateTo('/dashboard', {});
     return;
   }
 
@@ -132,7 +133,7 @@ function setupEventListeners() {
   const backBtn = document.getElementById('backBtn');
   
   // Volver al perfil del perro
-  backBtn.addEventListener('click', () => navigateTo('/dog-profile', { dogId: dogId }));
+  backBtn.addEventListener('click', () => router.navigateTo('/dog-profile', { dogId: dogId }));
 }
 
 // Cargar datos del perro
@@ -141,12 +142,12 @@ async function loadDogData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    // Cargar datos del perro
-    const dogResponse = await makeRequestWithAuth(`/api/dogs/${dogId}`, 'GET', null, token);
+    // Cargar datos del perro usando el servicio API centralizado
+    const dogResponse = await getDogById(dogId);
     
     if (dogResponse && dogResponse.id) {
       dogData = dogResponse;
@@ -247,6 +248,9 @@ function getAvailabilityText(availability) {
   return availabilityMap[availability] || 'Desconocido';
 }
 
+// Nota: makeRequestWithAuth ya no es necesario, usamos el servicio API centralizado
+
+/*
 async function makeRequestWithAuth(url, method, body, token) {
   const BASE_URL = "http://localhost:5050";
   
@@ -266,6 +270,7 @@ async function makeRequestWithAuth(url, method, body, token) {
   
   return await response.json();
 }
+*/
 
 function showSuccess(message) {
   const successMessage = document.getElementById('successMessage');

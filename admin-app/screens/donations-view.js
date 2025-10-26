@@ -1,6 +1,7 @@
 // Pantalla de las donaciones
 
-import { navigateTo, makeRequest } from '../app.js';
+import router from '../utils/router.js';
+import { getAllDogs, getAllDonations, searchDogsByName } from '../services/admin-api.js';
 import { checkAuth } from './admin-login.js';
 
 let allDogs = [];
@@ -11,7 +12,7 @@ let currentFilter = 'all';
 export default async function renderDonationsView() {
   const auth = await checkAuth();
   if (!auth.isAuthenticated) {
-    navigateTo('/admin-login', {});
+    router.navigateTo('/admin-login', {});
     return;
   }
 
@@ -86,7 +87,7 @@ function setupEventListeners() {
   
   clearSearchBtn.addEventListener('click', clearSearch);
   
-  backBtn.addEventListener('click', () => navigateTo('/dashboard', {}));
+  backBtn.addEventListener('click', () => router.navigateTo('/dashboard', {}));
   
   filterAll.addEventListener('click', () => applyFilter('all'));
   filterPuppies.addEventListener('click', () => applyFilter('puppies'));
@@ -98,13 +99,14 @@ async function loadInitialData() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
+    // Usar el servicio API centralizado
     const [dogsResponse, donationsResponse] = await Promise.allSettled([
-      makeRequestWithAuth('/api/dogs', 'GET', null, token),
-      makeRequestWithAuth('/api/donations', 'GET', null, token)
+      getAllDogs(),
+      getAllDonations()
     ]);
     
     if (dogsResponse.status === 'fulfilled' && Array.isArray(dogsResponse.value)) {
@@ -142,11 +144,12 @@ async function handleSearch(event) {
       const token = localStorage.getItem('adminToken');
       if (!token) {
         showError('Sesión expirada. Por favor inicia sesión nuevamente');
-        navigateTo('/admin-login', {});
+        router.navigateTo('/admin-login', {});
         return;
       }
       
-      const response = await makeRequestWithAuth(`/api/dogs/search/${encodeURIComponent(searchTerm)}`, 'GET', null, token);
+      // Usar el servicio API centralizado
+      const response = await searchDogsByName(searchTerm);
       
       if (Array.isArray(response)) {
         // Actualizar la lista base con los resultados de búsqueda
@@ -279,11 +282,12 @@ async function clearSearch() {
     const token = localStorage.getItem('adminToken');
     if (!token) {
       showError('Sesión expirada. Por favor inicia sesión nuevamente');
-      navigateTo('/admin-login', {});
+      router.navigateTo('/admin-login', {});
       return;
     }
     
-    const response = await makeRequestWithAuth('/api/dogs', 'GET', null, token);
+    // Usar el servicio API centralizado
+    const response = await getAllDogs();
     
     if (Array.isArray(response)) {
       allDogs = response;
@@ -306,28 +310,10 @@ async function clearSearch() {
 
 // Ver donaciones de un perro específico
 function viewDogDonations(dogId) {
-  navigateTo('/donations-profile-dog', { dogId: dogId });
+  router.navigateTo('/donations-profile-dog', { dogId: dogId });
 }
 
-async function makeRequestWithAuth(url, method, body, token) {
-  const BASE_URL = "http://localhost:5050";
-  
-  const response = await fetch(`${BASE_URL}${url}`, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: body ? JSON.stringify(body) : undefined
-  });
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Error en la petición');
-  }
-  
-  return await response.json();
-}
+// Nota: makeRequestWithAuth ya no es necesario, usamos el servicio API centralizado
 
 function updateDogsCount() {
   const countElement = document.getElementById('dogsCount');
