@@ -1,7 +1,7 @@
 // Servicio API para comunicarse con el backend
 // Todas las peticiones al servidor se centralizan aquí
 
-const API_URL = 'http://localhost:5050/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
 
 // Función helper para obtener el token de autenticación
 function getAuthToken() {
@@ -78,9 +78,10 @@ export function logoutAdmin(token) {
 // PERROS (Dogs)
 // ============================================
 
-// Traer todos los perros
-export function getAllDogs() {
-  return fetchAPI('/dogs');
+// Traer todos los perros (filtrados por admin si se pasa adminId)
+export function getAllDogs(adminId = null) {
+  const url = adminId ? `/dogs?adminId=${adminId}` : '/dogs';
+  return fetchAPI(url);
 }
 
 // Traer un perro específico

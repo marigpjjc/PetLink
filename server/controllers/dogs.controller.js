@@ -7,7 +7,17 @@ import dogsService from '../db/dogs.db.js';
 const getAllDogs = async (req, res) => {
   try {
     console.log('Petición recibida: GET /api/dogs');
-    const result = await dogsService.getAllDogs();
+    
+    // Si viene adminId en query params, filtrar por ese admin
+    const { adminId } = req.query;
+    
+    let result;
+    if (adminId) {
+      console.log(' Filtrando perros por admin:', adminId);
+      result = await dogsService.getDogsByAdmin(adminId);
+    } else {
+      result = await dogsService.getAllDogs();
+    }
     
     if (result.success) {
       console.log(' Datos enviados:', result.data.length, 'perritos');

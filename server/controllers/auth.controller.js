@@ -2,14 +2,21 @@
 
 import usersService from '../db/users.db.js';
 
-// LOGIN - Simular inicio de sesión
+// LOGIN - Inicio de sesión con validación de contraseña
 const login = async (req, res) => {
   try {
-    const { username, email } = req.body;
+    const { username, email, password } = req.body;
     
     console.log('Petición recibida: POST /api/auth/login', { username, email });
     
-    // Validar que al menos uno esté presente
+    // Validar que la contraseña esté presente
+    if (!password) {
+      return res.status(400).json({ 
+        error: 'La contraseña es obligatoria' 
+      });
+    }
+    
+    // Validar que al menos username o email esté presente
     if (!username && !email) {
       return res.status(400).json({ 
         error: 'Debes proporcionar username o email' 
@@ -26,14 +33,22 @@ const login = async (req, res) => {
     
     if (!result.success) {
       console.log('Usuario no encontrado');
-      return res.status(404).json({ 
-        error: 'Usuario no encontrado' 
+      return res.status(401).json({ 
+        error: 'Usuario o contraseña incorrectos' 
       });
     }
     
     const user = result.data;
     
-    // enerar token fake (solo el ID del usuario como string)
+    // ⭐ VALIDAR CONTRASEÑA
+    if (user.password !== password) {
+      console.log('Contraseña incorrecta para usuario:', username || email);
+      return res.status(401).json({ 
+        error: 'Usuario o contraseña incorrectos' 
+      });
+    }
+    
+    // Generar token (solo el ID del usuario como string)
     const fakeToken = `token_${user.id}_${Date.now()}`;
     
     console.log('Login exitoso:', user.username);
@@ -50,7 +65,8 @@ const login = async (req, res) => {
         username: user.username,
         email: user['e-mail'],
         rol: user.rol,
-        phone_number: user.phone_number
+        phone_number: user.phone_number,
+        foundation_name: user.foundation_name || null
       }
     });
     
@@ -70,6 +86,13 @@ const register = async (req, res) => {
     if (!userData.username || !userData['e-mail'] || !userData.name) {
       return res.status(400).json({ 
         error: 'Faltan campos obligatorios: username, email, name' 
+      });
+    }
+    
+    // Si es admin, validar que tenga foundation_name
+    if (userData.rol === 'admin' && !userData.foundation_name) {
+      return res.status(400).json({ 
+        error: 'Los administradores deben especificar el nombre de su fundación' 
       });
     }
     

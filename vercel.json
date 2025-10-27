@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server/index.js"
+    }
+  ],
+  "env": {
+    "PORT": "5050",
+    "SUPABASE_URL": "@supabase-url",
+    "SUPABASE_ANON_KEY": "@supabase-anon-key",
+    "TWILIO_ACCOUNT_SID": "@twilio-account-sid",
+    "TWILIO_AUTH_TOKEN": "@twilio-auth-token",
+    "TWILIO_WHATSAPP_NUMBER": "@twilio-whatsapp-number",
+    "STABILITY_API_KEY": "@stability-api-key"
+  }
+}
+

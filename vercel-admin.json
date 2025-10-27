@@ -1,0 +1,19 @@
+{
+  "name": "petlink-admin",
+  "version": 2,
+  "buildCommand": "npm run build:admin",
+  "outputDirectory": "dist/admin-app",
+  "framework": null,
+  "installCommand": "npm install",
+  "devCommand": null,
+  "env": {
+    "VITE_API_URL": "https://tu-backend.onrender.com"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+

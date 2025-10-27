@@ -184,17 +184,19 @@ async function handleSignup(event) {
       }
       
     } else {
-      let errorMsg = 'Error al crear la cuenta';
+      let errorMsg = 'Error al crear la cuenta. Verifica tus datos.';
       
       if (response.error) {
-        if (response.error.includes('username ya está en uso')) {
-          errorMsg = 'El nombre de usuario ya está registrado. Por favor elige otro.';
-        } else if (response.error.includes('email ya está registrado')) {
-          errorMsg = 'El correo electrónico ya está registrado. Por favor usa otro.';
-        } else if (response.error.includes('Faltan campos obligatorios')) {
-          errorMsg = 'Faltan campos obligatorios. Por favor completa todos los campos.';
+        if (response.error.includes('username ya está en uso') || response.error.includes('username')) {
+          errorMsg = 'El nombre de usuario ya está registrado';
+        } else if (response.error.includes('email ya está registrado') || response.error.includes('email') || response.error.includes('e-mail')) {
+          errorMsg = 'El correo electrónico ya está registrado';
+        } else if (response.error.includes('contraseña') || response.error.includes('password')) {
+          errorMsg = 'Error en la contraseña. Debe tener al menos 6 caracteres';
+        } else if (response.error.includes('Faltan campos') || response.error.includes('obligatorios')) {
+          errorMsg = 'Por favor completa todos los campos';
         } else {
-          errorMsg = response.error;
+          errorMsg = 'Error al crear la cuenta. Verifica tus datos.';
         }
       }
       
@@ -203,7 +205,7 @@ async function handleSignup(event) {
     
   } catch (error) {
     console.error('Error en registro:', error);
-    showError('Error de conexión. Verifica que el servidor esté funcionando.');
+    showError('Error al crear la cuenta. Intenta nuevamente.');
   } finally {
     signupBtn.disabled = false;
     signupBtn.textContent = 'Registrar';

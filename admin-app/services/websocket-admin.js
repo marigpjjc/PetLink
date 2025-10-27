@@ -19,7 +19,8 @@ export function initWebSocket() {
 
   try {
     // Usar io global desde el CDN cargado en index.html
-    socket = window.io('http://localhost:5050', {
+    const SOCKET_URL = import.meta?.env?.VITE_API_URL?.replace('/api', '') || 'http://localhost:5050';
+    socket = window.io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 1000,
