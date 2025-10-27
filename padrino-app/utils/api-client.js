@@ -2,7 +2,8 @@
 // Va al backend y trae la informacion que necesitamos
 
 // La direccion base de nuestra API
-const API_BASE_URL = 'http://localhost:5050/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
+
 
 // Clase que maneja todas las peticiones al backend
 class ApiService {

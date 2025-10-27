@@ -1,6 +1,6 @@
 // Este archivo maneja el USUARIO ACTUAL y la autenticacion
 
-const API_URL = 'http://localhost:5050/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
 
 // LOGIN - Iniciar sesion con el backend
 export async function login(username, password) {
