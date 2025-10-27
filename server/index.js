@@ -21,7 +21,8 @@ const io = new Server(httpServer, {
     origin: [
       'http://localhost:5173',
       'http://localhost:5174',
-      'https://petlink-538v.vercel.app'
+      'https://petlink-538v.vercel.app',
+      /^https:\/\/petlink-538v-.*\.vercel\.app$/
     ],
     methods: ["GET", "POST"],
     credentials: true
@@ -33,7 +34,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:5174',
-    'https://petlink-538v.vercel.app'
+    'https://petlink-538v.vercel.app',
+    /^https:\/\/petlink-538v-.*\.vercel\.app$/
   ],
   credentials: true
 }));
