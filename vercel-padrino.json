@@ -6,9 +6,6 @@
   "framework": null,
   "installCommand": "npm install",
   "devCommand": null,
-  "env": {
-    "VITE_API_URL": "https://tu-backend.onrender.com"
-  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -16,4 +13,3 @@
     }
   ]
 }
-
