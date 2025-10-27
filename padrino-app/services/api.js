@@ -1,6 +1,7 @@
 // Este archivo se comunica con el BACKEND (trae y envía datos)
 
-const API_URL = 'http://localhost:5050/api';
+// ✅ USAR VARIABLE DE ENTORNO en lugar de localhost hardcoded
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
 
 // Función helper para hacer peticiones
 async function fetchAPI(endpoint, options = {}) {
@@ -140,4 +141,4 @@ export {
   getNeedById,
   getDogStatistics,
   generateAIImage  // NUEVO
-};  
+};
