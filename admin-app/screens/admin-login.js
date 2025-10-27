@@ -103,14 +103,14 @@ async function handleLogin(event) {
         showError('No tienes permisos de administrador');
       }
     } else {
-      // Mostrar error del servidor
-      const errorMsg = response.error || 'Error al iniciar sesión';
-      showError(errorMsg);
+      // Mostrar mensaje amigable para cualquier error de autenticación
+      showError('Usuario o contraseña incorrecta');
     }
     
   } catch (error) {
     console.error('Error en login:', error);
-    showError('Error de conexión. Verifica que el servidor esté funcionando.');
+    // Mensaje amigable para errores de conexión
+    showError('Usuario o contraseña incorrecta');
   } finally {
 
     loginBtn.disabled = false;
