@@ -2,6 +2,7 @@
 
 //  USAR VARIABLE DE ENTORNO en lugar de localhost hardcoded
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
+console.log('🔍 API_URL:', API_URL); // ← AGREGA ESTA LÍNEA
 
 // Función helper para hacer peticiones
 async function fetchAPI(endpoint, options = {}) {
