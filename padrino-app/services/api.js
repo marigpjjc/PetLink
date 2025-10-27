@@ -1,6 +1,6 @@
 // Este archivo se comunica con el BACKEND (trae y envía datos)
 
-// ✅ USAR VARIABLE DE ENTORNO en lugar de localhost hardcoded
+//  USAR VARIABLE DE ENTORNO en lugar de localhost hardcoded
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5050/api';
 
 // Función helper para hacer peticiones

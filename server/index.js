@@ -18,12 +18,20 @@ const httpServer = createServer(app);
 // Configurar Socket.IO con CORS
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'https://petlink-538v.vercel.app',
-      /^https:\/\/petlink-538v-.*\.vercel\.app$/
-    ],
+    origin: function (origin, callback) {
+      // Permitir localhost y todos los dominios de Vercel
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+      ];
+      
+      // Permitir cualquier dominio de Vercel
+      if (!origin || allowedOrigins.includes(origin) || origin.includes('.vercel.app')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -31,12 +39,20 @@ const io = new Server(httpServer, {
 
 // Middlewares - CORS ACTUALIZADO
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://petlink-538v.vercel.app',
-    /^https:\/\/petlink-538v-.*\.vercel\.app$/
-  ],
+  origin: function (origin, callback) {
+    // Permitir localhost y todos los dominios de Vercel
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+    ];
+    
+    // Permitir cualquier dominio de Vercel
+    if (!origin || allowedOrigins.includes(origin) || origin.includes('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
