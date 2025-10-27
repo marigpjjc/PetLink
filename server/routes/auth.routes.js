@@ -13,6 +13,9 @@ router.post('/login', authController.login);
 // POST /api/auth/register - Registrar nuevo usuario
 router.post('/register', authController.register);
 
+// POST /api/auth/signup - Alias para register (compatibilidad)
+router.post('/signup', authController.register);
+
 // POST /api/auth/verify - Verificar token
 router.post('/verify', authController.verifyToken);
 
