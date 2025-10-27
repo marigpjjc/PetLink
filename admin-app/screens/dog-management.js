@@ -109,7 +109,8 @@ function setupRealtimeListeners() {
   
   needCreatedListener = async () => {
     try {
-      const dogsResponse = await getAllDogs();
+      const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+      const dogsResponse = await getAllDogs(adminUser.id);
       if (Array.isArray(dogsResponse)) {
         allDogs = dogsResponse;
         applyCurrentFilter();
@@ -155,8 +156,9 @@ async function loadInitialData() {
     }
     
     // Usar el servicio API centralizado
+    const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
     const [dogsResponse, donationsResponse] = await Promise.allSettled([
-      getAllDogs(),
+      getAllDogs(adminUser.id),
       getAllDonations()
     ]);
     

@@ -78,9 +78,10 @@ export function logoutAdmin(token) {
 // PERROS (Dogs)
 // ============================================
 
-// Traer todos los perros
-export function getAllDogs() {
-  return fetchAPI('/dogs');
+// Traer todos los perros (filtrados por admin si se pasa adminId)
+export function getAllDogs(adminId = null) {
+  const url = adminId ? `/dogs?adminId=${adminId}` : '/dogs';
+  return fetchAPI(url);
 }
 
 // Traer un perro específico

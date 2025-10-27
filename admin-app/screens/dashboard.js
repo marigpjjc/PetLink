@@ -181,8 +181,9 @@ async function loadDashboardData() {
     }
 
     // Obtener datos usando el servicio API centralizado
+    const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
     const [petsData, donationsData, appointmentsData, productsData] = await Promise.allSettled([
-      getAllDogs(),
+      getAllDogs(adminUser.id),
       getAllDonations(),
       getAllAppointments(),
       getAllAccessories()

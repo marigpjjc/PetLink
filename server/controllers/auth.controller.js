@@ -50,7 +50,8 @@ const login = async (req, res) => {
         username: user.username,
         email: user['e-mail'],
         rol: user.rol,
-        phone_number: user.phone_number
+        phone_number: user.phone_number,
+        foundation_name: user.foundation_name || null
       }
     });
     
@@ -70,6 +71,13 @@ const register = async (req, res) => {
     if (!userData.username || !userData['e-mail'] || !userData.name) {
       return res.status(400).json({ 
         error: 'Faltan campos obligatorios: username, email, name' 
+      });
+    }
+    
+    // Si es admin, validar que tenga foundation_name
+    if (userData.rol === 'admin' && !userData.foundation_name) {
+      return res.status(400).json({ 
+        error: 'Los administradores deben especificar el nombre de su fundación' 
       });
     }
     

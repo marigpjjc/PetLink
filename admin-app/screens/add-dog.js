@@ -261,6 +261,9 @@ async function handleSubmit(event) {
   hideMessages();
   
   try {
+    // Obtener el ID del admin logueado
+    const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+    
     const dogData = {
       name: name,
       age: age,
@@ -271,7 +274,8 @@ async function handleSubmit(event) {
       health_level: health,
       food_level: food,
       wellbeing_level: wellness,
-      affection_level: love
+      affection_level: love,
+      created_by_admin_id: adminUser.id  // ⭐ Asociar perro con el admin que lo crea
     };
     
     if (imageFile) {

@@ -16,6 +16,21 @@ const getAllDogs = async () => {
   }
 };
 
+// Traer perros por admin que los creó (filtrado por fundación)
+const getDogsByAdmin = async (adminId) => {
+  try {
+    const { data, error } = await supabase
+      .from('Dogs')
+      .select('*')
+      .eq('created_by_admin_id', adminId);
+    
+    if (error) throw error;
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
 // Traer UN perrito por ID
 const getDogById = async (id) => {
   try {
@@ -127,9 +142,10 @@ const updateDogStatistics = async (dogId, category) => {
 
 export default {
   getAllDogs,
+  getDogsByAdmin,
   getDogById,
   createDog,
   updateDog,
   deleteDog,
-  updateDogStatistics  // NUEVO
+  updateDogStatistics
 };

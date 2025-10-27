@@ -135,8 +135,9 @@ async function loadInitialData() {
     }
     
     // Usar el servicio API centralizado
+    const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
     const [dogsResponse, donationsResponse] = await Promise.allSettled([
-      getAllDogs(),
+      getAllDogs(adminUser.id),
       getAllDonations()
     ]);
     
@@ -294,7 +295,8 @@ async function clearSearch() {
     }
     
     // Usar el servicio API centralizado
-    const response = await getAllDogs();
+    const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+    const response = await getAllDogs(adminUser.id);
     
     if (Array.isArray(response)) {
       allDogs = response;
