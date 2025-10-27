@@ -18,13 +18,25 @@ const httpServer = createServer(app);
 // Configurar Socket.IO con CORS
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", // En producción, especifica tu dominio
-    methods: ["GET", "POST"]
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'https://petlink-538v.vercel.app'
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
-// Middlewares
-app.use(cors());
+// Middlewares - CORS ACTUALIZADO
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://petlink-538v.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Configuración para __dirname en ES Modules
